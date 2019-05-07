@@ -1,0 +1,94 @@
+
+2019-04-04 12:23:51,942 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5002) : 31709
+2019-04-04 12:23:51,943 : ERROR : Client : The message '31709' did'nt reached to ('127.0.0.1', 5002)
+2019-04-04 12:23:55,114 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5002) : 677765
+2019-04-04 12:23:55,115 : ERROR : Client : The message '677765' did'nt reached to ('127.0.0.1', 5002)
+2019-04-04 12:24:44,316 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5002) : 569183
+2019-04-04 12:24:44,317 : ERROR : Client : The message '569183' did'nt reached to ('127.0.0.1', 5002)
+2019-04-04 12:25:31,763 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5002) : 750766
+2019-04-04 12:25:31,764 : ERROR : Client : The message '750766' did'nt reached to ('127.0.0.1', 5002)
+2019-04-04 12:25:31,781 : CRITICAL : Client : The server is still working!!
+2019-04-04 12:25:33,786 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5002) : 314788
+2019-04-04 12:25:33,786 : ERROR : Client : The message '314788' did'nt reached to ('127.0.0.1', 5002)
+2019-04-04 12:25:33,786 : CRITICAL : Client : The server is still working!!
+2019-04-04 12:25:35,799 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5002) : 999585
+2019-04-04 12:25:35,799 : ERROR : Client : The message '999585' did'nt reached to ('127.0.0.1', 5002)
+2019-04-04 12:25:35,799 : CRITICAL : Client : The server is still working!!
+2019-04-04 12:25:37,806 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5002) : 10860
+2019-04-04 12:25:37,806 : ERROR : Client : The message '10860' did'nt reached to ('127.0.0.1', 5002)
+2019-04-04 12:25:37,806 : CRITICAL : Client : The server is still working!!
+2019-04-04 12:25:39,807 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5002) : 698190
+2019-04-04 12:25:39,808 : ERROR : Client : The message '698190' did'nt reached to ('127.0.0.1', 5002)
+2019-04-04 12:25:39,808 : CRITICAL : Client : The server is still working!!
+2019-04-04 12:25:41,813 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5002) : 339152
+2019-04-04 12:25:41,813 : ERROR : Client : The message '339152' did'nt reached to ('127.0.0.1', 5002)
+2019-04-04 12:25:41,813 : CRITICAL : Client : The server is still working!!
+2019-04-04 12:25:43,830 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5002) : 316037
+2019-04-04 12:25:43,831 : ERROR : Client : The message '316037' did'nt reached to ('127.0.0.1', 5002)
+2019-04-04 12:25:43,831 : CRITICAL : Client : The server is still working!!
+2019-04-04 12:25:45,833 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5002) : 909673
+2019-04-04 12:25:45,833 : ERROR : Client : The message '909673' did'nt reached to ('127.0.0.1', 5002)
+2019-04-04 12:25:45,834 : CRITICAL : Client : The server is still working!!
+2019-04-04 12:25:47,851 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5002) : 14458
+2019-04-04 12:25:47,851 : ERROR : Client : The message '14458' did'nt reached to ('127.0.0.1', 5002)
+2019-04-04 12:25:47,853 : CRITICAL : Client : The server is still working!!
+2019-04-04 12:25:49,869 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5002) : 15825
+2019-04-04 12:25:49,869 : ERROR : Client : The message '15825' did'nt reached to ('127.0.0.1', 5002)
+2019-04-04 12:25:49,870 : CRITICAL : Client : The server is still working!!
+2019-04-04 12:25:51,885 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5002) : 321646
+2019-04-04 12:25:51,885 : ERROR : Client : The message '321646' did'nt reached to ('127.0.0.1', 5002)
+2019-04-04 12:25:51,886 : CRITICAL : Client : The server is still working!!
+2019-04-04 12:25:53,890 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5002) : 217196
+2019-04-04 12:25:53,890 : ERROR : Client : The message '217196' did'nt reached to ('127.0.0.1', 5002)
+2019-04-04 12:25:53,892 : CRITICAL : Client : The server is still working!!
+2019-04-04 12:25:55,909 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5002) : 463645
+2019-04-04 12:25:55,909 : ERROR : Client : The message '463645' did'nt reached to ('127.0.0.1', 5002)
+2019-04-04 12:25:55,910 : CRITICAL : Client : The server is still working!!
+2019-04-04 12:25:57,923 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5002) : 329982
+2019-04-04 12:25:57,923 : ERROR : Client : The message '329982' did'nt reached to ('127.0.0.1', 5002)
+2019-04-04 12:25:57,923 : CRITICAL : Client : The server is still working!!
+2019-04-04 12:25:58,477 : DEBUG : Server : Listening
+2019-04-04 12:25:59,925 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5002) : 910832
+2019-04-04 12:25:59,925 : DEBUG : Server : Received message from Client ('127.0.0.1', 64310) : 910832
+2019-04-04 12:25:59,925 : DEBUG : Client : The message '910832' reached to ('127.0.0.1', 5002)
+2019-04-04 12:26:01,938 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5002) : 132403
+2019-04-04 12:26:01,938 : DEBUG : Server : Received message from Client ('127.0.0.1', 64310) : 132403
+2019-04-04 12:26:01,938 : DEBUG : Client : The message '132403' reached to ('127.0.0.1', 5002)
+2019-04-04 12:26:03,949 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5002) : 934371
+2019-04-04 12:26:03,949 : DEBUG : Server : Received message from Client ('127.0.0.1', 64310) : 934371
+2019-04-04 12:26:03,950 : DEBUG : Client : The message '934371' reached to ('127.0.0.1', 5002)
+2019-04-04 12:26:05,959 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5002) : 456774
+2019-04-04 12:26:05,959 : DEBUG : Server : Received message from Client ('127.0.0.1', 64310) : 456774
+2019-04-04 12:26:05,960 : DEBUG : Client : The message '456774' reached to ('127.0.0.1', 5002)
+2019-04-04 12:26:07,975 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5002) : 252455
+2019-04-04 12:26:07,975 : DEBUG : Server : Received message from Client ('127.0.0.1', 64310) : 252455
+2019-04-04 12:26:07,976 : DEBUG : Client : The message '252455' reached to ('127.0.0.1', 5002)
+2019-04-04 12:26:09,988 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5002) : 397730
+2019-04-04 12:26:09,988 : DEBUG : Server : Received message from Client ('127.0.0.1', 64310) : 397730
+2019-04-04 12:26:09,988 : DEBUG : Client : The message '397730' reached to ('127.0.0.1', 5002)
+2019-04-04 12:26:11,990 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5002) : 212822
+2019-04-04 12:26:11,990 : DEBUG : Server : Received message from Client ('127.0.0.1', 64310) : 212822
+2019-04-04 12:26:11,991 : DEBUG : Client : The message '212822' reached to ('127.0.0.1', 5002)
+2019-04-04 12:26:13,994 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5002) : 676171
+2019-04-04 12:26:13,995 : ERROR : Client : The message '676171' did'nt reached to ('127.0.0.1', 5002)
+2019-04-04 12:26:13,995 : CRITICAL : Client : The server is still working!!
+2019-04-04 12:26:15,536 : DEBUG : Client : User Pressed 'Key.ctrl_l'
+2019-04-04 12:26:15,623 : DEBUG : Client : User Pressed ''s''
+2019-04-04 12:26:16,009 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5002) : 555114
+2019-04-04 12:26:16,010 : ERROR : Client : The message '555114' did'nt reached to ('127.0.0.1', 5002)
+2019-04-04 12:26:16,010 : CRITICAL : Client : The server is still working!!
+2019-04-04 12:26:18,030 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5002) : 684225
+2019-04-04 12:26:18,030 : ERROR : Client : The message '684225' did'nt reached to ('127.0.0.1', 5002)
+2019-04-04 12:26:18,031 : CRITICAL : Client : The server is still working!!
+2019-04-04 12:26:20,043 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5002) : 957677
+2019-04-04 12:26:20,044 : ERROR : Client : The message '957677' did'nt reached to ('127.0.0.1', 5002)
+2019-04-04 12:26:20,044 : CRITICAL : Client : The server is still working!!
+2019-05-07 11:36:02,356 : DEBUG : Server : Listening
+2019-05-07 11:37:07,916 : DEBUG : Server : Received message from Client ('127.0.0.1', 61731) : 568731
+
+2019-05-07 11:37:07,916 : DEBUG : Client : The message '568731' reached to ('127.0.0.1', 5002)
+2019-05-07 11:37:09,931 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5002) : 800797
+2019-05-07 11:37:09,931 : DEBUG : Server : Received message from Client ('127.0.0.1', 61731) : 800797
+2019-05-07 11:37:09,931 : DEBUG : Client : The message '800797' reached to ('127.0.0.1', 5002)
+2019-05-07 11:37:11,946 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5002) : 630147
+2019-05-07 11:37:11,946 : DEBUG : Client : The message '630147' reached to ('127.0.0.1', 5002)
