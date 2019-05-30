@@ -13,7 +13,7 @@ logging.basicConfig(filename = 'Log.log', level = logging.DEBUG, format = '%(asc
 def sendMessage(data, sock, serverAddress):
 
     try:
-        sock.sendto(data.encode('utf-8'), serverAddress)
+        sock.sendto(data.encode(), serverAddress)
 
         logging.debug("Message has been sent to Server {} : {}".format(serverAddress, data))
 

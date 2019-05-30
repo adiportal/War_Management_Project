@@ -1,19 +1,26 @@
 import socket
 import logging
+import rebound
 
 # Initialize the Logger
 logging.basicConfig(filename = 'Log.log', level = logging.DEBUG, format = '%(asctime)s : %(levelname)s : Server : %(message)s')
 
 # Initialize Socket
-sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+try:
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    logging.debug("Socket Successfully Created!")
+except socket.error as err:
+    logging.error("Socket creation failed with error {}".format(err))
+
 IP = '127.0.0.1'
 port = 5002
 
-# Initialize Client Address
-clientAddress = (IP, port)
+# Initialize Server Address
+serverAddress = (IP, port)
 
 # Bind the socket with the address
-sock.bind(clientAddress)
+sock.bind(serverAddress)
+
 
 print('Listening')
 logging.debug('Listening')
@@ -36,3 +43,4 @@ while True:
         print("Closing Server...")
         logging.debug('Closing Server...')
         quit()
+

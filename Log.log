@@ -1,2 +1,21 @@
 
+2019-05-30 10:38:26,760 : DEBUG : Server : Socket Successfully Created!
+2019-05-30 10:38:26,760 : DEBUG : Server : Listening
+2019-05-30 10:38:30,861 : DEBUG : Server : Received message from Client ('127.0.0.1', 63021) : 627935
 
+2019-05-30 10:38:30,862 : DEBUG : Client : The message '627935' reached to ('127.0.0.1', 5002)
+2019-05-30 10:38:32,863 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5002) : 264433
+2019-05-30 10:38:32,863 : DEBUG : Server : Received message from Client ('127.0.0.1', 63021) : 264433
+2019-05-30 10:38:32,863 : DEBUG : Client : The message '264433' reached to ('127.0.0.1', 5002)
+2019-05-30 10:38:34,863 : DEBUG : Server : Received message from Client ('127.0.0.1', 63021) : 670069
+
+2019-05-30 10:38:34,865 : DEBUG : Client : The message '670069' reached to ('127.0.0.1', 5002)
+2019-05-30 10:38:36,865 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5002) : 551211
+2019-05-30 10:38:36,865 : DEBUG : Server : Received message from Client ('127.0.0.1', 63021) : 551211
+2019-05-30 10:38:36,865 : DEBUG : Client : The message '551211' reached to ('127.0.0.1', 5002)
+2019-05-30 10:38:38,351 : DEBUG : Client : User Pressed 'Key.space'
+2019-05-30 10:38:38,866 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5002) : -1
+2019-05-30 10:38:38,866 : DEBUG : Server : Received message from Client ('127.0.0.1', 63021) : -1
+2019-05-30 10:38:38,867 : DEBUG : Server : Closing Server...
+2019-05-30 10:38:38,867 : DEBUG : Client : The message '-1' reached to ('127.0.0.1', 5002)
+2019-05-30 10:38:38,867 : DEBUG : Client : Closing Client...
