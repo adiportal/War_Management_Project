@@ -9,6 +9,7 @@ program_running = True
 # Initialize the Logger
 logging.basicConfig(filename = 'Log.log', level = logging.DEBUG, format = '%(asctime)s : %(levelname)s : Client : %(message)s')
 
+
 # sendMassage
 def sendMessage(data, sock, serverAddress):
 
@@ -32,11 +33,14 @@ def sendMessage(data, sock, serverAddress):
         else:
             print("The server is still working!!")
         logging.critical("The server is still working!!")
+
+
 # randomNum
 def randomNum():
-    return str(random.randint(0,1000000))
+    return str(random.randint(0, 1000000))
 
-    # getSock
+
+# getSock
 def getSock():
     # Initialize socket
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -44,12 +48,19 @@ def getSock():
 
     return sock
 
-# getAddress
-def getAddress():
+
+# getServerAddress
+def getServerAddress():
     IP = '127.0.0.1'
     port = 5002
-
     return (IP, port)
+
+
+def getClientAddress():
+    IP = '127.0.0.1'
+    port = 5003
+    return (IP, port)
+
 
 # Exit
 def exit(sock, serverAddress):
@@ -57,6 +68,7 @@ def exit(sock, serverAddress):
     print("\nGood Bye :)")
     logging.debug("Closing Client...")
     quit()
+
 
 # On Press
 def on_press(key):
@@ -66,10 +78,13 @@ def on_press(key):
         program_running = False
         return False
 
+
 # Main
 
 sock = getSock()
-serverAddress = getAddress()
+sock.bind(getClientAddress())
+
+serverAddress = getServerAddress()
 
 print("Welcome to UDP Client/Server App\nPress [Esc] / [Space] for Exit")
 time.sleep(2)
