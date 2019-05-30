@@ -23,3 +23,7 @@
 2019-05-30 11:16:05,820 : DEBUG : Client : The message '-1' reached to ('127.0.0.1', 5002)
 2019-05-30 11:16:05,820 : DEBUG : Server : Closing Server...
 2019-05-30 11:16:05,820 : DEBUG : Client : Closing Client...
+2019-05-30 12:29:47,318 : DEBUG : Server : Socket Successfully Created!
+2019-05-30 12:29:47,318 : DEBUG : Server : Listening
+2019-05-30 12:29:57,870 : DEBUG : Middle : Socket Successfully Created!
+2019-05-30 12:48:22,054 : DEBUG : Middle : Socket Successfully Created!

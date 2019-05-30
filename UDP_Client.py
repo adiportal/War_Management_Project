@@ -43,7 +43,11 @@ def randomNum():
 # getSock
 def getSock():
     # Initialize socket
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        logging.debug("Socket Successfully Created!")
+    except socket.error as err:
+        logging.error("Socket creation failed with error {}".format(err))
     sock.settimeout(5)
 
     return sock

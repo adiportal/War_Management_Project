@@ -1,6 +1,5 @@
 import socket
 import logging
-import rebound
 
 # Initialize the Logger
 logging.basicConfig(filename = 'Log.log', level = logging.DEBUG, format = '%(asctime)s : %(levelname)s : Server : %(message)s')
