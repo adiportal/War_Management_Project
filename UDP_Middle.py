@@ -4,25 +4,35 @@ import logging
 logging.basicConfig(filename = 'Log.log', level = logging.DEBUG, format = '%(asctime)s : %(levelname)s : Middle : %(message)s')
 
 # sendMassage
-def sendMessage(msg_str, sock, senderAddress, senderName, receiverAddress, receiverName):
+def sendMessage(msg_str, senderAddress, senderName, receiverAddress, receiverName):
+
+    # serverClosed = False # Changing to True if Server app is closed
+    # clientClosed = False # Changing to True if Client app is closed
 
     try:
-        sock.sendto(msg_str.encode(), receiverAddress)
-
-        logging.debug("Message has been sent to {} {} : {}".format(receiverName, receiverAddress, msg_str))
-
-        msg_str, receiverAddress = sock.recvfrom(1024)
-        msg_str = msg_str.decode('utf-8')
-
-        if msg_str != '-1':
-            # print receive message
-            print("The message '{}' reached to the {}".format(receiverName, msg_str))
-            logging.debug("The message '{}' reached to {}".format(msg_str, receiverAddress))
-
-        elif msg_str == '-1'& senderName == "Server":
-            sock.sendto(msg_str.encode(), getClientAddress())
+        if msg_str != '-1' & receiverName == "Server":          # Client -> Middle -> Server
+            print("blabla")
+            # Middle -> Server
+            sockClient.sendto(msg_str.encode(), receiverAddress)
 
             logging.debug("Message has been sent to {} {} : {}".format(receiverName, receiverAddress, msg_str))
+
+            msg_str, receiverAddress = sockClient.recvfrom(1024)
+            msg_str = msg_str.decode('utf-8')
+
+            # print receive message
+            print("The message '{}' from {} reached to the {}".format(msg_str, senderName, receiverName))
+            logging.debug("The message '{}' from {} reached to {}".format(msg_str, senderAddress, receiverAddress))
+
+            # Middle -> Client
+            sockClient.sendto(msg_str.encode(), senderAddress)
+
+            logging.debug("Approval message has been sent to {} {} : {}".format(receiverName, receiverAddress, msg_str))
+
+            msg_str, senderAddress = sockClient.recvfrom(1024)
+            msg_str = msg_str.decode('utf-8')
+
+            logging.debug("The approval message '{}' reached to {}".format(msg_str, senderAddress))
 
     except:
         logging.error("The message '{}' did'nt reached to {}".format(msg_str, receiverAddress))
@@ -39,26 +49,29 @@ def server():
     except socket.error as err:
         logging.error("Socket creation failed with error {}".format(err))
 
-    IP = '127.0.0.1'
-    port = 5004
-    serverAddress = (IP, port)
+    middle_SAddress = getMiddle_SAddress()
 
-    sockServer.bind(serverAddress)
+    sockServer.bind(middle_SAddress)
 
     while True:
 
         # set max size of message
-        msg_bytes, clientAddress = sockServer.recvfrom(1024)
+        msg_bytes, receiverAddsend = sockServer.recvfrom(1024)
 
-        global msg_str
         # decoding the message to String
         msg_str = msg_bytes.decode('utf-8')
 
         # printing the message and the client Address
-        print('Received message from client {} : {}'.format(clientAddress, msg_str))
-        logging.debug("Received message from Client {} : {}".format(clientAddress, msg_str))
+        print('Received message from Client {} : {}'.format(receiverAddsend, msg_str[1:]))
+        logging.debug("Received message from Client {} : {}".format(receiverAddsend, msg_str[1:]))
 
-        sockServer.sendto(msg_str.encode(), clientAddress)
+        if msg_str[0] == "S":
+            sendMessage(msg_str[1:], getMiddle_SAddress(), "Middle_S", getMiddle_CAddress(), "Middle_C")
+            print("ports")
+
+
+        elif msg_str[0] == "M":
+            sockServer.sendto(msg_str.encode(), receiverAddsend)
 
         if msg_str == '-1':
             print("Closing Server...")
@@ -69,19 +82,50 @@ def server():
 
 def client():
     try:
+        global sockClient
         sockClient = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
         logging.debug("Socket Successfully Created!")
     except socket.error as err:
         logging.error("Socket creation failed with error {}".format(err))
 
     sockClient.settimeout(5)
 
-    clientAddress = getClientAddress()
-    sockClient.bind(clientAddress)
+    middle_CAddress = getMiddle_CAddress()
+    sockClient.bind(middle_CAddress)
+
+    while True:
+
+        # set max size of message
+        msg_bytes, receiverAddress = sockClient.recvfrom(1024)
+
+        # decoding the message to String
+        msg_str = msg_bytes.decode('utf-8')
+        print("port done")
+        sendMessage(msg_str[1:], getMiddle_CAddress(), "Middle_C", getServerAddress(), "Server")
+        print("message to server")
 
 # getClientAddress
 def getClientAddress():
+    return ('127.0.0.1', 5003)
+
+# getServerAddress
+def getServerAddress():
+    return ('127.0.0.1', 5002)
+
+# getMiddle_CAddress
+def getMiddle_CAddress():
     return ('127.0.0.1', 5005)
+
+# getMiddle_SAddress
+def getMiddle_SAddress():
+    return ('127.0.0.1', 5004)
+
+# Main
+server()
+client()
+
+
 
 
 

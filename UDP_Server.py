@@ -27,16 +27,16 @@ logging.debug('Listening')
 while True:
 
     # set max size of message
-    msg_bytes, clientAddress = sock.recvfrom(1024)
+    msg_bytes, middleAddress = sock.recvfrom(1024)
 
     # decoding the message to String
     msg_str = msg_bytes.decode('utf-8')
 
     # printing the message and the client Address
-    print('Received message from client {} : {}'.format(clientAddress, msg_str))
-    logging.debug("Received message from Client {} : {}".format(clientAddress, msg_str))
+    print('Received message from client {} : {}'.format(middleAddress, msg_str))
+    logging.debug("Received message from Client {} : {}".format(middleAddress, msg_str))
 
-    sock.sendto(msg_str.encode(), clientAddress)
+    sock.sendto(msg_str.encode(), middleAddress)
 
     if msg_str == '-1':
         print("Closing Server...")

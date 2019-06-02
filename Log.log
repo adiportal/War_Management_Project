@@ -1,2 +1,26 @@
-
-
+2019-06-02 19:32:00,591 : DEBUG : Server : Socket Successfully Created!
+2019-06-02 19:32:00,591 : DEBUG : Server : Listening
+2019-06-02 19:32:04,257 : DEBUG : Middle : Socket Successfully Created!
+2019-06-02 19:32:07,745 : DEBUG : Client : Socket Successfully Created!
+2019-06-02 19:32:07,745 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5004) : S750432
+2019-06-02 19:32:07,745 : DEBUG : Middle : Received message from Client ('127.0.0.1', 5003) : 750432
+2019-06-02 19:32:07,746 : ERROR : Middle : The message '750432' did'nt reached to ('127.0.0.1', 5005)
+2019-06-02 19:32:07,746 : CRITICAL : Middle : The server is still working!!
+2019-06-02 19:32:12,746 : ERROR : Client : The message 'S750432' did'nt reached to ('127.0.0.1', 5004)
+2019-06-02 19:32:12,746 : CRITICAL : Client : The server is still working!!
+2019-06-02 19:32:12,746 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5004) : M394965
+2019-06-02 19:32:12,746 : DEBUG : Middle : Received message from Client ('127.0.0.1', 5003) : 394965
+2019-06-02 19:32:12,747 : DEBUG : Client : The message 'M394965' reached to ('127.0.0.1', 5004)
+2019-06-02 19:38:43,814 : DEBUG : Server : Socket Successfully Created!
+2019-06-02 19:38:43,814 : DEBUG : Server : Listening
+2019-06-02 19:38:55,298 : DEBUG : Middle : Socket Successfully Created!
+2019-06-02 19:39:02,120 : DEBUG : Client : Socket Successfully Created!
+2019-06-02 19:39:02,121 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5004) : S746433
+2019-06-02 19:39:02,121 : DEBUG : Middle : Received message from Client ('127.0.0.1', 5003) : 746433
+2019-06-02 19:39:02,121 : ERROR : Middle : The message '746433' did'nt reached to ('127.0.0.1', 5005)
+2019-06-02 19:39:02,121 : CRITICAL : Middle : The server is still working!!
+2019-06-02 19:39:07,122 : ERROR : Client : The message 'S746433' did'nt reached to ('127.0.0.1', 5004)
+2019-06-02 19:39:07,122 : CRITICAL : Client : The server is still working!!
+2019-06-02 19:39:07,122 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5004) : M786989
+2019-06-02 19:39:07,122 : DEBUG : Middle : Received message from Client ('127.0.0.1', 5003) : 786989
+2019-06-02 19:39:07,122 : DEBUG : Client : The message 'M786989' reached to ('127.0.0.1', 5004)

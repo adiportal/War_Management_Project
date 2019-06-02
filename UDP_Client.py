@@ -65,6 +65,11 @@ def getClientAddress():
     port = 5003
     return (IP, port)
 
+def getMiddle_SAddress():
+    IP = '127.0.0.1'
+    port = 5004
+    return (IP, port)
+
 
 # Exit
 def exit(sock, serverAddress):
@@ -88,19 +93,27 @@ def on_press(key):
 sock = getSock()
 sock.bind(getClientAddress())
 
-serverAddress = getServerAddress()
+middleAddress = getMiddle_SAddress()
 
-print("Welcome to UDP Client/Server App\nPress [Esc] / [Space] for Exit")
-time.sleep(2)
+# print("Welcome to UDP Client/Server App\nPress [Esc] / [Space] for Exit")
+# time.sleep(2)
 
-with keyboard.Listener(on_press=on_press) as listener:
-    while program_running == True:
-        msg_str = randomNum()
-        sendMessage(msg_str, sock, serverAddress)
-        time.sleep(2)
-    listener.join()
+msg_str = "S" + randomNum()
+sendMessage(msg_str, sock, middleAddress)
 
-    exit(sock, serverAddress)
+msg_str = "M" + randomNum()
+sendMessage(msg_str, sock, middleAddress)
+
+
+
+# with keyboard.Listener(on_press=on_press) as listener:
+#     while program_running == True:
+#         msg_str = randomNum()
+#         sendMessage(msg_str, sock, serverAddress)
+#         time.sleep(2)
+#     listener.join()
+#
+#     exit(sock, serverAddress)
 
 
 
