@@ -11,25 +11,25 @@ logging.basicConfig(filename = 'Log.log', level = logging.DEBUG, format = '%(asc
 
 
 # sendMassage
-def sendMessage(data, sock, serverAddress):
+def sendMessage(msg_str, sock, serverAddress):
 
     try:
-        sock.sendto(data.encode(), serverAddress)
+        sock.sendto(msg_str.encode(), serverAddress)
 
-        logging.debug("Message has been sent to Server {} : {}".format(serverAddress, data))
+        logging.debug("Message has been sent to Server {} : {}".format(serverAddress, msg_str))
 
-        data, serverAddress = sock.recvfrom(1024)
-        text = data.decode('utf-8')
+        msg_str, serverAddress = sock.recvfrom(1024)
+        msg_str = msg_str.decode('utf-8')
 
-        if text != '-1':
+        if msg_str != '-1':
             # print receive message
-            print("The message '{}' reached to the server".format(text))
-        logging.debug("The message '{}' reached to {}".format(text, serverAddress))
+            print("The message '{}' reached to the server".format(msg_str))
+        logging.debug("The message '{}' reached to {}".format(msg_str, serverAddress))
 
     except:
-        logging.error("The message '{}' did'nt reached to {}".format(data, serverAddress))
-        if data != '-1':
-            print("The message '{}' did'nt reached to the server!!".format(data))
+        logging.error("The message '{}' did'nt reached to {}".format(msg_str, serverAddress))
+        if msg_str != '-1':
+            print("The message '{}' did'nt reached to the server!!".format(msg_str))
         else:
             print("The server is still working!!")
         logging.critical("The server is still working!!")
@@ -95,8 +95,8 @@ time.sleep(2)
 
 with keyboard.Listener(on_press=on_press) as listener:
     while program_running == True:
-        data = randomNum()
-        sendMessage(data, sock, serverAddress)
+        msg_str = randomNum()
+        sendMessage(msg_str, sock, serverAddress)
         time.sleep(2)
     listener.join()
 

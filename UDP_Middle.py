@@ -3,7 +3,34 @@ import logging
 
 logging.basicConfig(filename = 'Log.log', level = logging.DEBUG, format = '%(asctime)s : %(levelname)s : Middle : %(message)s')
 
+# sendMassage
+def sendMessage(msg_str, sock, senderAddress, senderName, receiverAddress, receiverName):
 
+    try:
+        sock.sendto(msg_str.encode(), receiverAddress)
+
+        logging.debug("Message has been sent to {} {} : {}".format(receiverName, receiverAddress, msg_str))
+
+        msg_str, receiverAddress = sock.recvfrom(1024)
+        msg_str = msg_str.decode('utf-8')
+
+        if msg_str != '-1':
+            # print receive message
+            print("The message '{}' reached to the {}".format(receiverName, msg_str))
+            logging.debug("The message '{}' reached to {}".format(msg_str, receiverAddress))
+
+        elif msg_str == '-1'& senderName == "Server":
+            sock.sendto(msg_str.encode(), getClientAddress())
+
+            logging.debug("Message has been sent to {} {} : {}".format(receiverName, receiverAddress, msg_str))
+
+    except:
+        logging.error("The message '{}' did'nt reached to {}".format(msg_str, receiverAddress))
+        if msg_str != '-1':
+            print("The message '{}' did'nt reached to the {}!!".format(msg_str, receiverName))
+        else:
+            print("The server is still working!!")
+        logging.critical("The server is still working!!")
 
 def server():
     try:
@@ -49,13 +76,12 @@ def client():
 
     sockClient.settimeout(5)
 
-    IP = '127.0.0.1'
-    port = 5005
-
-    clientAddress = (IP, port)
+    clientAddress = getClientAddress()
     sockClient.bind(clientAddress)
 
+# getClientAddress
+def getClientAddress():
+    return ('127.0.0.1', 5005)
 
-server()
-msg_str = "NONE"
-client()
+
+
