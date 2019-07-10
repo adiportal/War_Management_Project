@@ -59,3 +59,18 @@ def sendMessage(sendMsg, sock, app2Address):
         else:
             print("App2 is still working!!")
         logging.critical("App2 is still working!!")
+
+
+sock = getSock()
+sock.bind(getApp1Address())
+
+app2Address = getApp2Address()
+
+# print("Welcome to UDP Client/Server App\nPress [Esc] / [Space] for Exit")
+# time.sleep(2)
+
+msg_str = ""
+
+while msg_str != "-1":
+    msg_str = input()
+    sendMessage(msg_str, sock, app2Address)

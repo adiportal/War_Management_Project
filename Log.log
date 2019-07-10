@@ -57,3 +57,35 @@
 2019-06-16 11:14:03,096 : DEBUG : Client : Socket Successfully Created!
 2019-06-16 11:14:08,141 : ERROR : Client : The message 'Sconnect' did'nt reached to ('192.168.1.1', 5004)
 2019-06-16 11:14:08,157 : CRITICAL : Client : The server is still working!!
+2019-07-10 13:13:16,068 : DEBUG : App3 : Socket Successfully Created!
+2019-07-10 13:13:16,069 : DEBUG : App3 : Listening
+2019-07-10 13:13:21,713 : DEBUG : App1 : Socket Successfully Created!
+2019-07-10 13:13:29,686 : DEBUG : App1 : Message has been sent to App2 ('127.0.0.1', 5003) : connect
+2019-07-10 13:13:29,686 : DEBUG : App3 : Received message from App2 ('127.0.0.1', 5001) : connect
+2019-07-10 13:13:29,686 : DEBUG : App1 : The message 'connect' reached to ('127.0.0.1', 5003)
+2019-07-10 13:57:18,361 : DEBUG : App2 : Socket Successfully Created!
+2019-07-10 13:57:18,361 : DEBUG : App2 : Listening
+2019-07-10 13:57:26,159 : DEBUG : App1 : Socket Successfully Created!
+2019-07-10 13:57:55,667 : DEBUG : App2 : Socket Successfully Created!
+2019-07-10 13:57:55,667 : DEBUG : App2 : Listening
+2019-07-10 13:58:06,740 : DEBUG : App1 : Socket Successfully Created!
+2019-07-10 14:00:21,359 : DEBUG : App1 : Socket Successfully Created!
+2019-07-10 14:00:56,964 : DEBUG : App1 : Message has been sent to App2 ('127.0.0.1', 5002) : App2hello
+2019-07-10 14:00:56,965 : DEBUG : App2 : Received message from App1 ('127.0.0.1', 5001) : App2hello
+2019-07-10 14:00:56,965 : DEBUG : App1 : The message 'App2hello' reached to ('127.0.0.1', 5002)
+2019-07-10 14:02:01,655 : DEBUG : App1 : Socket Successfully Created!
+2019-07-10 14:02:11,037 : DEBUG : App1 : Socket Successfully Created!
+2019-07-10 14:02:14,744 : DEBUG : App2 : Socket Successfully Created!
+2019-07-10 14:02:14,745 : DEBUG : App2 : Listening
+2019-07-10 14:02:25,246 : DEBUG : App1 : Message has been sent to App2 ('127.0.0.1', 5002) : App1hello
+2019-07-10 14:02:46,207 : DEBUG : App2 : Socket Successfully Created!
+2019-07-10 14:02:46,207 : DEBUG : App2 : Listening
+2019-07-10 14:02:50,470 : DEBUG : App1 : Socket Successfully Created!
+2019-07-10 14:03:12,018 : DEBUG : App1 : Message has been sent to App2 ('127.0.0.1', 5002) : Apphello
+2019-07-10 14:03:49,836 : DEBUG : App1 : Socket Successfully Created!
+2019-07-10 14:03:59,791 : DEBUG : App2 : Socket Successfully Created!
+2019-07-10 14:03:59,792 : DEBUG : App2 : Listening
+2019-07-10 14:04:25,647 : DEBUG : App1 : Socket Successfully Created!
+2019-07-10 14:04:32,835 : DEBUG : App1 : Message has been sent to App2 ('127.0.0.1', 5002) : App2hello
+2019-07-10 14:04:32,835 : DEBUG : App2 : Received message from App1 ('127.0.0.1', 5001) : hello
+2019-07-10 14:04:32,836 : DEBUG : App1 : The message 'App2hello' reached to ('127.0.0.1', 5002)
