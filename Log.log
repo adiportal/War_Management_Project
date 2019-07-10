@@ -24,3 +24,36 @@
 2019-06-02 19:39:07,122 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5004) : M786989
 2019-06-02 19:39:07,122 : DEBUG : Middle : Received message from Client ('127.0.0.1', 5003) : 786989
 2019-06-02 19:39:07,122 : DEBUG : Client : The message 'M786989' reached to ('127.0.0.1', 5004)
+2019-06-14 16:37:25,793 : DEBUG : Client : Socket Successfully Created!
+2019-06-14 16:37:25,793 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5004) : S842155
+2019-06-14 16:37:25,793 : ERROR : Client : The message 'S842155' did'nt reached to ('127.0.0.1', 5004)
+2019-06-14 16:37:25,794 : CRITICAL : Client : The server is still working!!
+2019-06-14 16:37:25,794 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5004) : M344117
+2019-06-14 16:37:25,794 : ERROR : Client : The message 'M344117' did'nt reached to ('127.0.0.1', 5004)
+2019-06-14 16:37:25,794 : CRITICAL : Client : The server is still working!!
+2019-06-14 18:53:01,217 : DEBUG : Middle : Socket Successfully Created!
+2019-06-14 18:54:01,310 : DEBUG : Middle : Socket Successfully Created!
+2019-06-14 18:54:05,695 : DEBUG : Client : Socket Successfully Created!
+2019-06-14 18:54:11,878 : DEBUG : Client : Socket Successfully Created!
+2019-06-14 18:54:19,255 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5004) : Sconnect
+2019-06-14 18:54:19,255 : DEBUG : Middle : Received message from Client ('127.0.0.1', 5008) : connect
+2019-06-14 18:54:21,240 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5004) : Sconnect
+2019-06-14 18:54:21,241 : ERROR : Client : The message 'Sconnect' did'nt reached to ('127.0.0.1', 5004)
+2019-06-14 18:54:21,241 : CRITICAL : Client : The server is still working!!
+2019-06-14 18:54:24,255 : ERROR : Client : The message 'Sconnect' did'nt reached to ('127.0.0.1', 5004)
+2019-06-14 18:54:24,255 : CRITICAL : Client : The server is still working!!
+2019-06-16 11:10:34,155 : DEBUG : Client : Socket Successfully Created!
+2019-06-16 11:10:38,498 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5004) : Sconnect
+2019-06-16 11:10:38,498 : ERROR : Client : The message 'Sconnect' did'nt reached to ('127.0.0.1', 5004)
+2019-06-16 11:10:38,498 : CRITICAL : Client : The server is still working!!
+2019-06-16 11:11:33,571 : DEBUG : Client : Socket Successfully Created!
+2019-06-16 11:11:42,163 : DEBUG : Client : Socket Successfully Created!
+2019-06-16 11:11:46,740 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5004) : Sconnect
+2019-06-16 11:11:46,740 : ERROR : Client : The message 'Sconnect' did'nt reached to ('127.0.0.1', 5004)
+2019-06-16 11:11:46,740 : CRITICAL : Client : The server is still working!!
+2019-06-16 11:13:21,108 : DEBUG : Client : Socket Successfully Created!
+2019-06-16 11:13:24,342 : ERROR : Client : The message 'Sconnect' did'nt reached to ('192.168.1.1', 5004)
+2019-06-16 11:13:24,342 : CRITICAL : Client : The server is still working!!
+2019-06-16 11:14:03,096 : DEBUG : Client : Socket Successfully Created!
+2019-06-16 11:14:08,141 : ERROR : Client : The message 'Sconnect' did'nt reached to ('192.168.1.1', 5004)
+2019-06-16 11:14:08,157 : CRITICAL : Client : The server is still working!!

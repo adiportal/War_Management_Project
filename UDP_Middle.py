@@ -3,6 +3,8 @@ import logging
 
 logging.basicConfig(filename = 'Log.log', level = logging.DEBUG, format = '%(asctime)s : %(levelname)s : Middle : %(message)s')
 
+clients = []
+
 # sendMassage
 def sendMessage(msg_str, senderAddress, senderName, receiverAddress, receiverName):
 
@@ -56,22 +58,32 @@ def server():
     while True:
 
         # set max size of message
-        msg_bytes, receiverAddsend = sockServer.recvfrom(1024)
+        msg_bytes, senderAddress = sockServer.recvfrom(1024)
 
         # decoding the message to String
         msg_str = msg_bytes.decode('utf-8')
 
         # printing the message and the client Address
-        print('Received message from Client {} : {}'.format(receiverAddsend, msg_str[1:]))
-        logging.debug("Received message from Client {} : {}".format(receiverAddsend, msg_str[1:]))
+        print('Received message from Client {} : {}'.format(senderAddress, msg_str[1:]))
+        logging.debug("Received message from Client {} : {}".format(senderAddress, msg_str[1:]))
+
+        if msg_str[1:] == "connect":
+            if not clients:
+                clients.append(senderAddress)
+                sockServer.sendto(senderAddress + "Connected", senderAddress)
+            else:
+                clients.append(senderAddress)
+                for client in clients:
+                    sockServer.sendto(client + "Connected", senderAddress)
 
         if msg_str[0] == "S":
+
             sendMessage(msg_str[1:], getMiddle_SAddress(), "Middle_S", getMiddle_CAddress(), "Middle_C")
             print("ports")
 
 
         elif msg_str[0] == "M":
-            sockServer.sendto(msg_str.encode(), receiverAddsend)
+            sockServer.sendto(msg_str.encode(), senderAddress)
 
         if msg_str == '-1':
             print("Closing Server...")

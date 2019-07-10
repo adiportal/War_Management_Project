@@ -66,7 +66,7 @@ def getClientAddress():
     return (IP, port)
 
 def getMiddle_SAddress():
-    IP = '127.0.0.1'
+    IP = '192.168.1.1'
     port = 5004
     return (IP, port)
 
@@ -98,11 +98,11 @@ middleAddress = getMiddle_SAddress()
 # print("Welcome to UDP Client/Server App\nPress [Esc] / [Space] for Exit")
 # time.sleep(2)
 
-msg_str = "S" + randomNum()
+strr = input()
+msg_str = "Sconnect"
 sendMessage(msg_str, sock, middleAddress)
 
-msg_str = "M" + randomNum()
-sendMessage(msg_str, sock, middleAddress)
+
 
 
 
