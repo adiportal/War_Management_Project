@@ -53,8 +53,14 @@ while True:
 
         sock.sendto(recMsg.encode(), recAddress)
 
-    if recMsg == '-1':
-        print("Closing App3...")
-        logging.debug('Closing App3...')
-        quit()
+    elif (recMsg[:4] == "App3" and recAddress == getApp1Address()):
+
+        logging.debug("Received message from App1 {} : {}".format(recAddress, recMsg))
+        sock.sendto(recMsg.encode(), getApp3Address())
+
+    elif (recMsg[:4] == "App3" and recAddress == getApp3Address()):
+
+        logging.debug("Received message from App3 {} : {}".format(recAddress, recMsg))
+        sock.sendto(recMsg.encode(), getApp1Address())
+
 

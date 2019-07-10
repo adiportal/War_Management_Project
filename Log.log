@@ -89,3 +89,20 @@
 2019-07-10 14:04:32,835 : DEBUG : App1 : Message has been sent to App2 ('127.0.0.1', 5002) : App2hello
 2019-07-10 14:04:32,835 : DEBUG : App2 : Received message from App1 ('127.0.0.1', 5001) : hello
 2019-07-10 14:04:32,836 : DEBUG : App1 : The message 'App2hello' reached to ('127.0.0.1', 5002)
+2019-07-10 14:35:58,730 : DEBUG : App2 : Socket Successfully Created!
+2019-07-10 14:35:58,731 : DEBUG : App2 : Listening
+2019-07-10 14:36:06,058 : DEBUG : App1 : Socket Successfully Created!
+2019-07-10 14:36:14,653 : DEBUG : App3 : Socket Successfully Created!
+2019-07-10 14:36:14,653 : DEBUG : App3 : Listening
+2019-07-10 14:36:24,794 : DEBUG : App2 : Received message from App1 ('127.0.0.1', 5001) : App3hello
+o
+2019-07-10 14:38:49,171 : DEBUG : App2 : Socket Successfully Created!
+2019-07-10 14:38:49,172 : DEBUG : App2 : Listening
+2019-07-10 14:38:53,522 : DEBUG : App1 : Socket Successfully Created!
+2019-07-10 14:38:59,761 : DEBUG : App3 : Socket Successfully Created!
+2019-07-10 14:38:59,761 : DEBUG : App3 : Listening
+2019-07-10 14:39:07,037 : DEBUG : App2 : Received message from App1 ('127.0.0.1', 5001) : App3hello
+o
+2019-07-10 14:39:07,038 : DEBUG : App3 : Received message from App2 ('127.0.0.1', 5002) : App3hello
+2019-07-10 14:39:07,038 : DEBUG : App2 : Received message from App3 ('127.0.0.1', 5003) : App3hello
+2019-07-10 14:39:07,038 : DEBUG : App1 : The message 'App3hello' reached to App3 ('127.0.0.1', 5003)

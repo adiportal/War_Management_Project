@@ -28,6 +28,10 @@ def getApp2Address():
     port = 5002
     return (IP, port)
 
+def getApp3Address():
+    IP = '127.0.0.1'
+    port = 5003
+    return (IP, port)
 
 # Exit
 def exit(sock, serverAddress):
@@ -47,30 +51,32 @@ def sendMessage(sendMsg, sock, app2Address):
         recMsg, app2Address = sock.recvfrom(1024)
         recMsg = recMsg.decode('utf-8')
 
-        if recMsg != '-1':
+        if recMsg[:4] == 'App2':
             # print receive message
-            print("The message '{}' reached to the App2".format(recMsg))
-        logging.debug("The message '{}' reached to {}".format(recMsg, app2Address))
+            print("The message '{}' reached to App2".format(recMsg))
+            logging.debug("The message '{}' reached to App2 {}".format(recMsg, app2Address))
+
+        elif recMsg[:4] == 'App3':
+            print("The message '{}' reached to App3".format(recMsg))
+            logging.debug("The message '{}' reached to App3 {}".format(recMsg, getApp3Address()))
 
     except:
         logging.error("The message '{}' did'nt reached to {}".format(recMsg, app2Address))
-        if sendMsg != '-1':
-            print("The message '{}' did'nt reached to the App2!!".format(recMsg))
-        else:
-            print("App2 is still working!!")
-        logging.critical("App2 is still working!!")
-
+        print("The message '{}' did'nt reached to the App2!!".format(recMsg))
 
 sock = getSock()
 sock.bind(getApp1Address())
 
 app2Address = getApp2Address()
 
-# print("Welcome to UDP Client/Server App\nPress [Esc] / [Space] for Exit")
-# time.sleep(2)
-
 msg_str = ""
 
-while msg_str != "-1":
+while msg_str == "":
     msg_str = input()
-    sendMessage(msg_str, sock, app2Address)
+
+    if (msg_str[:4] != "App2" or msg_str[:4] != "App3"):
+        print("The Message you entered is not correct")
+        msg_str = ""
+    else:
+        sendMessage(msg_str, sock, app2Address)
+        msg_str = ""

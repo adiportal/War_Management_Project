@@ -33,13 +33,10 @@ while True:
     recMsg = recMsg.decode('utf-8')
 
     # printing the message and the client Address
-    print('Received message from App2 {} : {}'.format(app2Address, recMsg))
-    logging.debug("Received message from App2 {} : {}".format(app2Address, recMsg))
+    print('Received message from App1 {} : {}'.format(app2Address, recMsg))
+    logging.debug("Received message from App1 {} : {}".format(app2Address, recMsg))
 
     sock.sendto(recMsg.encode(), app2Address)
 
-    if recMsg == '-1':
-        print("Closing App3...")
-        logging.debug('Closing App3...')
-        quit()
+
 
