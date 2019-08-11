@@ -37,6 +37,18 @@ def getBCAddress():
     port = 5003
     return (IP, port)
 
+# Check Message
+def checkMSG(msg_str):
+
+    if msg_str[:2] == 'CC':
+        return 'CC'
+
+    elif msg_str[:2] == 'BC':
+        return 'BC'
+
+    else:
+        return 'null'
+
 # **Main**
 # Initialize Server Address
 CCAddress = getCCAddress()
@@ -57,7 +69,9 @@ while True:
     # decoding the message to String
     recMsg = recMsg.decode('utf-8')
 
-    if (recMsg[:2] == "CC" and recAddress == getSoldierAddress()):
+    check = checkMSG(recMsg)
+
+    if (check == "CC" and recAddress == getSoldierAddress()):
 
         # printing the message and the client Address
         print('Received message from Soldier {} : {}'.format(recAddress, recMsg[4:]))
@@ -65,12 +79,12 @@ while True:
 
         sock.sendto(recMsg.encode(), recAddress)
 
-    elif (recMsg[:2] == "BC" and recAddress == getSoldierAddress()):
+    elif (check == "BC" and recAddress == getSoldierAddress()):
 
         logging.debug("Received message from Soldier {} : {}".format(recAddress, recMsg))
         sock.sendto(recMsg.encode(), getBCAddress())
 
-    elif (recMsg[:2] == "BC" and recAddress == getBCAddress()):
+    elif (check == "BC" and recAddress == getBCAddress()):
 
         logging.debug("Received message from BC {} : {}".format(recAddress, recMsg))
         sock.sendto(recMsg.encode(), getSoldierAddress())
