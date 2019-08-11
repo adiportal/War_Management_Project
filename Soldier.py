@@ -58,6 +58,7 @@ def checkMSG(msg_str):
 # sendMassage
 def sendMessage(sendMsg, sock, CCAddress):
 
+    recMsg = ''
     try:
         sock.sendto(sendMsg.encode(), CCAddress)
 
@@ -94,10 +95,12 @@ while msg_str == "":
     msg_str = input()
     check = checkMSG(msg_str)
 
-    if (check != "CC" or check != "BC"):
+    if (check == "CC" or check == "BC"):
+        sendMessage(msg_str, sock, CCAddress)
+        msg_str = ""
+
+    else:
         print("The Message you entered is not correct")
         msg_str = ""
         continue
 
-    sendMessage(msg_str, sock, CCAddress)
-    msg_str = ""

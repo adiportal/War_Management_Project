@@ -1,115 +1,34 @@
-2019-06-02 19:32:00,591 : DEBUG : Server : Socket Successfully Created!
-2019-06-02 19:32:00,591 : DEBUG : Server : Listening
-2019-06-02 19:32:04,257 : DEBUG : Middle : Socket Successfully Created!
-2019-06-02 19:32:07,745 : DEBUG : Client : Socket Successfully Created!
-2019-06-02 19:32:07,745 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5004) : S750432
-2019-06-02 19:32:07,745 : DEBUG : Middle : Received message from Client ('127.0.0.1', 5003) : 750432
-2019-06-02 19:32:07,746 : ERROR : Middle : The message '750432' did'nt reached to ('127.0.0.1', 5005)
-2019-06-02 19:32:07,746 : CRITICAL : Middle : The server is still working!!
-2019-06-02 19:32:12,746 : ERROR : Client : The message 'S750432' did'nt reached to ('127.0.0.1', 5004)
-2019-06-02 19:32:12,746 : CRITICAL : Client : The server is still working!!
-2019-06-02 19:32:12,746 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5004) : M394965
-2019-06-02 19:32:12,746 : DEBUG : Middle : Received message from Client ('127.0.0.1', 5003) : 394965
-2019-06-02 19:32:12,747 : DEBUG : Client : The message 'M394965' reached to ('127.0.0.1', 5004)
-2019-06-02 19:38:43,814 : DEBUG : Server : Socket Successfully Created!
-2019-06-02 19:38:43,814 : DEBUG : Server : Listening
-2019-06-02 19:38:55,298 : DEBUG : Middle : Socket Successfully Created!
-2019-06-02 19:39:02,120 : DEBUG : Client : Socket Successfully Created!
-2019-06-02 19:39:02,121 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5004) : S746433
-2019-06-02 19:39:02,121 : DEBUG : Middle : Received message from Client ('127.0.0.1', 5003) : 746433
-2019-06-02 19:39:02,121 : ERROR : Middle : The message '746433' did'nt reached to ('127.0.0.1', 5005)
-2019-06-02 19:39:02,121 : CRITICAL : Middle : The server is still working!!
-2019-06-02 19:39:07,122 : ERROR : Client : The message 'S746433' did'nt reached to ('127.0.0.1', 5004)
-2019-06-02 19:39:07,122 : CRITICAL : Client : The server is still working!!
-2019-06-02 19:39:07,122 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5004) : M786989
-2019-06-02 19:39:07,122 : DEBUG : Middle : Received message from Client ('127.0.0.1', 5003) : 786989
-2019-06-02 19:39:07,122 : DEBUG : Client : The message 'M786989' reached to ('127.0.0.1', 5004)
-2019-06-14 16:37:25,793 : DEBUG : Client : Socket Successfully Created!
-2019-06-14 16:37:25,793 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5004) : S842155
-2019-06-14 16:37:25,793 : ERROR : Client : The message 'S842155' did'nt reached to ('127.0.0.1', 5004)
-2019-06-14 16:37:25,794 : CRITICAL : Client : The server is still working!!
-2019-06-14 16:37:25,794 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5004) : M344117
-2019-06-14 16:37:25,794 : ERROR : Client : The message 'M344117' did'nt reached to ('127.0.0.1', 5004)
-2019-06-14 16:37:25,794 : CRITICAL : Client : The server is still working!!
-2019-06-14 18:53:01,217 : DEBUG : Middle : Socket Successfully Created!
-2019-06-14 18:54:01,310 : DEBUG : Middle : Socket Successfully Created!
-2019-06-14 18:54:05,695 : DEBUG : Client : Socket Successfully Created!
-2019-06-14 18:54:11,878 : DEBUG : Client : Socket Successfully Created!
-2019-06-14 18:54:19,255 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5004) : Sconnect
-2019-06-14 18:54:19,255 : DEBUG : Middle : Received message from Client ('127.0.0.1', 5008) : connect
-2019-06-14 18:54:21,240 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5004) : Sconnect
-2019-06-14 18:54:21,241 : ERROR : Client : The message 'Sconnect' did'nt reached to ('127.0.0.1', 5004)
-2019-06-14 18:54:21,241 : CRITICAL : Client : The server is still working!!
-2019-06-14 18:54:24,255 : ERROR : Client : The message 'Sconnect' did'nt reached to ('127.0.0.1', 5004)
-2019-06-14 18:54:24,255 : CRITICAL : Client : The server is still working!!
-2019-06-16 11:10:34,155 : DEBUG : Client : Socket Successfully Created!
-2019-06-16 11:10:38,498 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5004) : Sconnect
-2019-06-16 11:10:38,498 : ERROR : Client : The message 'Sconnect' did'nt reached to ('127.0.0.1', 5004)
-2019-06-16 11:10:38,498 : CRITICAL : Client : The server is still working!!
-2019-06-16 11:11:33,571 : DEBUG : Client : Socket Successfully Created!
-2019-06-16 11:11:42,163 : DEBUG : Client : Socket Successfully Created!
-2019-06-16 11:11:46,740 : DEBUG : Client : Message has been sent to Server ('127.0.0.1', 5004) : Sconnect
-2019-06-16 11:11:46,740 : ERROR : Client : The message 'Sconnect' did'nt reached to ('127.0.0.1', 5004)
-2019-06-16 11:11:46,740 : CRITICAL : Client : The server is still working!!
-2019-06-16 11:13:21,108 : DEBUG : Client : Socket Successfully Created!
-2019-06-16 11:13:24,342 : ERROR : Client : The message 'Sconnect' did'nt reached to ('192.168.1.1', 5004)
-2019-06-16 11:13:24,342 : CRITICAL : Client : The server is still working!!
-2019-06-16 11:14:03,096 : DEBUG : Client : Socket Successfully Created!
-2019-06-16 11:14:08,141 : ERROR : Client : The message 'Sconnect' did'nt reached to ('192.168.1.1', 5004)
-2019-06-16 11:14:08,157 : CRITICAL : Client : The server is still working!!
-2019-07-10 13:13:16,068 : DEBUG : App3 : Socket Successfully Created!
-2019-07-10 13:13:16,069 : DEBUG : App3 : Listening
-2019-07-10 13:13:21,713 : DEBUG : App1 : Socket Successfully Created!
-2019-07-10 13:13:29,686 : DEBUG : App1 : Message has been sent to App2 ('127.0.0.1', 5003) : connect
-2019-07-10 13:13:29,686 : DEBUG : App3 : Received message from App2 ('127.0.0.1', 5001) : connect
-2019-07-10 13:13:29,686 : DEBUG : App1 : The message 'connect' reached to ('127.0.0.1', 5003)
-2019-07-10 13:57:18,361 : DEBUG : App2 : Socket Successfully Created!
-2019-07-10 13:57:18,361 : DEBUG : App2 : Listening
-2019-07-10 13:57:26,159 : DEBUG : App1 : Socket Successfully Created!
-2019-07-10 13:57:55,667 : DEBUG : App2 : Socket Successfully Created!
-2019-07-10 13:57:55,667 : DEBUG : App2 : Listening
-2019-07-10 13:58:06,740 : DEBUG : App1 : Socket Successfully Created!
-2019-07-10 14:00:21,359 : DEBUG : App1 : Socket Successfully Created!
-2019-07-10 14:00:56,964 : DEBUG : App1 : Message has been sent to App2 ('127.0.0.1', 5002) : App2hello
-2019-07-10 14:00:56,965 : DEBUG : App2 : Received message from App1 ('127.0.0.1', 5001) : App2hello
-2019-07-10 14:00:56,965 : DEBUG : App1 : The message 'App2hello' reached to ('127.0.0.1', 5002)
-2019-07-10 14:02:01,655 : DEBUG : App1 : Socket Successfully Created!
-2019-07-10 14:02:11,037 : DEBUG : App1 : Socket Successfully Created!
-2019-07-10 14:02:14,744 : DEBUG : App2 : Socket Successfully Created!
-2019-07-10 14:02:14,745 : DEBUG : App2 : Listening
-2019-07-10 14:02:25,246 : DEBUG : App1 : Message has been sent to App2 ('127.0.0.1', 5002) : App1hello
-2019-07-10 14:02:46,207 : DEBUG : App2 : Socket Successfully Created!
-2019-07-10 14:02:46,207 : DEBUG : App2 : Listening
-2019-07-10 14:02:50,470 : DEBUG : App1 : Socket Successfully Created!
-2019-07-10 14:03:12,018 : DEBUG : App1 : Message has been sent to App2 ('127.0.0.1', 5002) : Apphello
-2019-07-10 14:03:49,836 : DEBUG : App1 : Socket Successfully Created!
-2019-07-10 14:03:59,791 : DEBUG : App2 : Socket Successfully Created!
-2019-07-10 14:03:59,792 : DEBUG : App2 : Listening
-2019-07-10 14:04:25,647 : DEBUG : App1 : Socket Successfully Created!
-2019-07-10 14:04:32,835 : DEBUG : App1 : Message has been sent to App2 ('127.0.0.1', 5002) : App2hello
-2019-07-10 14:04:32,835 : DEBUG : App2 : Received message from App1 ('127.0.0.1', 5001) : hello
-2019-07-10 14:04:32,836 : DEBUG : App1 : The message 'App2hello' reached to ('127.0.0.1', 5002)
-2019-07-10 14:35:58,730 : DEBUG : App2 : Socket Successfully Created!
-2019-07-10 14:35:58,731 : DEBUG : App2 : Listening
-2019-07-10 14:36:06,058 : DEBUG : App1 : Socket Successfully Created!
-2019-07-10 14:36:14,653 : DEBUG : App3 : Socket Successfully Created!
-2019-07-10 14:36:14,653 : DEBUG : App3 : Listening
-2019-07-10 14:36:24,794 : DEBUG : App2 : Received message from App1 ('127.0.0.1', 5001) : App3hello
+
+2019-08-11 13:03:35,662 : DEBUG : CC : Socket Successfully Created!
+2019-08-11 13:03:35,662 : DEBUG : CC : Listening
+2019-08-11 13:03:41,530 : DEBUG : BC : Socket Successfully Created!
+2019-08-11 13:03:41,530 : DEBUG : BC : Listening
+2019-08-11 13:04:11,849 : DEBUG : Soldier : Socket Successfully Created!
+2019-08-11 13:04:16,361 : DEBUG : CC : Socket Successfully Created!
+2019-08-11 13:04:16,361 : DEBUG : CC : Listening
+2019-08-11 13:04:20,992 : DEBUG : BC : Socket Successfully Created!
+2019-08-11 13:04:20,992 : DEBUG : BC : Listening
+2019-08-11 13:24:21,924 : DEBUG : Soldier : Socket Successfully Created!
+2019-08-11 13:24:26,024 : DEBUG : CC : Socket Successfully Created!
+2019-08-11 13:24:26,024 : DEBUG : CC : Listening
+2019-08-11 13:24:30,224 : DEBUG : BC : Socket Successfully Created!
+2019-08-11 13:24:30,225 : DEBUG : BC : Listening
+2019-08-11 13:24:46,950 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CCHello
+2019-08-11 13:24:46,950 : DEBUG : CC : Received message from Soldier ('127.0.0.1', 5001) : CCHello
+2019-08-11 13:24:46,950 : DEBUG : Soldier : The message 'CCHello' reached to CC ('127.0.0.1', 5002)
+2019-08-11 13:25:36,240 : DEBUG : CC : Received message from Soldier ('127.0.0.1', 5001) : BCHello
 o
-2019-07-10 14:38:49,171 : DEBUG : App2 : Socket Successfully Created!
-2019-07-10 14:38:49,172 : DEBUG : App2 : Listening
-2019-07-10 14:38:53,522 : DEBUG : App1 : Socket Successfully Created!
-2019-07-10 14:38:59,761 : DEBUG : App3 : Socket Successfully Created!
-2019-07-10 14:38:59,761 : DEBUG : App3 : Listening
-2019-07-10 14:39:07,037 : DEBUG : App2 : Received message from App1 ('127.0.0.1', 5001) : App3hello
-o
-2019-07-10 14:39:07,038 : DEBUG : App3 : Received message from App2 ('127.0.0.1', 5002) : App3hello
-2019-07-10 14:39:07,038 : DEBUG : App2 : Received message from App3 ('127.0.0.1', 5003) : App3hello
-2019-07-10 14:39:07,038 : DEBUG : App1 : The message 'App3hello' reached to App3 ('127.0.0.1', 5003)
-2019-08-11 11:46:35,169 : DEBUG : App2 : Socket Successfully Created!
-2019-08-11 11:46:35,169 : DEBUG : App2 : Listening
-2019-08-11 11:46:39,267 : DEBUG : App3 : Socket Successfully Created!
-2019-08-11 11:46:39,267 : DEBUG : App3 : Listening
-2019-08-11 11:46:45,576 : DEBUG : Soldier : Socket Successfully Created!
-2019-08-11 11:47:53,599 : DEBUG : Soldier : Socket Successfully Created!
-2019-08-11 11:49:05,118 : DEBUG : Soldier : Socket Successfully Created!
+2019-08-11 13:25:36,240 : DEBUG : BC : Received message from Soldier ('127.0.0.1', 5002) : BCHello
+2019-08-11 13:25:36,240 : DEBUG : CC : Received message from BC ('127.0.0.1', 5003) : BCHello
+2019-08-11 13:25:36,241 : DEBUG : Soldier : The message 'BCHello' reached to BC ('127.0.0.1', 5003)
+2019-08-11 13:26:53,041 : DEBUG : BC : Socket Successfully Created!
+2019-08-11 13:26:53,041 : DEBUG : BC : Listening
+2019-08-11 13:26:56,137 : DEBUG : CC : Socket Successfully Created!
+2019-08-11 13:26:56,137 : DEBUG : CC : Listening
+2019-08-11 13:27:06,648 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CCHello
+2019-08-11 13:27:06,648 : DEBUG : CC : Received message from Soldier ('127.0.0.1', 5001) : CCHello
+2019-08-11 13:27:06,648 : DEBUG : Soldier : The message 'CCHello' reached to CC ('127.0.0.1', 5002)
+2019-08-11 13:27:13,694 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : BCHello
+2019-08-11 13:27:13,694 : DEBUG : BC : Received message from Soldier ('127.0.0.1', 5002) : BCHello
+2019-08-11 13:27:13,694 : DEBUG : CC : Received message from BC ('127.0.0.1', 5003) : BCHello
+2019-08-11 13:27:13,694 : DEBUG : Soldier : The message 'BCHello' reached to BC ('127.0.0.1', 5003)

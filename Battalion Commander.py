@@ -12,7 +12,6 @@ def getSock():
         logging.debug("Socket Successfully Created!")
     except socket.error as err:
         logging.error("Socket creation failed with error {}".format(err))
-    sock.settimeout(5)
 
     return sock
 
@@ -75,7 +74,7 @@ while True:
 
     else:
         # printing the message and the Sender Address
-        print('Received message from Soldier {} : {}'.format(CCAddress, recMsg))
+        print('Received message from Soldier {} : {}'.format(CCAddress, recMsg[2:]))
         logging.debug("Received message from Soldier {} : {}".format(CCAddress, recMsg))
 
         sock.sendto(recMsg.encode(), CCAddress)
