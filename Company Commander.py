@@ -1,5 +1,7 @@
 import socket
 import logging
+import concurrent.futures
+
 
 # Initialize the Logger
 logging.basicConfig(filename = 'Log.log', level = logging.DEBUG, format = '%(asctime)s : %(levelname)s : CC : %(message)s')
@@ -49,6 +51,7 @@ def checkMSG(msg_str):
         return 'null'
 
 def sendMessage(recMsg, recAddress):
+
     check = checkMSG(recMsg)
 
     if (check == "CC" and recAddress == getSoldierAddress()):
@@ -72,6 +75,7 @@ def sendMessage(recMsg, recAddress):
         logging.ERROR("An invalid message has reached: \'{}\'".format(recMsg))
 
 # **Main**
+
 # Initialize Server Address
 CCAddress = getCCAddress()
 
@@ -91,6 +95,11 @@ while True:
     # decoding the message to String
     recMsg = recMsg.decode('utf-8')
 
-    sendMessage(recMsg, recAddress)
+
+    #sendMessage(recMsg, recAddress)
+    with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
+        executor.submit(sendMessage(recMsg, recAddress))
+
+
 
 
