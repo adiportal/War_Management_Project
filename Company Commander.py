@@ -2,7 +2,7 @@ import socket
 import logging
 
 # Initialize the Logger
-logging.basicConfig(filename = 'Log.log', level = logging.DEBUG, format = '%(asctime)s : %(levelname)s : App2 : %(message)s')
+logging.basicConfig(filename = 'Log.log', level = logging.DEBUG, format = '%(asctime)s : %(levelname)s : CC : %(message)s')
 
 
 
@@ -37,6 +37,7 @@ def getBCAddress():
     port = 5003
     return (IP, port)
 
+# **Main**
 # Initialize Server Address
 CCAddress = getCCAddress()
 

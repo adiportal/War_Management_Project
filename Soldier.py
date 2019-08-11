@@ -39,7 +39,7 @@ def getBCAddress():
 def exit(sock, serverAddress):
     sendMessage('-1', sock, serverAddress)
     print("\nGood Bye :)")
-    logging.debug("Closing Soldier App...")
+    logging.debug("Closing Soldier...")
     quit()
 
 # sendMassage
@@ -66,6 +66,7 @@ def sendMessage(sendMsg, sock, CCAddress):
         logging.error("The message '{}' did'nt reached to CC {}".format(recMsg, CCAddress))
         print("The message '{}' did'nt reached to the Company Commander!!".format(recMsg))
 
+# **Main**
 sock = getSock()
 sock.bind(getSoldierAddress())
 

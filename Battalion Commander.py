@@ -2,24 +2,47 @@ import socket
 import logging
 
 # Initialize the Logger
-logging.basicConfig(filename = 'Log.log', level = logging.DEBUG, format = '%(asctime)s : %(levelname)s : App3 : %(message)s')
+logging.basicConfig(filename = 'Log.log', level = logging.DEBUG, format = '%(asctime)s : %(levelname)s : BC : %(message)s')
+
+# getSock
+def getSock():
+    # Initialize socket
+    try:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        logging.debug("Socket Successfully Created!")
+    except socket.error as err:
+        logging.error("Socket creation failed with error {}".format(err))
+    sock.settimeout(5)
+
+    return sock
+
+# get Soldier Address
+def getSoldierAddress():
+    IP = '127.0.0.1'
+    port = 5001
+    return (IP, port)
+
+# get Company Commander Address
+def getCCAddress():
+    IP = '127.0.0.1'
+    port = 5002
+    return (IP, port)
+
+# get Battalion Commander Address
+def getBCAddress():
+    IP = '127.0.0.1'
+    port = 5003
+    return (IP, port)
+
+# **Main**
+# Initialize Server Address
+BCAddress = getBCAddress()
 
 # Initialize Socket
-try:
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    logging.debug("Socket Successfully Created!")
-except socket.error as err:
-    logging.error("Socket creation failed with error {}".format(err))
-
-IP = '127.0.0.1'
-port = 5003
-
-# Initialize Server Address
-app3Address = (IP, port)
+sock = getSock()
 
 # Bind the socket with the address
-sock.bind(app3Address)
-
+sock.bind(BCAddress)
 
 print('Listening')
 logging.debug('Listening')
@@ -27,16 +50,16 @@ logging.debug('Listening')
 while True:
 
     # set max size of message
-    recMsg, app2Address = sock.recvfrom(1024)
+    recMsg, CCAddress = sock.recvfrom(1024)
 
     # decoding the message to String
     recMsg = recMsg.decode('utf-8')
 
     # printing the message and the client Address
-    print('Received message from App1 {} : {}'.format(app2Address, recMsg))
-    logging.debug("Received message from App1 {} : {}".format(app2Address, recMsg))
+    print('Received message from Soldier {} : {}'.format(CCAddress, recMsg))
+    logging.debug("Received message from Soldier {} : {}".format(CCAddress, recMsg))
 
-    sock.sendto(recMsg.encode(), app2Address)
+    sock.sendto(recMsg.encode(), CCAddress)
 
 
 
