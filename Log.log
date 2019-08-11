@@ -106,3 +106,10 @@ o
 2019-07-10 14:39:07,038 : DEBUG : App3 : Received message from App2 ('127.0.0.1', 5002) : App3hello
 2019-07-10 14:39:07,038 : DEBUG : App2 : Received message from App3 ('127.0.0.1', 5003) : App3hello
 2019-07-10 14:39:07,038 : DEBUG : App1 : The message 'App3hello' reached to App3 ('127.0.0.1', 5003)
+2019-08-11 11:46:35,169 : DEBUG : App2 : Socket Successfully Created!
+2019-08-11 11:46:35,169 : DEBUG : App2 : Listening
+2019-08-11 11:46:39,267 : DEBUG : App3 : Socket Successfully Created!
+2019-08-11 11:46:39,267 : DEBUG : App3 : Listening
+2019-08-11 11:46:45,576 : DEBUG : Soldier : Socket Successfully Created!
+2019-08-11 11:47:53,599 : DEBUG : Soldier : Socket Successfully Created!
+2019-08-11 11:49:05,118 : DEBUG : Soldier : Socket Successfully Created!
