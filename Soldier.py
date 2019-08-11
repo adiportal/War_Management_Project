@@ -77,7 +77,7 @@ def sendMessage(sendMsg, sock, CCAddress):
             logging.debug("The message '{}' reached to BC {}".format(recMsg, getBCAddress()))
 
         else:
-            logging.ERROR("an invalid message has reached: \'{}\'".format(recMsg))
+            logging.ERROR("An invalid message has reached: \'{}\'".format(recMsg))
 
     except:
         logging.error("The message '{}' did'nt reached to CC {}".format(recMsg, CCAddress))
@@ -100,7 +100,7 @@ while msg_str == "":
         msg_str = ""
 
     else:
-        print("The Message you entered is not correct")
+        print("The Message you Entered is not correct")
         msg_str = ""
         continue
 

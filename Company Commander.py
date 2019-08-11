@@ -48,26 +48,7 @@ def checkMSG(msg_str):
     else:
         return 'null'
 
-# **Main**
-# Initialize Server Address
-CCAddress = getCCAddress()
-
-sock = getSock()
-
-# Bind the socket with the address
-sock.bind(CCAddress)
-
-print('Listening')
-logging.debug('Listening')
-
-while True:
-
-    # set max size of message
-    recMsg, recAddress = sock.recvfrom(1024)
-
-    # decoding the message to String
-    recMsg = recMsg.decode('utf-8')
-
+def sendMessage(recMsg, recAddress):
     check = checkMSG(recMsg)
 
     if (check == "CC" and recAddress == getSoldierAddress()):
@@ -88,6 +69,28 @@ while True:
         logging.debug("Received message from BC {} : {}".format(recAddress, recMsg))
         sock.sendto(recMsg.encode(), getSoldierAddress())
     else:
-        continue
+        logging.ERROR("An invalid message has reached: \'{}\'".format(recMsg))
+
+# **Main**
+# Initialize Server Address
+CCAddress = getCCAddress()
+
+sock = getSock()
+
+# Bind the socket with the address
+sock.bind(CCAddress)
+
+print('Listening')
+logging.debug('Listening')
+
+while True:
+
+    # set max size of message
+    recMsg, recAddress = sock.recvfrom(1024)
+
+    # decoding the message to String
+    recMsg = recMsg.decode('utf-8')
+
+    sendMessage(recMsg, recAddress)
 
 
