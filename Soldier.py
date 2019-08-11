@@ -42,6 +42,19 @@ def exit(sock, serverAddress):
     logging.debug("Closing Soldier...")
     quit()
 
+# Check Message
+def checkMSG(msg_str):
+
+    if msg_str[:2] == 'CC':
+        return 'CC'
+
+    elif msg_str[:2] == 'BC':
+        return 'BC'
+
+    else:
+        return 'null'
+
+
 # sendMassage
 def sendMessage(sendMsg, sock, CCAddress):
 
@@ -53,14 +66,17 @@ def sendMessage(sendMsg, sock, CCAddress):
         recMsg, CCAddress = sock.recvfrom(1024)
         recMsg = recMsg.decode('utf-8')
 
-        if recMsg[:4] == 'CC':
+        if checkMSG(recMsg) == 'CC':
             # print receive message
             print("The message '{}' reached to Company Commander".format(recMsg))
             logging.debug("The message '{}' reached to CC {}".format(recMsg, CCAddress))
 
-        elif recMsg[:4] == 'BC':
+        elif checkMSG(recMsg) == 'BC':
             print("The message '{}' reached to Battalion Commander".format(recMsg))
             logging.debug("The message '{}' reached to BC {}".format(recMsg, getBCAddress()))
+
+        else:
+            logging.ERROR("an invalid message has reached: \'{}\'".format(recMsg))
 
     except:
         logging.error("The message '{}' did'nt reached to CC {}".format(recMsg, CCAddress))
@@ -76,8 +92,9 @@ msg_str = ""
 
 while msg_str == "":
     msg_str = input()
+    check = checkMSG(msg_str)
 
-    if (msg_str[:2] != "CC" or msg_str[:2] != "BC"):
+    if (check != "CC" or check != "BC"):
         print("The Message you entered is not correct")
         msg_str = ""
         continue
