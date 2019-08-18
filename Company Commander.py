@@ -1,11 +1,9 @@
 import socket
 import logging
-import concurrent.futures
-
+from concurrent.futures import ThreadPoolExecutor
 
 # Initialize the Logger
 logging.basicConfig(filename = 'Log.log', level = logging.DEBUG, format = '%(asctime)s : %(levelname)s : CC : %(message)s')
-
 
 
 # getSock
@@ -50,7 +48,13 @@ def checkMSG(msg_str):
     else:
         return 'null'
 
-def sendMessage(recMsg, recAddress):
+# receiveMsg
+def receiveMsg(sock):
+    # set max size of message
+    recMsg, recAddress = sock.recvfrom(1024)
+
+    # decoding the message to String
+    recMsg = recMsg.decode('utf-8')
 
     check = checkMSG(recMsg)
 
@@ -60,22 +64,27 @@ def sendMessage(recMsg, recAddress):
         print('Received message from Soldier {} : {}'.format(recAddress, recMsg[2:]))
         logging.debug("Received message from Soldier {} : {}".format(recAddress, recMsg))
 
-        sock.sendto(recMsg.encode(), recAddress)
+        pool.submit(sendMsg, recMsg, recAddress)
 
     elif (check == "BC" and recAddress == getSoldierAddress()):
 
         logging.debug("Received message from Soldier {} : {}".format(recAddress, recMsg))
-        sock.sendto(recMsg.encode(), getBCAddress())
+        pool.submit(sendMsg, recMsg, getBCAddress())
 
     elif (check == "BC" and recAddress == getBCAddress()):
 
         logging.debug("Received message from BC {} : {}".format(recAddress, recMsg))
-        sock.sendto(recMsg.encode(), getSoldierAddress())
+        pool.submit(sendMsg, recMsg, getSoldierAddress())
     else:
-        logging.ERROR("An invalid message has reached: \'{}\'".format(recMsg))
+        return
+
+
+# sendMsg
+def sendMsg(msg, address):
+    print("started")
+    sock.sendto(msg, address)
 
 # **Main**
-
 # Initialize Server Address
 CCAddress = getCCAddress()
 
@@ -88,18 +97,5 @@ print('Listening')
 logging.debug('Listening')
 
 while True:
-
-    # set max size of message
-    recMsg, recAddress = sock.recvfrom(1024)
-
-    # decoding the message to String
-    recMsg = recMsg.decode('utf-8')
-
-
-    #sendMessage(recMsg, recAddress)
-    with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
-        executor.submit(sendMessage(recMsg, recAddress))
-
-
-
-
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        pool.submit(receiveMsg, sock)

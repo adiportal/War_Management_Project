@@ -271,3 +271,244 @@ o
 2019-08-11 15:17:47,297 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CCHELLO
 2019-08-11 15:17:52,169 : DEBUG : CC : Received message from Soldier ('127.0.0.1', 5001) : CCHELLO
 2019-08-11 15:17:52,169 : DEBUG : Soldier : The message 'CCHELLO' reached to CC ('127.0.0.1', 5002)
+2019-08-11 15:53:11,713 : DEBUG : CC : Socket Successfully Created!
+2019-08-11 15:53:11,713 : DEBUG : CC : Listening
+2019-08-11 15:53:14,486 : DEBUG : Soldier : Socket Successfully Created!
+2019-08-11 15:53:23,145 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CCHELLO
+2019-08-11 15:53:23,145 : DEBUG : CC : Received message from Soldier ('127.0.0.1', 5001) : CCHELLO
+2019-08-11 15:53:23,145 : DEBUG : Soldier : The message 'CCHELLO' reached to CC ('127.0.0.1', 5002)
+2019-08-11 15:53:25,453 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CCHELLO
+2019-08-11 15:53:25,453 : DEBUG : CC : Received message from Soldier ('127.0.0.1', 5001) : CCHELLO
+2019-08-11 15:53:25,453 : DEBUG : Soldier : The message 'CCHELLO' reached to CC ('127.0.0.1', 5002)
+2019-08-11 16:21:52,588 : DEBUG : CC : Socket Successfully Created!
+2019-08-11 16:21:52,588 : DEBUG : CC : Listening
+2019-08-11 16:21:55,937 : DEBUG : Soldier : Socket Successfully Created!
+2019-08-11 16:22:17,695 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CCHELLO
+2019-08-11 16:22:22,696 : ERROR : Soldier : The message '' did'nt reached to CC ('127.0.0.1', 5002)
+2019-08-11 16:22:22,696 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CCHELLO
+2019-08-11 16:22:22,696 : ERROR : Soldier : The message '' did'nt reached to CC ('127.0.0.1', 5002)
+2019-08-11 16:22:29,221 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CCHELLO
+2019-08-11 16:22:29,221 : ERROR : Soldier : The message '' did'nt reached to CC ('127.0.0.1', 5002)
+2019-08-11 16:22:29,509 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CCHELLO
+2019-08-11 16:22:29,509 : ERROR : Soldier : The message '' did'nt reached to CC ('127.0.0.1', 5002)
+2019-08-11 16:22:34,596 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CCHELLO
+2019-08-11 16:22:34,596 : ERROR : Soldier : The message '' did'nt reached to CC ('127.0.0.1', 5002)
+2019-08-11 16:22:34,916 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CCHELLO
+2019-08-11 16:22:34,916 : ERROR : Soldier : The message '' did'nt reached to CC ('127.0.0.1', 5002)
+2019-08-11 16:22:35,291 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CCHELLO
+2019-08-11 16:22:35,291 : ERROR : Soldier : The message '' did'nt reached to CC ('127.0.0.1', 5002)
+2019-08-11 16:22:35,572 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CCHELLO
+2019-08-11 16:22:35,572 : ERROR : Soldier : The message '' did'nt reached to CC ('127.0.0.1', 5002)
+2019-08-11 16:24:29,986 : DEBUG : CC : Socket Successfully Created!
+2019-08-11 16:24:29,986 : DEBUG : CC : Listening
+2019-08-11 16:24:34,170 : DEBUG : Soldier : Socket Successfully Created!
+2019-08-11 16:24:47,103 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CCHello
+2019-08-11 16:24:52,109 : ERROR : Soldier : The message '' did'nt reached to CC ('127.0.0.1', 5002)
+2019-08-11 16:24:52,109 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CCHello
+2019-08-11 16:24:57,109 : ERROR : Soldier : The message '' did'nt reached to CC ('127.0.0.1', 5002)
+2019-08-11 16:27:16,618 : DEBUG : CC : Socket Successfully Created!
+2019-08-11 16:27:16,618 : DEBUG : CC : Listening
+2019-08-11 16:27:30,456 : DEBUG : Soldier : Socket Successfully Created!
+2019-08-11 16:27:34,752 : DEBUG : CC : Socket Successfully Created!
+2019-08-11 16:27:34,752 : DEBUG : CC : Listening
+2019-08-11 16:28:27,395 : DEBUG : CC : Socket Successfully Created!
+2019-08-11 16:28:27,395 : DEBUG : CC : Listening
+2019-08-11 16:28:30,644 : DEBUG : Soldier : Socket Successfully Created!
+2019-08-11 16:28:42,724 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CChello
+2019-08-11 16:28:47,726 : ERROR : Soldier : The message '' did'nt reached to CC ('127.0.0.1', 5002)
+2019-08-11 16:28:47,726 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CChello
+2019-08-11 16:28:52,730 : ERROR : Soldier : The message '' did'nt reached to CC ('127.0.0.1', 5002)
+2019-08-11 16:29:16,349 : DEBUG : CC : Socket Successfully Created!
+2019-08-11 16:29:16,349 : DEBUG : CC : Listening
+2019-08-11 16:29:19,878 : DEBUG : Soldier : Socket Successfully Created!
+2019-08-11 16:29:23,535 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CChello
+2019-08-11 16:29:28,537 : ERROR : Soldier : The message '' did'nt reached to CC ('127.0.0.1', 5002)
+2019-08-11 16:29:55,379 : DEBUG : CC : Socket Successfully Created!
+2019-08-11 16:29:55,379 : DEBUG : CC : Listening
+2019-08-11 16:29:57,711 : DEBUG : Soldier : Socket Successfully Created!
+2019-08-11 16:29:59,837 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CChello
+2019-08-11 16:30:04,842 : ERROR : Soldier : The message '' did'nt reached to CC ('127.0.0.1', 5002)
+2019-08-18 15:47:10,389 : DEBUG : CC : Socket Successfully Created!
+2019-08-18 15:47:10,391 : DEBUG : CC : Listening
+2019-08-18 15:48:21,457 : DEBUG : Soldier : Socket Successfully Created!
+2019-08-18 15:48:28,441 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CChello
+2019-08-18 15:48:33,456 : ERROR : Soldier : The message '' did'nt reached to CC ('127.0.0.1', 5002)
+2019-08-18 15:48:38,908 : DEBUG : CC : Socket Successfully Created!
+2019-08-18 15:48:38,908 : DEBUG : CC : Listening
+2019-08-18 15:48:43,927 : DEBUG : BC : Socket Successfully Created!
+2019-08-18 15:48:43,928 : DEBUG : BC : Listening
+2019-08-18 15:48:50,128 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CChello
+2019-08-18 15:48:55,137 : ERROR : Soldier : The message '' did'nt reached to CC ('127.0.0.1', 5002)
+2019-08-18 15:50:36,801 : DEBUG : Soldier : Socket Successfully Created!
+2019-08-18 15:50:41,462 : DEBUG : CC : Socket Successfully Created!
+2019-08-18 15:50:41,464 : DEBUG : CC : Listening
+2019-08-18 15:51:30,130 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CChello
+2019-08-18 15:51:35,143 : ERROR : Soldier : The message '' did'nt reached to CC ('127.0.0.1', 5002)
+2019-08-18 15:51:55,992 : DEBUG : Soldier : Socket Successfully Created!
+2019-08-18 15:52:03,227 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CCHELLO
+2019-08-18 15:52:08,228 : ERROR : Soldier : The message '' did'nt reached to CC ('127.0.0.1', 5002)
+2019-08-18 16:04:49,219 : DEBUG : CC : Socket Successfully Created!
+2019-08-18 16:04:49,219 : DEBUG : CC : Listening
+2019-08-18 16:05:08,941 : DEBUG : Soldier : Socket Successfully Created!
+2019-08-18 16:05:14,770 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CChello
+2019-08-18 16:05:14,792 : DEBUG : CC : Received message from Soldier ('127.0.0.1', 5001) : CChello
+2019-08-18 16:05:19,773 : ERROR : Soldier : The message '' did'nt reached to CC ('127.0.0.1', 5002)
+2019-08-18 16:07:08,651 : DEBUG : CC : Socket Successfully Created!
+2019-08-18 16:07:08,651 : DEBUG : CC : Listening
+2019-08-18 16:07:54,777 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CChello
+2019-08-18 16:07:54,784 : DEBUG : CC : Received message from Soldier ('127.0.0.1', 5001) : CChello
+2019-08-18 16:07:59,778 : ERROR : Soldier : The message '' did'nt reached to CC ('127.0.0.1', 5002)
+2019-08-18 16:08:49,294 : DEBUG : CC : Socket Successfully Created!
+2019-08-18 16:08:49,294 : DEBUG : CC : Listening
+2019-08-18 16:08:55,979 : DEBUG : Soldier : Socket Successfully Created!
+2019-08-18 16:09:01,835 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CChello
+2019-08-18 16:09:03,278 : DEBUG : CC : Received message from Soldier ('127.0.0.1', 5001) : CChello
+2019-08-18 16:09:06,837 : ERROR : Soldier : The message '' did'nt reached to CC ('127.0.0.1', 5002)
+2019-08-18 16:10:49,485 : DEBUG : CC : Socket Successfully Created!
+2019-08-18 16:10:49,487 : DEBUG : CC : Listening
+2019-08-18 16:10:58,033 : DEBUG : Soldier : Socket Successfully Created!
+2019-08-18 16:11:03,212 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CChello
+2019-08-18 16:11:03,749 : DEBUG : CC : Received message from Soldier ('127.0.0.1', 5001) : CChello
+2019-08-18 16:11:08,213 : ERROR : Soldier : The message '' did'nt reached to CC ('127.0.0.1', 5002)
+2019-08-18 16:11:45,058 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CCHELLO
+2019-08-18 16:11:50,063 : ERROR : Soldier : The message '' did'nt reached to CC ('127.0.0.1', 5002)
+2019-08-18 16:11:58,069 : DEBUG : CC : Received message from Soldier ('127.0.0.1', 5001) : CCHELLO
+2019-08-18 16:12:49,645 : DEBUG : CC : Socket Successfully Created!
+2019-08-18 16:12:49,649 : DEBUG : CC : Listening
+2019-08-18 16:12:56,121 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CCHELLO
+2019-08-18 16:13:01,122 : ERROR : Soldier : The message '' did'nt reached to CC ('127.0.0.1', 5002)
+2019-08-18 16:13:03,503 : DEBUG : CC : Received message from Soldier ('127.0.0.1', 5001) : CCHELLO
+2019-08-18 16:15:13,656 : DEBUG : CC : Socket Successfully Created!
+2019-08-18 16:15:13,658 : DEBUG : CC : Listening
+2019-08-18 16:15:20,336 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CCHELLO
+2019-08-18 16:15:25,344 : ERROR : Soldier : The message '' did'nt reached to CC ('127.0.0.1', 5002)
+2019-08-18 16:15:37,483 : DEBUG : CC : Socket Successfully Created!
+2019-08-18 16:15:37,483 : DEBUG : CC : Listening
+2019-08-18 16:15:46,023 : DEBUG : Soldier : Socket Successfully Created!
+2019-08-18 16:15:50,474 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CCHELLO
+2019-08-18 16:15:51,617 : DEBUG : CC : Received message from Soldier ('127.0.0.1', 5001) : CCHELLO
+2019-08-18 16:15:55,477 : ERROR : Soldier : The message '' did'nt reached to CC ('127.0.0.1', 5002)
+2019-08-18 16:16:41,316 : DEBUG : CC : Socket Successfully Created!
+2019-08-18 16:16:41,316 : DEBUG : CC : Listening
+2019-08-18 16:16:49,547 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CCHELLO
+2019-08-18 16:16:49,551 : DEBUG : CC : Received message from Soldier ('127.0.0.1', 5001) : CCHELLO
+2019-08-18 16:16:54,548 : ERROR : Soldier : The message '' did'nt reached to CC ('127.0.0.1', 5002)
+2019-08-18 16:22:09,007 : DEBUG : Soldier : Socket Successfully Created!
+2019-08-18 16:22:13,274 : DEBUG : CC : Socket Successfully Created!
+2019-08-18 16:22:13,274 : DEBUG : CC : Listening
+2019-08-18 16:22:18,579 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CChello
+2019-08-18 16:22:18,579 : DEBUG : Soldier : The message 'CChello' reached to CC ('127.0.0.1', 5002)
+2019-08-18 16:24:05,612 : DEBUG : Soldier : Socket Successfully Created!
+2019-08-18 16:24:08,556 : DEBUG : CC : Socket Successfully Created!
+2019-08-18 16:24:08,556 : DEBUG : CC : Listening
+2019-08-18 16:24:14,433 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CChello
+2019-08-18 16:24:14,433 : DEBUG : CC : Received message from Soldier ('127.0.0.1', 5001) : CChello
+2019-08-18 16:24:14,433 : DEBUG : Soldier : The message 'CChello' reached to CC ('127.0.0.1', 5002)
+2019-08-18 16:31:50,544 : DEBUG : Soldier : Socket Successfully Created!
+2019-08-18 16:33:02,299 : DEBUG : Soldier : Socket Successfully Created!
+2019-08-18 16:33:04,945 : DEBUG : CC : Socket Successfully Created!
+2019-08-18 16:33:04,945 : DEBUG : CC : Listening
+2019-08-18 16:33:11,432 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CCHELLO
+2019-08-18 16:33:11,432 : DEBUG : CC : Received message from Soldier ('127.0.0.1', 5001) : CCHELLO
+2019-08-18 16:33:16,434 : ERROR : Soldier : The message '' did'nt reached to CC ('127.0.0.1', 5002)
+2019-08-18 16:34:06,348 : DEBUG : CC : Socket Successfully Created!
+2019-08-18 16:34:06,348 : DEBUG : CC : Listening
+2019-08-18 16:34:11,431 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CCHELLO
+2019-08-18 16:34:11,431 : DEBUG : CC : Received message from Soldier ('127.0.0.1', 5001) : CCHELLO
+2019-08-18 16:34:11,439 : DEBUG : Soldier : The message 'CCHELLO' reached to CC ('127.0.0.1', 5002)
+2019-08-18 16:34:27,616 : DEBUG : BC : Socket Successfully Created!
+2019-08-18 16:34:27,616 : DEBUG : BC : Listening
+2019-08-18 16:36:17,554 : DEBUG : BC : Socket Successfully Created!
+2019-08-18 16:36:17,554 : DEBUG : BC : Listening
+2019-08-18 16:36:22,642 : DEBUG : CC : Socket Successfully Created!
+2019-08-18 16:36:22,642 : DEBUG : CC : Listening
+2019-08-18 16:36:24,310 : DEBUG : Soldier : Socket Successfully Created!
+2019-08-18 16:36:28,759 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CCHELLO
+2019-08-18 16:36:28,759 : DEBUG : CC : Received message from Soldier ('127.0.0.1', 5001) : CCHELLO
+2019-08-18 16:36:28,759 : DEBUG : Soldier : The message 'CCHELLO' reached to CC ('127.0.0.1', 5002)
+2019-08-18 16:36:32,474 : DEBUG : CC : Received message from Soldier ('127.0.0.1', 5001) : BCHELLO
+O
+2019-08-18 16:36:32,474 : DEBUG : BC : Received message from Soldier ('127.0.0.1', 5002) : BCHELLO
+2019-08-18 16:36:32,474 : DEBUG : CC : Received message from BC ('127.0.0.1', 5003) : BCHELLO
+2019-08-18 16:36:32,474 : DEBUG : Soldier : The message 'BCHELLO' reached to BC ('127.0.0.1', 5003)
+2019-08-18 16:40:23,582 : DEBUG : CC : Socket Successfully Created!
+2019-08-18 16:40:23,582 : DEBUG : CC : Listening
+2019-08-18 16:40:25,628 : DEBUG : Soldier : Socket Successfully Created!
+2019-08-18 16:40:33,784 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CCHELLO
+2019-08-18 16:40:34,772 : DEBUG : CC : Received message from Soldier ('127.0.0.1', 5001) : CCHELLO
+2019-08-18 16:40:34,772 : DEBUG : Soldier : The message 'CCHELLO' reached to CC ('127.0.0.1', 5002)
+2019-08-18 16:41:08,651 : DEBUG : CC : Socket Successfully Created!
+2019-08-18 16:41:08,651 : DEBUG : CC : Listening
+2019-08-18 16:41:14,364 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CCHELLO
+2019-08-18 16:41:14,796 : DEBUG : CC : Received message from Soldier ('127.0.0.1', 5001) : CCHELLO
+2019-08-18 16:41:14,796 : DEBUG : Soldier : The message 'CCHELLO' reached to CC ('127.0.0.1', 5002)
+2019-08-18 16:43:31,078 : DEBUG : CC : Socket Successfully Created!
+2019-08-18 16:43:31,082 : DEBUG : CC : Listening
+2019-08-18 16:43:33,939 : DEBUG : Soldier : Socket Successfully Created!
+2019-08-18 16:43:38,328 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CCHELLO
+2019-08-18 16:43:38,336 : DEBUG : CC : Received message from Soldier ('127.0.0.1', 5001) : CCHELLO
+2019-08-18 16:43:43,331 : ERROR : Soldier : The message '' did'nt reached to CC ('127.0.0.1', 5002)
+2019-08-18 16:45:01,272 : DEBUG : CC : Socket Successfully Created!
+2019-08-18 16:45:01,272 : DEBUG : CC : Listening
+2019-08-18 16:45:10,669 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CCHELLO
+2019-08-18 16:45:10,676 : DEBUG : CC : Received message from Soldier ('127.0.0.1', 5001) : CCHELLO
+2019-08-18 16:45:15,670 : ERROR : Soldier : The message '' did'nt reached to CC ('127.0.0.1', 5002)
+2019-08-18 16:48:00,126 : DEBUG : CC : Socket Successfully Created!
+2019-08-18 16:48:00,126 : DEBUG : CC : Listening
+2019-08-18 16:48:02,050 : DEBUG : Soldier : Socket Successfully Created!
+2019-08-18 16:48:05,658 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CCHELLO
+2019-08-18 16:48:06,036 : DEBUG : CC : Received message from Soldier ('127.0.0.1', 5001) : CCHELLO
+2019-08-18 16:48:10,658 : ERROR : Soldier : The message '' did'nt reached to CC ('127.0.0.1', 5002)
+2019-08-18 16:49:19,286 : DEBUG : Soldier : Socket Successfully Created!
+2019-08-18 16:49:24,558 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CCHELLO
+2019-08-18 16:49:29,562 : ERROR : Soldier : The message '' did'nt reached to CC ('127.0.0.1', 5002)
+2019-08-18 16:53:06,606 : DEBUG : CC : Socket Successfully Created!
+2019-08-18 16:53:06,606 : DEBUG : CC : Listening
+2019-08-18 16:53:08,515 : DEBUG : Soldier : Socket Successfully Created!
+2019-08-18 16:53:16,938 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CCHELLO
+2019-08-18 16:53:16,938 : DEBUG : CC : Received message from Soldier ('127.0.0.1', 5001) : CCHELLO
+2019-08-18 16:53:21,938 : ERROR : Soldier : The message '' did'nt reached to CC ('127.0.0.1', 5002)
+2019-08-18 17:01:36,803 : DEBUG : CC : Socket Successfully Created!
+2019-08-18 17:01:36,803 : DEBUG : CC : Listening
+2019-08-18 17:01:41,650 : DEBUG : Soldier : Socket Successfully Created!
+2019-08-18 17:01:50,353 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CCHELLO
+2019-08-18 17:01:55,356 : ERROR : Soldier : The message '' did'nt reached to CC ('127.0.0.1', 5002)
+2019-08-18 17:07:16,280 : DEBUG : CC : Socket Successfully Created!
+2019-08-18 17:07:16,280 : DEBUG : CC : Listening
+2019-08-18 17:07:17,481 : DEBUG : Soldier : Socket Successfully Created!
+2019-08-18 17:07:21,044 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CCHELLO
+2019-08-18 17:07:21,044 : DEBUG : CC : Received message from Soldier ('127.0.0.1', 5001) : CCHELLO
+2019-08-18 17:07:26,045 : ERROR : Soldier : The message '' did'nt reached to CC ('127.0.0.1', 5002)
+2019-08-18 17:08:46,433 : DEBUG : CC : Socket Successfully Created!
+2019-08-18 17:08:46,433 : DEBUG : CC : Listening
+2019-08-18 17:10:52,841 : DEBUG : CC : Socket Successfully Created!
+2019-08-18 17:10:52,841 : DEBUG : CC : Listening
+2019-08-18 17:10:57,451 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CCHELLO
+2019-08-18 17:11:02,455 : ERROR : Soldier : The message '' did'nt reached to CC ('127.0.0.1', 5002)
+2019-08-18 17:11:28,516 : DEBUG : CC : Socket Successfully Created!
+2019-08-18 17:11:28,516 : DEBUG : CC : Listening
+2019-08-18 17:11:35,157 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CCHELLO
+2019-08-18 17:11:35,157 : DEBUG : CC : Received message from Soldier ('127.0.0.1', 5001) : CCHELLO
+2019-08-18 17:11:40,159 : ERROR : Soldier : The message '' did'nt reached to CC ('127.0.0.1', 5002)
+2019-08-18 17:12:31,375 : DEBUG : CC : Socket Successfully Created!
+2019-08-18 17:12:31,375 : DEBUG : CC : Listening
+2019-08-18 17:12:35,790 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CCHELLO
+2019-08-18 17:12:35,790 : DEBUG : CC : Received message from Soldier ('127.0.0.1', 5001) : CCHELLO
+2019-08-18 17:12:40,793 : ERROR : Soldier : The message '' did'nt reached to CC ('127.0.0.1', 5002)
+2019-08-18 17:13:40,524 : DEBUG : CC : Socket Successfully Created!
+2019-08-18 17:13:40,524 : DEBUG : CC : Listening
+2019-08-18 17:13:54,813 : DEBUG : Soldier : Socket Successfully Created!
+2019-08-18 17:14:04,969 : DEBUG : Soldier : Socket Successfully Created!
+2019-08-18 17:14:15,713 : DEBUG : CC : Socket Successfully Created!
+2019-08-18 17:14:15,713 : DEBUG : CC : Listening
+2019-08-18 17:14:25,230 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CCHELLO
+2019-08-18 17:14:25,230 : DEBUG : CC : Received message from Soldier ('127.0.0.1', 5001) : CCHELLO
+2019-08-18 17:14:30,232 : ERROR : Soldier : The message '' did'nt reached to CC ('127.0.0.1', 5002)
+2019-08-18 17:15:47,201 : DEBUG : CC : Socket Successfully Created!
+2019-08-18 17:15:47,205 : DEBUG : CC : Listening
+2019-08-18 17:16:54,121 : DEBUG : CC : Socket Successfully Created!
+2019-08-18 17:16:54,125 : DEBUG : CC : Listening
+2019-08-18 17:16:57,497 : DEBUG : Soldier : Socket Successfully Created!
+2019-08-18 17:17:05,680 : DEBUG : Soldier : Message has been sent to CC ('127.0.0.1', 5002) : CCHELLO
+2019-08-18 17:17:05,680 : DEBUG : CC : Received message from Soldier ('127.0.0.1', 5001) : CCHELLO
+2019-08-18 17:17:10,683 : ERROR : Soldier : The message '' did'nt reached to CC ('127.0.0.1', 5002)
