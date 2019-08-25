@@ -1,9 +1,9 @@
 import socket
 import logging
-from concurrent.futures import ThreadPoolExecutor
 
 # Initialize the Logger
 logging.basicConfig(filename = 'Log.log', level = logging.DEBUG, format = '%(asctime)s : %(levelname)s : CC : %(message)s')
+
 
 
 # getSock
@@ -48,14 +48,7 @@ def checkMSG(msg_str):
     else:
         return 'null'
 
-# receiveMsg
-def receiveMsg(sock):
-    # set max size of message
-    recMsg, recAddress = sock.recvfrom(1024)
-
-    # decoding the message to String
-    recMsg = recMsg.decode('utf-8')
-
+def sendMessage(recMsg, recAddress):
     check = checkMSG(recMsg)
 
     if (check == "CC" and recAddress == getSoldierAddress()):
@@ -64,25 +57,19 @@ def receiveMsg(sock):
         print('Received message from Soldier {} : {}'.format(recAddress, recMsg[2:]))
         logging.debug("Received message from Soldier {} : {}".format(recAddress, recMsg))
 
-        pool.submit(sendMsg, recMsg, recAddress)
+        sock.sendto(recMsg.encode(), recAddress)
 
     elif (check == "BC" and recAddress == getSoldierAddress()):
 
         logging.debug("Received message from Soldier {} : {}".format(recAddress, recMsg))
-        pool.submit(sendMsg, recMsg, getBCAddress())
+        sock.sendto(recMsg.encode(), getBCAddress())
 
     elif (check == "BC" and recAddress == getBCAddress()):
 
         logging.debug("Received message from BC {} : {}".format(recAddress, recMsg))
-        pool.submit(sendMsg, recMsg, getSoldierAddress())
+        sock.sendto(recMsg.encode(), getSoldierAddress())
     else:
-        return
-
-
-# sendMsg
-def sendMsg(msg, address):
-    print("started")
-    sock.sendto(msg, address)
+        logging.ERROR("An invalid message has reached: \'{}\'".format(recMsg))
 
 # **Main**
 # Initialize Server Address
@@ -97,5 +84,11 @@ print('Listening')
 logging.debug('Listening')
 
 while True:
-    with ThreadPoolExecutor(max_workers=2) as pool:
-        pool.submit(receiveMsg, sock)
+
+    # set max size of message
+    recMsg, recAddress = sock.recvfrom(1024)
+
+    # decoding the message to String
+    recMsg = recMsg.decode('utf-8')
+
+    sendMessage(recMsg, recAddress)
