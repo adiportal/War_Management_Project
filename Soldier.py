@@ -26,25 +26,6 @@ class Soldier():
         self.HP = 100
 
 
-
-# get Soldier Address
-def getSoldierAddress():
-    IP = '127.0.0.1'
-    port = 5001
-    return (IP, port)
-
-# get Company Commander Address
-def getCCAddress():
-    IP = '127.0.0.1'
-    port = 5002
-    return (IP, port)
-
-# get Battalion Commander Address
-def getBCAddress():
-    IP = '127.0.0.1'
-    port = 5003
-    return (IP, port)
-
 # Exit
 def exit(sock, serverAddress):
     sendMessage('-1', sock, serverAddress)
@@ -84,7 +65,7 @@ def sendMessage(sendMsg, sock, CCAddress):
 
         elif checkMSG(recMsg) == 'BC':
             print("The message '{}' reached to Battalion Commander".format(recMsg))
-            logging.debug("The message '{}' reached to BC {}".format(recMsg, getBCAddress()))
+            logging.debug("The message '{}' reached to BC {}".format(recMsg, Utility.getBCAddress()))
 
         else:
             logging.ERROR("An invalid message has reached: \'{}\'".format(recMsg))
@@ -96,9 +77,9 @@ def sendMessage(sendMsg, sock, CCAddress):
 # **Main**
 sock = Utility.getSock()
 sock.settimeout(5)
-sock.bind(getSoldierAddress())
+sock.bind(Utility.getSoldierAddress())
 
-CCAddress = getCCAddress()
+CCAddress = Utility.getCCAddress()
 
 msg_str = ""
 

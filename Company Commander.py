@@ -1,5 +1,6 @@
 import socket
 import logging
+import Utility
 
 # Initialize the Logger
 logging.basicConfig(filename = 'Log.log', level = logging.DEBUG, format = '%(asctime)s : %(levelname)s : CC : %(message)s')
@@ -23,35 +24,6 @@ class CompanyCommander():
         self.ammo = ammo
         self.HP = 100
 
-# getSock
-def getSock():
-    # Initialize socket
-    try:
-        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        logging.debug("Socket Successfully Created!")
-    except socket.error as err:
-        logging.error("Socket creation failed with error {}".format(err))
-
-    return sock
-
-
-# get Soldier Address
-def getSoldierAddress():
-    IP = '127.0.0.1'
-    port = 5001
-    return (IP, port)
-
-# get Company Commander Address
-def getCCAddress():
-    IP = '127.0.0.1'
-    port = 5002
-    return (IP, port)
-
-# get Battalion Commander Address
-def getBCAddress():
-    IP = '127.0.0.1'
-    port = 5003
-    return (IP, port)
 
 # Check Message
 def checkMSG(msg_str):
@@ -68,7 +40,7 @@ def checkMSG(msg_str):
 def sendMessage(recMsg, recAddress):
     check = checkMSG(recMsg)
 
-    if (check == "CC" and recAddress == getSoldierAddress()):
+    if (check == "CC" and recAddress == Utility.getSoldierAddress()):
 
         # printing the message and the client Address
         print('Received message from Soldier {} : {}'.format(recAddress, recMsg[2:]))
@@ -76,23 +48,23 @@ def sendMessage(recMsg, recAddress):
 
         sock.sendto(recMsg.encode(), recAddress)
 
-    elif (check == "BC" and recAddress == getSoldierAddress()):
+    elif (check == "BC" and recAddress == Utility.getSoldierAddress()):
 
         logging.debug("Received message from Soldier {} : {}".format(recAddress, recMsg))
-        sock.sendto(recMsg.encode(), getBCAddress())
+        sock.sendto(recMsg.encode(), Utility.getBCAddress())
 
-    elif (check == "BC" and recAddress == getBCAddress()):
+    elif (check == "BC" and recAddress == Utility.getBCAddress()):
 
         logging.debug("Received message from BC {} : {}".format(recAddress, recMsg))
-        sock.sendto(recMsg.encode(), getSoldierAddress())
+        sock.sendto(recMsg.encode(), Utility.getSoldierAddress())
     else:
         logging.ERROR("An invalid message has reached: \'{}\'".format(recMsg))
 
 # *Main*
 # Initialize Server Address
-CCAddress = getCCAddress()
+CCAddress = Utility.getCCAddress()
 
-sock = getSock()
+sock = Utility.getSock()
 
 # Bind the socket with the address
 sock.bind(CCAddress)

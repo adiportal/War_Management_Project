@@ -13,3 +13,21 @@ def getSock():
         logging.error("Socket creation failed with error {}".format(err))
 
     return sock
+
+# get Soldier Address
+def getSoldierAddress():
+    IP = '127.0.0.1'
+    port = 5001
+    return (IP, port)
+
+# get Company Commander Address
+def getCCAddress():
+    IP = '127.0.0.1'
+    port = 5002
+    return (IP, port)
+
+# get Battalion Commander Address
+def getBCAddress():
+    IP = '127.0.0.1'
+    port = 5003
+    return (IP, port)
