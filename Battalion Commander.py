@@ -36,7 +36,7 @@ logging.debug('Listening')
 while True:
 
     # set max size of message
-    recMsg, CCAddress = sock.recvfrom(1024)
+    recMsg, CCAddress = sock.recvfrom(65527)
 
     # decoding the message to String
     recMsg = recMsg.decode('utf-8')
@@ -51,6 +51,7 @@ while True:
         print('Received message from Soldier {} : {}'.format(CCAddress, recMsg[2:]))
         logging.debug("Received message from Soldier {} : {}".format(CCAddress, recMsg))
 
+        recMsg = "3.1." + recMsg[4:]
         sock.sendto(recMsg.encode(), CCAddress)
 
 

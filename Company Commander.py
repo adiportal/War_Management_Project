@@ -25,39 +25,28 @@ class CompanyCommander():
         self.HP = 100
 
 
-# Check Message
-def checkMSG(msg_str):
+def handleMessage(recMsg, recAddress):
+    case = Utility.switchCase(recMsg)
 
-    if msg_str[:2] == 'CC':
-        return 'CC'
-
-    elif msg_str[:2] == 'BC':
-        return 'BC'
-
-    else:
-        return 'null'
-
-def sendMessage(recMsg, recAddress):
-    check = checkMSG(recMsg)
-
-    if (check == "CC" and recAddress == Utility.getSoldierAddress()):
+    if case == 1:
 
         # printing the message and the client Address
         print('Received message from Soldier {} : {}'.format(recAddress, recMsg[2:]))
         logging.debug("Received message from Soldier {} : {}".format(recAddress, recMsg))
 
-        sock.sendto(recMsg.encode(), recAddress)
+        sock.sendto(recMsg.encode(), Utility.getSoldierAddress())
 
-    elif (check == "BC" and recAddress == Utility.getSoldierAddress()):
+    elif case == 2:
 
         logging.debug("Received message from Soldier {} : {}".format(recAddress, recMsg))
         sock.sendto(recMsg.encode(), Utility.getBCAddress())
 
-    elif (check == "BC" and recAddress == Utility.getBCAddress()):
+    elif case == 3:
 
         logging.debug("Received message from BC {} : {}".format(recAddress, recMsg))
         sock.sendto(recMsg.encode(), Utility.getSoldierAddress())
-    else:
+
+    else:           # case = 0
         logging.ERROR("An invalid message has reached: \'{}\'".format(recMsg))
 
 # *Main*
@@ -75,9 +64,9 @@ logging.debug('Listening')
 while True:
 
     # set max size of message
-    recMsg, recAddress = sock.recvfrom(1024)
+    recMsg, recAddress = sock.recvfrom(65527)
 
     # decoding the message to String
     recMsg = recMsg.decode('utf-8')
 
-    sendMessage(recMsg, recAddress)
+    handleMessage(recMsg, recAddress)

@@ -1,6 +1,4 @@
-import socket
 import logging
-import datetime
 import Utility
 
 # Initialize the Logger
@@ -55,7 +53,7 @@ def sendMessage(sendMsg, sock, CCAddress):
 
         logging.debug("Message has been sent to CC {} : {}".format(CCAddress, sendMsg))
 
-        recMsg, CCAddress = sock.recvfrom(1024)
+        recMsg, CCAddress = sock.recvfrom(65527)
         recMsg = recMsg.decode('utf-8')
 
         if checkMSG(recMsg) == 'CC':
@@ -85,13 +83,7 @@ msg_str = ""
 
 while msg_str == "":
     msg_str = input()
-    check = checkMSG(msg_str)
+    sendMessage(msg_str, sock, CCAddress)
 
-    if (check == "CC" or check == "BC"):
-        sendMessage(msg_str, sock, CCAddress)
-        msg_str = ""
 
-    else:
-        print("The Message you Entered is not correct")
-        msg_str = ""
-        continue
+
