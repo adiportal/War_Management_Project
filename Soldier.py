@@ -1,5 +1,7 @@
 import socket
 import logging
+import datetime
+import Utility
 
 
 # Initialize the Logger
@@ -84,6 +86,7 @@ def sendMessage(sendMsg, sock, CCAddress):
         print("The message '{}' did'nt reached to the Company Commander!!".format(recMsg))
 
 # **Main**
+
 sock = getSock()
 sock.bind(getSoldierAddress())
 
@@ -92,7 +95,7 @@ CCAddress = getCCAddress()
 msg_str = ""
 
 while msg_str == "":
-    msg_str = input()
+    msg_str = (1, datetime.datetime.now(), 2, num, 1, (soldierNum, location))
     check = checkMSG(msg_str)
 
     if (check == "CC" or check == "BC"):
