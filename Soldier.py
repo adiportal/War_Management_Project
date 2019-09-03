@@ -25,17 +25,7 @@ class Soldier():
         self.ammo = ammo
         self.HP = 100
 
-# getSock
-def getSock():
-    # Initialize socket
-    try:
-        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        logging.debug("Socket Successfully Created!")
-    except socket.error as err:
-        logging.error("Socket creation failed with error {}".format(err))
-    sock.settimeout(5)
 
-    return sock
 
 # get Soldier Address
 def getSoldierAddress():
@@ -104,8 +94,8 @@ def sendMessage(sendMsg, sock, CCAddress):
         print("The message '{}' did'nt reached to the Company Commander!!".format(recMsg))
 
 # **Main**
-
-sock = getSock()
+sock = Utility.getSock()
+sock.settimeout(5)
 sock.bind(getSoldierAddress())
 
 CCAddress = getCCAddress()
@@ -113,7 +103,7 @@ CCAddress = getCCAddress()
 msg_str = ""
 
 while msg_str == "":
-    msg_str = (1, datetime.datetime.now(), 2, num, 1, (soldierNum, location))
+    msg_str = input()
     check = checkMSG(msg_str)
 
     if (check == "CC" or check == "BC"):
@@ -124,4 +114,3 @@ while msg_str == "":
         print("The Message you Entered is not correct")
         msg_str = ""
         continue
-
