@@ -74,6 +74,7 @@ msg_str = ""
 while msg_str == "":
     print("Write Your Message:")
     msg_str = input()
+    msg_str = "1." + msg_str
     handleMessage(msg_str, sock, CCAddress)
     msg_str = ""
 
