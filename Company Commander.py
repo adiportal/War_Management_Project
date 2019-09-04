@@ -31,7 +31,7 @@ def handleMessage(recMsg, recAddress):
     if case == 1:
 
         # printing the message and the client Address
-        print('Received message from Soldier {} : {}'.format(recAddress, recMsg[2:]))
+        print('Received message from Soldier {} : {}'.format(recAddress, recMsg))
         logging.debug("Received message from Soldier {} : {}".format(recAddress, recMsg))
 
         sock.sendto(recMsg.encode(), Utility.getSoldierAddress())
