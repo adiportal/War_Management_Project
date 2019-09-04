@@ -43,6 +43,8 @@ def handleMessage(recMsg, recAddress):
 
     elif case == 3:
 
+        recMsg = recMsg[:-1]
+
         logging.debug("Received message from BC {} : {}".format(recAddress, recMsg))
         sock.sendto(recMsg.encode(), Utility.getSoldierAddress())
 

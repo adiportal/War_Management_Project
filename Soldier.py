@@ -25,27 +25,15 @@ class Soldier():
 
 
 # Exit
-def exit(sock, serverAddress):
-    sendMessage('-1', sock, serverAddress)
-    print("\nGood Bye :)")
-    logging.debug("Closing Soldier...")
-    quit()
-
-# Check Message
-def checkMSG(msg_str):
-
-    if msg_str[:2] == 'CC':
-        return 'CC'
-
-    elif msg_str[:2] == 'BC':
-        return 'BC'
-
-    else:
-        return 'null'
+# def exit(sock, serverAddress):
+#     sendMessage('-1', sock, serverAddress)
+#     print("\nGood Bye :)")
+#     logging.debug("Closing Soldier...")
+#     quit()
 
 
 # sendMassage
-def sendMessage(sendMsg, sock, CCAddress):
+def handleMessage(sendMsg, sock, CCAddress):
 
     recMsg = ''
     try:
@@ -56,12 +44,14 @@ def sendMessage(sendMsg, sock, CCAddress):
         recMsg, CCAddress = sock.recvfrom(65527)
         recMsg = recMsg.decode('utf-8')
 
-        if checkMSG(recMsg) == 'CC':
+        case = Utility.switchCase(recMsg)
+
+        if case == 1:
             # print receive message
             print("The message '{}' reached to Company Commander".format(recMsg))
             logging.debug("The message '{}' reached to CC {}".format(recMsg, CCAddress))
 
-        elif checkMSG(recMsg) == 'BC':
+        elif case == 2:
             print("The message '{}' reached to Battalion Commander".format(recMsg))
             logging.debug("The message '{}' reached to BC {}".format(recMsg, Utility.getBCAddress()))
 
@@ -82,8 +72,11 @@ CCAddress = Utility.getCCAddress()
 msg_str = ""
 
 while msg_str == "":
+    print("Write Your Message:")
     msg_str = input()
-    sendMessage(msg_str, sock, CCAddress)
+    handleMessage(msg_str, sock, CCAddress)
+    msg_str = ""
+
 
 
 
