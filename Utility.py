@@ -26,8 +26,18 @@ def getSoldierAddress():
 # get Company Commander Address
 def getCCAddress():
     IP = '127.0.0.1'
-    port = 5002
+    port = 5004
+    count = 0
+
+    while (isOpen(IP, port)) == False and count == 3:
+        port += 1
+        count += 1
+
+    if count == 3:
+        return 0
+
     return (IP, port)
+
 
 
 # get Battalion Commander Address
@@ -62,3 +72,14 @@ def switchCase(msg_str):
 def splitMessage(msg_str):
     msg_list = msg_str.split(".")
     return msg_list
+
+
+# isOpen
+def isOpen(IP, port):
+   sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+   try:
+      sock.connect((IP, int(port)))
+      sock.shutdown(2)
+      return True
+   except:
+      return False
