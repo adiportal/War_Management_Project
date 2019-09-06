@@ -53,9 +53,12 @@ def handleMessage(recMsg, recAddress):
 
 # *Main*
 # Initialize Server Address
-CCAddress = Utility.getCCAddress()
+CCAddress = Utility.initCCAddress()
 
 sock = Utility.getSock()
+
+if sock == 0:   # 3 CompanyCommanders is open
+    quit()
 
 # Bind the socket with the address
 sock.bind(CCAddress)

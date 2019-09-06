@@ -23,9 +23,6 @@ BCAddress = Utility.getBCAddress()
 # Initialize Socket
 sock = Utility.getSock()
 
-if sock == 0:
-    quit()
-
 # Bind the socket with the address
 sock.bind(BCAddress)
 

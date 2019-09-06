@@ -67,17 +67,21 @@ sock = Utility.getSock()
 sock.settimeout(5)
 sock.bind(Utility.getSoldierAddress())
 
-CCAddress = Utility.getCCAddress()
 
 msg_str = ""
 
 while msg_str == "":
     print("Write Your Message:")
     msg_str = input()
-    msg_str = "1." + msg_str
+
+    CCAddress = Utility.getCCAddress(msg_str[0])
+
+    if CCAddress == 0:
+        print("ERROR: INVALID Company Number")
+        msg_str = ""
+        continue
+
+    msg_str = "1." + msg_str[2:]
     handleMessage(msg_str, sock, CCAddress)
     msg_str = ""
-
-
-
 
