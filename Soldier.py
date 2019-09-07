@@ -62,6 +62,7 @@ def handleMessage(sendMsg, sock, CCAddress):
         logging.error("The message '{}' did'nt reached to CC {}".format(recMsg, CCAddress))
         print("The message '{}' did'nt reached to the Company Commander!!".format(recMsg))
 
+
 # **Main**
 sock = Utility.getSock()
 sock.settimeout(5)
@@ -75,7 +76,7 @@ while msg_str == "":
     msg_str = input()
 
     CCAddress = Utility.getCCAddress(msg_str[0])
-
+    print(CCAddress)
     if CCAddress == 0:
         print("ERROR: INVALID Company Number")
         msg_str = ""

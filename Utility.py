@@ -40,9 +40,8 @@ def initCCAddress():
 
 def getCCAddress(companyNum):
     IP = '127.0.0.1'
-    port = 0
 
-    if companyNum == 1:
+    if int(companyNum) == 1:
         port = 5004
 
         if isOpen(IP, port) == False:
@@ -50,7 +49,7 @@ def getCCAddress(companyNum):
         else:
             return 0
 
-    elif companyNum == 2:
+    elif int(companyNum) == 2:
         port = 5005
 
         if isOpen(IP, port) == False:
@@ -58,7 +57,7 @@ def getCCAddress(companyNum):
         else:
             return 0
 
-    elif companyNum == 3:
+    elif int(companyNum) == 3:
         port = 5006
 
         if isOpen(IP, port) == False:
@@ -106,10 +105,12 @@ def splitMessage(msg_str):
 # isOpen
 def isOpen(IP, port):
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    result = False
     try:
-        sock.connect((IP, int(port)))
-        sock.shutdown(2)
-        return True
+        sock.bind((IP, port))
+        result = True
     except:
-        return False
+        print("Port is in use")
+    sock.close()
+    return result
 
