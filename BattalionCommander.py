@@ -4,17 +4,19 @@ import Utility
 # Initialize the Logger
 logging.basicConfig(filename = 'Log.log', level = logging.DEBUG, format = '%(asctime)s : %(levelname)s : BC : %(message)s')
 
-def handleMessage(recMsg, recAddress):
+def handleMessage(recMsg):
+    recMsg_list = Utility.splitMessage(recMsg)
+
     if Utility.switchCase(recMsg) == 0:
         logging.ERROR("an invalid message has reached: \'{}\'".format(recMsg))
-
     else:
+        recAddress = Utility.getCCAddress(recMsg_list[1])
         # printing the message and the Sender Address
         print('Received message from Soldier {} : {}'.format(recAddress, recMsg))
         logging.debug("Received message from Soldier {} : {}".format(recAddress, recMsg))
 
         recMsg = recMsg + "*"
-        sock.sendto(recMsg.encode(), Utility.getCCAddress())
+        sock.sendto(recMsg.encode(), recAddress)
 
 # *Main*
 # Initialize Server Address
@@ -37,4 +39,4 @@ while True:
     # decoding the message to String
     recMsg = recMsg.decode('utf-8')
 
-    handleMessage(recMsg, recAddress)
+    handleMessage(recMsg)

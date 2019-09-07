@@ -82,7 +82,7 @@ while msg_str == "":
         msg_str = ""
         continue
 
-    msg_str = "1." + msg_str[2:]
+    msg_str = "1." + msg_str
     handleMessage(msg_str, sock, CCAddress)
     msg_str = ""
 

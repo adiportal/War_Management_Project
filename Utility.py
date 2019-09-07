@@ -81,15 +81,15 @@ def switchCase(msg_str):
     msg_list = splitMessage(msg_str)
 
     # sender = Soldier, receiver = CC
-    if int(msg_list[0]) == 1 and int(msg_list[1]) == 2:
+    if int(msg_list[0]) == 1 and int(msg_list[2]) == 2:
         return 1
 
     # sender = Soldier, receiver = BC
-    elif int(msg_list[0]) == 1 and int(msg_list[1]) == 3 and msg_str[-1] != "*":
+    elif int(msg_list[0]) == 1 and int(msg_list[2]) == 3 and msg_str[-1] != "*":
         return 2
 
     # sender = BC, receiver = CC -> Soldier
-    elif int(msg_list[0]) == 1 and int(msg_list[1]) == 3 and msg_str[-1] == "*":
+    elif int(msg_list[0]) == 1 and int(msg_list[2]) == 3 and msg_str[-1] == "*":
         return 3
 
     else:
