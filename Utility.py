@@ -105,12 +105,12 @@ def splitMessage(msg_str):
 # isOpen
 def isOpen(IP, port):
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    result = False
+
     try:
         sock.bind((IP, port))
         result = True
     except:
-        print("Port is in use")
+        result = False
     sock.close()
     return result
 

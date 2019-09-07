@@ -678,3 +678,19 @@ O
 2019-09-07 12:34:17,793 : DEBUG : Utility : Message has been sent to CC ('127.0.0.1', 5004) : 1.2.3
 2019-09-07 12:34:17,793 : DEBUG : Utility : Received message from Soldier ('127.0.0.1', 5001) : 1.2.3
 2019-09-07 12:34:17,793 : DEBUG : Utility : The message '1.2.3' reached to CC ('127.0.0.1', 5004)
+2019-09-07 12:36:48,110 : DEBUG : Utility : Socket Successfully Created!
+2019-09-07 12:36:51,896 : DEBUG : Utility : Socket Successfully Created!
+2019-09-07 12:36:51,896 : DEBUG : Utility : Listening
+2019-09-07 12:36:54,117 : DEBUG : Utility : Socket Successfully Created!
+2019-09-07 12:36:54,117 : DEBUG : Utility : Listening
+2019-09-07 12:37:00,421 : DEBUG : Utility : Message has been sent to CC ('127.0.0.1', 5004) : 1.2.3
+2019-09-07 12:37:00,421 : DEBUG : Utility : Received message from Soldier ('127.0.0.1', 5001) : 1.2.3
+2019-09-07 12:37:00,422 : DEBUG : Utility : The message '1.2.3' reached to CC ('127.0.0.1', 5004)
+2019-09-07 12:38:23,501 : DEBUG : Utility : Socket Successfully Created!
+2019-09-07 12:38:28,340 : DEBUG : Utility : Message has been sent to CC ('127.0.0.1', 5004) : 1.2.3
+2019-09-07 12:38:28,340 : DEBUG : Utility : Received message from Soldier ('127.0.0.1', 5001) : 1.2.3
+2019-09-07 12:38:28,341 : DEBUG : Utility : The message '1.2.3' reached to CC ('127.0.0.1', 5004)
+2019-09-07 12:40:50,454 : DEBUG : Utility : Socket Successfully Created!
+2019-09-07 12:40:52,705 : DEBUG : Utility : Message has been sent to CC ('127.0.0.1', 5004) : 1.2.3
+2019-09-07 12:40:52,705 : DEBUG : Utility : Received message from Soldier ('127.0.0.1', 5001) : 1.2.3
+2019-09-07 12:40:52,706 : DEBUG : Utility : The message '1.2.3' reached to CC ('127.0.0.1', 5004)

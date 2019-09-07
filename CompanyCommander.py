@@ -54,7 +54,6 @@ def handleMessage(recMsg, recAddress):
 # *Main*
 # Initialize Server Address
 CCAddress = Utility.initCCAddress()
-print(CCAddress)
 
 sock = Utility.getSock()
 

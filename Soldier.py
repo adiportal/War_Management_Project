@@ -76,7 +76,7 @@ while msg_str == "":
     msg_str = input()
 
     CCAddress = Utility.getCCAddress(msg_str[0])
-    print(CCAddress)
+
     if CCAddress == 0:
         print("ERROR: INVALID Company Number")
         msg_str = ""
