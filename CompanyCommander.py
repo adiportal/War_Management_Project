@@ -55,10 +55,12 @@ def handleMessage(recMsg, recAddress):
 # Initialize Server Address
 CCAddress = Utility.initCCAddress()
 
+if CCAddress == 0:   # 3 CompanyCommanders is open
+    print("There are 3 Company Commanders already open in the system")
+    quit()
+
 sock = Utility.getSock()
 
-if sock == 0:   # 3 CompanyCommanders is open
-    quit()
 
 # Bind the socket with the address
 sock.bind(CCAddress)
