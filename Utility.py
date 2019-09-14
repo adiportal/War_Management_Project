@@ -147,6 +147,10 @@ def sender_receiver_switch_case(packet):
             packet.get_receiver() == Receiver.soldier.value:
         return Case.cc_to_soldier.value
 
+    # sender = CC, receiver = soldier
+    elif int(msg_list[0]) == 2 and int(msg_list[2]) == 1:
+        return 4
+
     else:
         return Case.error.value
 
