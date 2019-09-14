@@ -6,23 +6,23 @@ import Utility
 logging.basicConfig(filename = 'Log.log', level = logging.DEBUG, format = '%(asctime)s : %(levelname)s : CC : %(message)s')
 
 
-class CompanyCommander():
-    # Attributes
-    ID = 1
-    companyNumber = 0
-    x = 0
-    y = 0
-    ammo = 0
-    HP = 0
-
-    def __init__(self, companyNumber, location, ammo):
-        self.ID = CompanyCommander.ID
-        CompanyCommander.ID += 1
-        self.companyNumber = companyNumber
-        self.x = location[0]
-        self.y = location[1]
-        self.ammo = ammo
-        self.HP = 100
+# class CompanyCommander():
+#     # Attributes
+#     ID = 1
+#     companyNumber = 0
+#     x = 0
+#     y = 0
+#     ammo = 0
+#     HP = 0
+#
+#     def __init__(self, companyNumber, location, ammo):
+#         self.ID = CompanyCommander.ID
+#         CompanyCommander.ID += 1
+#         self.companyNumber = companyNumber
+#         self.x = location[0]
+#         self.y = location[1]
+#         self.ammo = ammo
+#         self.HP = 100
 
 
 def handleMessage(recMsg, recAddress):

@@ -8,6 +8,7 @@ import matplotlib
 matplotlib.use('QT5Agg')
 
 
+
 class MyWindow(QtWidgets.QMainWindow):
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
@@ -69,8 +70,17 @@ class MyWindow(QtWidgets.QMainWindow):
         x_data = this_point.get_xdata()
         y_data = this_point.get_ydata()
         ind = event.ind
+        index = -1
 
-        index = MyWindow.soldier_index(x_data, y_data)
+        for soldier in MyWindow.soldiers:
+            if soldier.x == x_data and soldier.y == y_data:
+                index = soldier.ID - 1
+                break
+
+        if index == -1:
+            print("hello")
+
+        MyWindow.soldiers[index].pick()
 
         print(str(float(x_data[ind])) + ", " + str(float(y_data[ind])))
         print(str(MyWindow.soldiers[index].to_string()))
