@@ -92,6 +92,10 @@ def switchCase(msg_str):
     elif int(msg_list[0]) == 1 and int(msg_list[2]) == 3 and msg_str[-1] == "*":
         return 3
 
+    # sender = CC, receiver = soldier
+    elif int(msg_list[0]) == 2 and int(msg_list[2]) == 1:
+        return 4
+
     else:
         return 0
 
