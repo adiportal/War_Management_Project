@@ -5,8 +5,8 @@ import Utility
 # Initialize the Logger
 logging.basicConfig(filename = 'Log.log', level = logging.DEBUG, format = '%(asctime)s : %(levelname)s : CC : %(message)s')
 
-class CompanyCommander():
 
+class CompanyCommander():
     # Attributes
     ID = 1
     companyNumber = 0
@@ -15,7 +15,7 @@ class CompanyCommander():
     ammo = 0
     HP = 0
 
-    def _init_(self, companyNumber, location, ammo):
+    def __init__(self, companyNumber, location, ammo):
         self.ID = CompanyCommander.ID
         CompanyCommander.ID += 1
         self.companyNumber = companyNumber
@@ -77,3 +77,5 @@ while True:
     recMsg = recMsg.decode('utf-8')
 
     handleMessage(recMsg, recAddress)
+
+
