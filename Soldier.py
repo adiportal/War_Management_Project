@@ -1,5 +1,5 @@
-import socket
 import logging
+import Utility
 
 # Initialize the Logger
 logging.basicConfig(filename = 'Log.log', level = logging.DEBUG, format = '%(asctime)s : %(levelname)s : Soldier : %(message)s')
@@ -23,58 +23,17 @@ class Soldier():
         self.ammo = ammo
         self.HP = 100
 
-# getSock
-def getSock():
-    # Initialize socket
-    try:
-        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        logging.debug("Socket Successfully Created!")
-    except socket.error as err:
-        logging.error("Socket creation failed with error {}".format(err))
-    sock.settimeout(5)
-
-    return sock
-
-# get Soldier Address
-def getSoldierAddress():
-    IP = '127.0.0.1'
-    port = 5001
-    return (IP, port)
-
-# get Company Commander Address
-def getCCAddress():
-    IP = '127.0.0.1'
-    port = 5002
-    return (IP, port)
-
-# get Battalion Commander Address
-def getBCAddress():
-    IP = '127.0.0.1'
-    port = 5003
-    return (IP, port)
 
 # Exit
-def exit(sock, serverAddress):
-    sendMessage('-1', sock, serverAddress)
-    print("\nGood Bye :)")
-    logging.debug("Closing Soldier...")
-    quit()
-
-# Check Message
-def checkMSG(msg_str):
-
-    if msg_str[:2] == 'CC':
-        return 'CC'
-
-    elif msg_str[:2] == 'BC':
-        return 'BC'
-
-    else:
-        return 'null'
+# def exit(sock, serverAddress):
+#     sendMessage('-1', sock, serverAddress)
+#     print("\nGood Bye :)")
+#     logging.debug("Closing Soldier...")
+#     quit()
 
 
 # sendMassage
-def sendMessage(sendMsg, sock, CCAddress):
+def handleMessage(sendMsg, sock, CCAddress):
 
     recMsg = ''
     try:
@@ -82,17 +41,19 @@ def sendMessage(sendMsg, sock, CCAddress):
 
         logging.debug("Message has been sent to CC {} : {}".format(CCAddress, sendMsg))
 
-        recMsg, CCAddress = sock.recvfrom(1024)
+        recMsg, CCAddress = sock.recvfrom(65527)
         recMsg = recMsg.decode('utf-8')
 
-        if checkMSG(recMsg) == 'CC':
+        case = Utility.switchCase(recMsg)
+
+        if case == 1:
             # print receive message
             print("The message '{}' reached to Company Commander".format(recMsg))
             logging.debug("The message '{}' reached to CC {}".format(recMsg, CCAddress))
 
-        elif checkMSG(recMsg) == 'BC':
+        elif case == 2:
             print("The message '{}' reached to Battalion Commander".format(recMsg))
-            logging.debug("The message '{}' reached to BC {}".format(recMsg, getBCAddress()))
+            logging.debug("The message '{}' reached to BC {}".format(recMsg, Utility.getBCAddress()))
 
         else:
             logging.ERROR("An invalid message has reached: \'{}\'".format(recMsg))
@@ -101,24 +62,27 @@ def sendMessage(sendMsg, sock, CCAddress):
         logging.error("The message '{}' did'nt reached to CC {}".format(recMsg, CCAddress))
         print("The message '{}' did'nt reached to the Company Commander!!".format(recMsg))
 
-# **Main**
-sock = getSock()
-sock.bind(getSoldierAddress())
 
-CCAddress = getCCAddress()
+# **Main**
+sock = Utility.getSock()
+sock.settimeout(5)
+sock.bind(Utility.getSoldierAddress())
+
 
 msg_str = ""
 
 while msg_str == "":
+    print("Write Your Message:")
     msg_str = input()
-    check = checkMSG(msg_str)
 
-    if (check == "CC" or check == "BC"):
-        sendMessage(msg_str, sock, CCAddress)
-        msg_str = ""
+    CCAddress = Utility.getCCAddress(msg_str[0])
 
-    else:
-        print("The Message you Entered is not correct")
+    if CCAddress == 0:
+        print("ERROR: INVALID Company Number")
         msg_str = ""
         continue
+
+    msg_str = "1." + msg_str
+    handleMessage(msg_str, sock, CCAddress)
+    msg_str = ""
 
