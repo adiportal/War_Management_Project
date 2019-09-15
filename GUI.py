@@ -38,23 +38,7 @@ class MyWindow(QtWidgets.QMainWindow):
         MyWindow.soldiers.append(s8)
         MyWindow.soldiers.append(s9)
 
-
-        # x_list = []
-        # y_list = []
-
-        # for soldier in soldiers:
-        #     x_list.append(soldier.x)
-        #     y_list.append(soldier.y)
-
-        for s in MyWindow.soldiers:
-            if s.companyNumber == 1:
-                MyWindow.ax.plot(s.x, s.y, marker='o', markersize=5, color="blue", picker=5)
-
-            elif s.companyNumber == 2:
-                MyWindow.ax.plot(s.x, s.y, marker='o', markersize=5, color="red", picker=5)
-
-            elif s.companyNumber == 3:
-                MyWindow.ax.plot(s.x, s.y, marker='o', markersize=5, color="green", picker=5)
+        add_points()
 
         self.plotWidget = FigureCanvas(MyWindow.fig)
         lay = QtWidgets.QVBoxLayout(self.content_plot)
@@ -64,7 +48,6 @@ class MyWindow(QtWidgets.QMainWindow):
         lay.addWidget(self.toolbar)
 
         MyWindow.fig.canvas.mpl_connect('pick_event', MyWindow.on_pick)
-        #MyWindow.fig.canvas.mpl_connect('button_press_event', MyWindow.on_click)
 
     def on_pick(event):
         if len(MyWindow.picked_soldier) == 0:
@@ -80,15 +63,11 @@ class MyWindow(QtWidgets.QMainWindow):
                     MyWindow.picked_soldier.append(soldier)
                     break
 
-            MyWindow.soldiers[index].pick()
-
             print(str(float(x_data[ind])) + ", " + str(float(y_data[ind])))
             print(str(MyWindow.soldiers[index].to_string()))
 
             MyWindow.fig.canvas.mpl_connect('button_press_event', MyWindow.on_click)
             MyWindow.fig.canvas.mpl_disconnect(MyWindow.fig.canvas.mpl_connect('pick_event', MyWindow.on_pick))
-
-
 
     def on_click(event):
         x_data = event.xdata
@@ -97,7 +76,6 @@ class MyWindow(QtWidgets.QMainWindow):
         if len(MyWindow.picked_soldier) > 0:
             soldier = MyWindow.picked_soldier.pop(0)
             soldier.update_location(x_data, y_data)
-            soldier.unpick()
             print(soldier.get_location())
 
         print(x_data, y_data, len(MyWindow.picked_soldier))
@@ -108,6 +86,19 @@ class MyWindow(QtWidgets.QMainWindow):
         for soldier in MyWindow.soldiers:
             if soldier.x == x_data and soldier.y == y_data:
                 return soldier.ID - 1
+
+
+def add_points():
+    MyWindow.ax.clear()
+    for s in MyWindow.soldiers:
+        if s.companyNumber == 1:
+            MyWindow.ax.plot(s.x, s.y, marker='o', markersize=5, color="blue", picker=5)
+
+        elif s.companyNumber == 2:
+            MyWindow.ax.plot(s.x, s.y, marker='o', markersize=5, color="red", picker=5)
+
+        elif s.companyNumber == 3:
+            MyWindow.ax.plot(s.x, s.y, marker='o', markersize=5, color="green", picker=5)
 
 
 def main():

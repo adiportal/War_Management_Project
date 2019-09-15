@@ -2,31 +2,36 @@ import logging
 import Utility
 
 # Initialize the Logger
-logging.basicConfig(filename = 'Log.log', level = logging.DEBUG, format = '%(asctime)s : %(levelname)s : BC : %(message)s')
+logging.basicConfig(filename='BattalionCommander.log', level=logging.DEBUG, format='%(asctime)s : %(levelname)s : BC : %(message)s')
 
-def handleMessage(recMsg):
-    recMsg_list = Utility.splitMessage(recMsg)
 
-    if Utility.switchCase(recMsg) == 0:
-        logging.ERROR("an invalid message has reached: \'{}\'".format(recMsg))
+def handle_message(rec_msg):
+    rec_msg_list = Utility.split_message(rec_msg)
+
+    if Utility.switch_case(rec_msg) == 0:
+        logging.ERROR("an invalid message has reached: \'{}\'".format(rec_msg))
     else:
-        recAddress = Utility.getCCAddress(recMsg_list[1])
+        rec_address = Utility.get_cc_address(rec_msg_list[1])
         # printing the message and the Sender Address
-        print('Received message from Soldier {} : {}'.format(recAddress, recMsg))
-        logging.debug("Received message from Soldier {} : {}".format(recAddress, recMsg))
+        print('Received message from Soldier {} : {}'.format(rec_address, rec_msg))
+        logging.debug("Received message from Soldier {} : {}".format(rec_address, rec_msg))
 
-        recMsg = recMsg + "*"
-        sock.sendto(recMsg.encode(), recAddress)
+        rec_msg = rec_msg + "*"
+        sock.sendto(rec_msg.encode(), rec_address)
 
 # *Main*
 # Initialize Server Address
-BCAddress = Utility.getBCAddress()
+bc_address = Utility.init_bc_address()
+
+if bc_address == 0:   # there is open BattalionCommanders
+    print("There is open Battalion Commanders")
+    quit()
 
 # Initialize Socket
-sock = Utility.getSock()
+sock = Utility.get_sock()
 
 # Bind the socket with the address
-sock.bind(BCAddress)
+sock.bind(bc_address)
 
 print('Listening')
 logging.debug('Listening')
@@ -34,9 +39,9 @@ logging.debug('Listening')
 while True:
 
     # set max size of message
-    recMsg, recAddress = sock.recvfrom(65527)
+    rec_msg, rec_address = sock.recvfrom(65527)
 
     # decoding the message to String
-    recMsg = recMsg.decode('utf-8')
+    rec_msg = rec_msg.decode('utf-8')
 
-    handleMessage(recMsg)
+    handle_message(rec_msg)

@@ -1,69 +1,50 @@
-import socket
 import logging
 import Utility
 
 # Initialize the Logger
-logging.basicConfig(filename = 'Log.log', level = logging.DEBUG, format = '%(asctime)s : %(levelname)s : CC : %(message)s')
+logging.basicConfig(filename='CompanyCommander.log', level=logging.DEBUG, format='%(asctime)s : %(levelname)s : CC : %(message)s')
 
 
-# class CompanyCommander():
-#     # Attributes
-#     ID = 1
-#     companyNumber = 0
-#     x = 0
-#     y = 0
-#     ammo = 0
-#     HP = 0
-#
-#     def __init__(self, companyNumber, location, ammo):
-#         self.ID = CompanyCommander.ID
-#         CompanyCommander.ID += 1
-#         self.companyNumber = companyNumber
-#         self.x = location[0]
-#         self.y = location[1]
-#         self.ammo = ammo
-#         self.HP = 100
-
-
-def handleMessage(recMsg, recAddress):
-    case = Utility.switchCase(recMsg)
+def handle_message(rec_msg, rec_address):
+    case = Utility.switch_case(rec_msg)
 
     if case == 1:
 
         # printing the message and the client Address
-        print('Received message from Soldier {} : {}'.format(recAddress, recMsg))
-        logging.debug("Received message from Soldier {} : {}".format(recAddress, recMsg))
+        print('Received message from Soldier {} : {}'.format(rec_address, rec_msg))
+        logging.debug("Received message from Soldier {} : {}".format(rec_address, rec_msg))
 
-        sock.sendto(recMsg.encode(), Utility.getSoldierAddress())
+        sock.sendto(rec_msg.encode(), Utility.get_soldier_address())
 
     elif case == 2:
 
-        logging.debug("Received message from Soldier {} : {}".format(recAddress, recMsg))
-        sock.sendto(recMsg.encode(), Utility.getBCAddress())
+        logging.debug("Received message from Soldier {} : {}".format(rec_address, rec_msg))
+        sock.sendto(rec_msg.encode(), Utility.get_bc_address())
 
     elif case == 3:
 
-        recMsg = recMsg[:-1]
+        rec_msg = rec_msg[:-1]
 
-        logging.debug("Received message from BC {} : {}".format(recAddress, recMsg))
-        sock.sendto(recMsg.encode(), Utility.getSoldierAddress())
+        logging.debug("Received message from BC {} : {}".format(rec_address, rec_msg))
+        sock.sendto(rec_msg.encode(), Utility.get_soldier_address())
 
     else:           # case = 0
-        logging.ERROR("An invalid message has reached: \'{}\'".format(recMsg))
+        logging.ERROR("An invalid message has reached: \'{}\'".format(rec_msg))
+
 
 # *Main*
 # Initialize Server Address
-CCAddress = Utility.initCCAddress()
+cc_address = Utility.init_cc_address()
 
-if CCAddress == 0:   # 3 CompanyCommanders is open
+if cc_address == 0:   # 3 CompanyCommanders is open
     print("There are 3 Company Commanders already open in the system")
     quit()
 
-sock = Utility.getSock()
+sock = Utility.get_sock()
 
 
 # Bind the socket with the address
-sock.bind(CCAddress)
+sock.bind(cc_address)
 
 print('Listening')
 logging.debug('Listening')
@@ -71,11 +52,11 @@ logging.debug('Listening')
 while True:
 
     # set max size of message
-    recMsg, recAddress = sock.recvfrom(65527)
+    rec_msg, rec_address = sock.recvfrom(65527)
 
     # decoding the message to String
-    recMsg = recMsg.decode('utf-8')
+    rec_msg = rec_msg.decode('utf-8')
 
-    handleMessage(recMsg, recAddress)
+    handle_message(rec_msg, rec_address)
 
 
