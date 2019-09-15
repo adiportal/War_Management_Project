@@ -45,6 +45,7 @@ sock = Utility.get_sock()
 
 # Bind the socket with the address
 sock.bind(cc_address)
+logging.info(sock)
 
 print('Listening')
 logging.debug('Listening')

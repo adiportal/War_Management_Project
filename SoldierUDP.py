@@ -46,6 +46,7 @@ class UDP():
     sock = Utility.get_sock()
     sock.settimeout(5)
     sock.bind(Utility.get_soldier_address())
+    logging.info(sock)
 
     msg_str = ""
 
@@ -53,14 +54,21 @@ class UDP():
         print("Write Your Message:")
         msg_str = input()
 
-        cc_address = Utility.get_cc_address(msg_str[0])
+        msg_list = msg_str.split(".")
 
-        if cc_address == 0:
-            print("ERROR: INVALID Company Number")
+        if Utility.check_message(msg_list[1]):
+
+            cc_address = Utility.get_cc_address(msg_str[0])
+
+            if cc_address == 0:
+                print("ERROR: INVALID Company Number")
+                msg_str = ""
+                continue
+
+            msg_str = "1." + msg_str
+            handle_message(msg_str, sock, cc_address)
             msg_str = ""
-            continue
 
-        msg_str = "1." + msg_str
-        handle_message(msg_str, sock, cc_address)
-        msg_str = ""
+        else:
+            print("Invalid Receiver")
 

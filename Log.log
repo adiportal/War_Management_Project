@@ -777,3 +777,14 @@ O
 2019-09-15 19:53:44,196 : DEBUG : Utility : Message has been sent to CC ('127.0.0.1', 5004) : 1.1.2.3
 2019-09-15 19:53:44,197 : DEBUG : Utility : Received message from Soldier ('127.0.0.1', 5001) : 1.1.2.3
 2019-09-15 19:53:44,197 : DEBUG : Utility : The message '1.1.2.3' reached to CC ('127.0.0.1', 5004)
+2019-09-15 19:54:08,728 : DEBUG : Utility : Message has been sent to CC ('127.0.0.1', 5004) : 1.1.1.1212
+2019-09-15 19:54:13,729 : ERROR : Utility : The message '' did'nt reached to CC ('127.0.0.1', 5004)
+2019-09-15 19:58:37,412 : DEBUG : Utility : Socket Successfully Created!
+2019-09-15 19:58:37,412 : DEBUG : Utility : Listening
+2019-09-15 19:58:46,881 : DEBUG : Utility : Message has been sent to CC ('127.0.0.1', 5004) : 1.1.1.1212
+2019-09-15 19:58:51,882 : ERROR : Utility : The message '' did'nt reached to CC ('127.0.0.1', 5004)
+2019-09-15 20:10:00,548 : DEBUG : Utility : Socket Successfully Created!
+2019-09-15 20:10:02,000 : DEBUG : Utility : Socket Successfully Created!
+2019-09-15 20:10:02,000 : DEBUG : Utility : Listening
+2019-09-15 20:12:32,969 : DEBUG : Utility : Socket Successfully Created!
+2019-09-15 20:13:01,843 : DEBUG : Utility : Socket Successfully Created!

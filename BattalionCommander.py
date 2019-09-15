@@ -6,7 +6,7 @@ logging.basicConfig(filename='BattalionCommander.log', level=logging.DEBUG, form
 
 
 def handle_message(rec_msg):
-    rec_msg_list = Utility.split_message(rec_msg)
+    rec_msg_list = rec_msg.split(".")
 
     if Utility.switch_case(rec_msg) == 0:
         logging.ERROR("an invalid message has reached: \'{}\'".format(rec_msg))
@@ -18,6 +18,7 @@ def handle_message(rec_msg):
 
         rec_msg = rec_msg + "*"
         sock.sendto(rec_msg.encode(), rec_address)
+
 
 # *Main*
 # Initialize Server Address
@@ -32,6 +33,8 @@ sock = Utility.get_sock()
 
 # Bind the socket with the address
 sock.bind(bc_address)
+
+logging.info(sock)
 
 print('Listening')
 logging.debug('Listening')
