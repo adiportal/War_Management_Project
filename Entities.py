@@ -26,6 +26,9 @@ class Soldier():
         self.x = new_x
         self.y = new_y
 
+    def get_location(self):
+        return "({}, {})".format(self.x, self.y)
+
     def pick(self):
         self.picked = True
 

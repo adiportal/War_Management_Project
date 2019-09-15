@@ -2,17 +2,17 @@ import sys
 from Entities import Soldier, CompanyCommander
 from PyQt5 import QtCore, QtWidgets, uic
 import matplotlib.pylab as plt
-from matplotlib.backends.backend_qt5agg import FigureCanvas
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 import matplotlib
 matplotlib.use('QT5Agg')
-
 
 
 class MyWindow(QtWidgets.QMainWindow):
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
     soldiers = []
+    picked_soldier = []
 
     def __init__(self):
         super(MyWindow, self).__init__()
@@ -64,27 +64,45 @@ class MyWindow(QtWidgets.QMainWindow):
         lay.addWidget(self.toolbar)
 
         MyWindow.fig.canvas.mpl_connect('pick_event', MyWindow.on_pick)
+        #MyWindow.fig.canvas.mpl_connect('button_press_event', MyWindow.on_click)
 
     def on_pick(event):
-        this_point = event.artist
-        x_data = this_point.get_xdata()
-        y_data = this_point.get_ydata()
-        ind = event.ind
-        index = -1
+        if len(MyWindow.picked_soldier) == 0:
+            this_point = event.artist
+            x_data = this_point.get_xdata()
+            y_data = this_point.get_ydata()
+            ind = event.ind
+            index = -1
 
-        for soldier in MyWindow.soldiers:
-            if soldier.x == x_data and soldier.y == y_data:
-                index = soldier.ID - 1
-                break
+            for soldier in MyWindow.soldiers:
+                if soldier.x == x_data and soldier.y == y_data:
+                    index = soldier.ID - 1
+                    MyWindow.picked_soldier.append(soldier)
+                    break
 
-        if index == -1:
-            print("hello")
+            MyWindow.soldiers[index].pick()
 
-        MyWindow.soldiers[index].pick()
+            print(str(float(x_data[ind])) + ", " + str(float(y_data[ind])))
+            print(str(MyWindow.soldiers[index].to_string()))
 
-        print(str(float(x_data[ind])) + ", " + str(float(y_data[ind])))
-        print(str(MyWindow.soldiers[index].to_string()))
+            MyWindow.fig.canvas.mpl_connect('button_press_event', MyWindow.on_click)
+            MyWindow.fig.canvas.mpl_disconnect(MyWindow.fig.canvas.mpl_connect('pick_event', MyWindow.on_pick))
 
+
+
+    def on_click(event):
+        x_data = event.xdata
+        y_data = event.ydata
+
+        if len(MyWindow.picked_soldier) > 0:
+            soldier = MyWindow.picked_soldier.pop(0)
+            soldier.update_location(x_data, y_data)
+            soldier.unpick()
+            print(soldier.get_location())
+
+        print(x_data, y_data, len(MyWindow.picked_soldier))
+        MyWindow.fig.canvas.mpl_connect('pick_event', MyWindow.on_pick)
+        MyWindow.fig.canvas.mpl_disconnect(MyWindow.fig.canvas.mpl_connect('button_press_event', MyWindow.on_click))
 
     def soldier_index(x_data, y_data):
         for soldier in MyWindow.soldiers:
