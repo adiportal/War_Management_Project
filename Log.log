@@ -767,3 +767,13 @@ O
 2019-09-14 17:29:15,041 : DEBUG : Utility : Listening
 2019-09-14 17:30:19,230 : DEBUG : Utility : Socket Successfully Created!
 2019-09-14 17:30:19,230 : DEBUG : Utility : Listening
+2019-09-15 19:52:31,253 : DEBUG : Utility : Socket Successfully Created!
+2019-09-15 19:53:24,188 : DEBUG : Utility : Socket Successfully Created!
+2019-09-15 19:53:30,687 : DEBUG : Utility : Socket Successfully Created!
+2019-09-15 19:53:30,687 : DEBUG : Utility : Listening
+2019-09-15 19:53:34,310 : DEBUG : Utility : Socket Successfully Created!
+2019-09-15 19:53:34,310 : DEBUG : Utility : Listening
+2019-09-15 19:53:37,546 : DEBUG : Utility : Socket Successfully Created!
+2019-09-15 19:53:44,196 : DEBUG : Utility : Message has been sent to CC ('127.0.0.1', 5004) : 1.1.2.3
+2019-09-15 19:53:44,197 : DEBUG : Utility : Received message from Soldier ('127.0.0.1', 5001) : 1.1.2.3
+2019-09-15 19:53:44,197 : DEBUG : Utility : The message '1.1.2.3' reached to CC ('127.0.0.1', 5004)

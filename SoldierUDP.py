@@ -50,8 +50,8 @@ class UDP():
     msg_str = ""
 
     while msg_str == "":
-        #print("Write Your Message:")
-        #msg_str = input()
+        print("Write Your Message:")
+        msg_str = input()
 
         cc_address = Utility.get_cc_address(msg_str[0])
 
