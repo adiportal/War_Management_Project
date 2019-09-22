@@ -5,85 +5,57 @@ import Entities
 # Initialize the Logger
 logging.basicConfig(filename = 'Log.log', level = logging.DEBUG, format = '%(asctime)s : %(levelname)s : Soldier : %(message)s')
 
-# class Creates():
-#
-#     # Attributes
-#     ID = 1
-#     companyNumber = 0
-#     x = 0
-#     y = 0
-#     ammo = 0
-#     HP = 0
-#
-#     def __init__(self, companyNumber, location, ammo):
-#         self.ID = Creates.ID
-#         Creates.ID += 1
-#         self.companyNumber = companyNumber
-#         self.x = location[0]
-#         self.y = location[1]
-#         self.ammo = ammo
-#         self.HP = 100
+
+# sendMassage
+def handle_message(send_msg, sock, cc_address):
+
+    rec_msg = ''
+    try:
+        sock.sendto(send_msg.encode(), cc_address)
+
+        logging.debug("Message has been sent to CC {} : {}".format(cc_address, send_msg))
+
+        rec_msg, cc_address = sock.recvfrom(65527)
+        rec_msg = rec_msg.decode('utf-8')
+
+        case = Utility.switch_case(rec_msg)
+
+        if case == 1:
+            # print receive message
+            print("The message '{}' reached to Company Commander".format(rec_msg))
+            logging.debug("The message '{}' reached to CC {}".format(rec_msg, cc_address))
+
+        elif case == 2:
+            print("The message '{}' reached to Battalion Commander".format(rec_msg))
+            logging.debug("The message '{}' reached to BC {}".format(rec_msg, Utility.get_bc_address()))
+
+        else:
+            logging.ERROR("An invalid message has reached: \'{}\'".format(rec_msg))
+
+    except:
+        logging.error("The message '{}' did'nt reached to CC {}".format(rec_msg, cc_address))
+        print("The message '{}' did'nt reached to the Company Commander!!".format(rec_msg))
 
 
-# Exit
-# def exit(sock, serverAddress):
-#     sendMessage('-1', sock, serverAddress)
-#     print("\nGood Bye :)")
-#     logging.debug("Closing Soldier...")
-#     quit()
+# **Main**
+sock = Utility.get_sock()
+sock.settimeout(5)
+sock.bind(Utility.get_soldier_address())
 
-class UDP():
-    # sendMassage
-    def handleMessage(sendMsg, sock, CCAddress):
+msg_str = ""
 
-        recMsg = ''
-        try:
-            sock.sendto(sendMsg.encode(), CCAddress)
+while msg_str == "":
+    #print("Write Your Message:")
+    #msg_str = input()
 
-            logging.debug("Message has been sent to CC {} : {}".format(CCAddress, sendMsg))
+    cc_address = Utility.get_cc_address(msg_str[0])
 
-            recMsg, CCAddress = sock.recvfrom(65527)
-            recMsg = recMsg.decode('utf-8')
-
-            case = Utility.switchCase(recMsg)
-
-            if case == 1:
-                # print receive message
-                print("The message '{}' reached to Company Commander".format(recMsg))
-                logging.debug("The message '{}' reached to CC {}".format(recMsg, CCAddress))
-
-            elif case == 2:
-                print("The message '{}' reached to Battalion Commander".format(recMsg))
-                logging.debug("The message '{}' reached to BC {}".format(recMsg, Utility.get_bc_address()))
-
-            else:
-                logging.ERROR("An invalid message has reached: \'{}\'".format(recMsg))
-
-        except:
-            logging.error("The message '{}' did'nt reached to CC {}".format(recMsg, CCAddress))
-            print("The message '{}' did'nt reached to the Company Commander!!".format(recMsg))
-
-
-    # **Main**
-    sock = Utility.getSock()
-    sock.settimeout(5)
-    sock.bind(Utility.getSoldierAddress())
-
-
-    msg_str = ""
-
-    while msg_str == "":
-        #print("Write Your Message:")
-        #msg_str = input()
-
-        CCAddress = Utility.getCCAddress(msg_str[0])
-
-        if CCAddress == 0:
-            print("ERROR: INVALID Company Number")
-            msg_str = ""
-            continue
-
-        msg_str = "1." + msg_str
-        handleMessage(msg_str, sock, CCAddress)
+    if cc_address == 0:
+        print("ERROR: INVALID Company Number")
         msg_str = ""
+        continue
+
+    msg_str = "1." + msg_str
+    handle_message(msg_str, sock, cc_address)
+    msg_str = ""
 
