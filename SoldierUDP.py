@@ -54,7 +54,7 @@ class UDP():
 
             elif case == 2:
                 print("The message '{}' reached to Battalion Commander".format(recMsg))
-                logging.debug("The message '{}' reached to BC {}".format(recMsg, Utility.getBCAddress()))
+                logging.debug("The message '{}' reached to BC {}".format(recMsg, Utility.get_bc_address()))
 
             else:
                 logging.ERROR("An invalid message has reached: \'{}\'".format(recMsg))
