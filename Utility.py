@@ -5,7 +5,7 @@ logging.basicConfig(filename = 'Log.log', level = logging.DEBUG, format = '%(asc
 
 
 # getSock
-def getSock():
+def get_sock():
     # Initialize socket
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -17,19 +17,19 @@ def getSock():
 
 
 # get Soldier Address
-def getSoldierAddress():
+def get_soldier_address():
     IP = '127.0.0.1'
     port = 5001
     return (IP, port)
 
 
 # get Company Commander Address
-def initCCAddress():
+def init_cc_address():
     IP = '127.0.0.1'
     port = 5004
     count = 0
 
-    while isOpen(IP, port) == False and count != 3:
+    while not is_open(IP, port) and count != 3:
         port += 1
         count += 1
 
@@ -38,30 +38,30 @@ def initCCAddress():
 
     return (IP, port)
 
-def getCCAddress(companyNum):
+def get_cc_address(company_num):
     IP = '127.0.0.1'
 
-    if int(companyNum) == 1:
+    if int(company_num) == 1:
         port = 5004
 
-        if isOpen(IP, port) == False:
+        if not is_open(IP, port):
             return (IP, port)
         else:
             return 0
 
-    elif int(companyNum) == 2:
+    elif int(company_num) == 2:
         port = 5005
 
-        if isOpen(IP, port) == False:
-            return (IP, port)
+        if not is_open(IP, port):
+            return IP, port
         else:
             return 0
 
-    elif int(companyNum) == 3:
+    elif int(company_num) == 3:
         port = 5006
 
-        if isOpen(IP, port) == False:
-            return (IP, port)
+        if not is_open(IP, port):
+            return IP, port
         else:
             return 0
 
@@ -69,16 +69,16 @@ def getCCAddress(companyNum):
         return 0
 
 # get Battalion Commander Address
-def getBCAddress():
+def get_bc_address():
     IP = '127.0.0.1'
     port = 5003
     return (IP, port)
 
 
 # Check Message                     MSG ICD: Sender.Receiver.MSG (str)
-def switchCase(msg_str):
+def switch_case(msg_str):
 
-    msg_list = splitMessage(msg_str)
+    msg_list = msg_str.split(".")
 
     # sender = Soldier, receiver = CC
     if int(msg_list[0]) == 1 and int(msg_list[2]) == 2:
@@ -100,14 +100,8 @@ def switchCase(msg_str):
         return 0
 
 
-# Split Message
-def splitMessage(msg_str):
-    msg_list = msg_str.split(".")
-    return msg_list
-
-
 # isOpen
-def isOpen(IP, port):
+def is_open(IP, port):
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
     try:
