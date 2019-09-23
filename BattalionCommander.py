@@ -6,18 +6,20 @@ logging.basicConfig(filename = 'Log.log', level = logging.DEBUG, format = '%(asc
 
 
 def handle_message(rec_msg):
-    recMsg_list = rec_msg.split(".")
+
+    rec_msg_list = rec_msg.split(".")
 
     if Utility.switch_case(rec_msg) == 0:
         logging.ERROR("an invalid message has reached: \'{}\'".format(rec_msg))
     else:
-        rec_address = Utility.get_cc_ddress(recMsg_list[1])
+        rec_address = Utility.get_cc_address(rec_msg_list[Utility.MessageIndexes.company_num.value])
         # printing the message and the Sender Address
         print('Received message from Soldier {} : {}'.format(rec_address, rec_msg))
         logging.debug("Received message from Soldier {} : {}".format(rec_address, rec_msg))
 
         rec_msg = rec_msg + "*"
         sock.sendto(rec_msg.encode(), rec_address)
+
 
 # *Main*
 # Initialize Server Address

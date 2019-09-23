@@ -9,7 +9,7 @@ logging.basicConfig(filename = 'Log.log', level = logging.DEBUG, format = '%(asc
 def handle_message(rec_msg, rec_address):
     case = Utility.switch_case(rec_msg)
 
-    if case == 1:
+    if case == Utility.Case.soldier_to_cc.value:
 
         # printing the message and the client Address
         print('Received message from Soldier {} : {}'.format(rec_address, rec_msg))
@@ -17,12 +17,12 @@ def handle_message(rec_msg, rec_address):
 
         sock.sendto(rec_msg.encode(), Utility.get_soldier_address())
 
-    elif case == 2:
+    elif case == Utility.Case.soldier_to_bc.value:
 
         logging.debug("Received message from Soldier {} : {}".format(rec_address, rec_msg))
         sock.sendto(rec_msg.encode(), Utility.get_bc_address())
 
-    elif case == 3:
+    elif case == Utility.Case.bc_to_cc_approval.value:
 
         rec_msg = rec_msg[:-1]
 
@@ -32,11 +32,12 @@ def handle_message(rec_msg, rec_address):
     else:           # case = 0
         logging.ERROR("An invalid message has reached: \'{}\'".format(rec_msg))
 
+
 # *Main*
 # Initialize Server Address
 cc_address = Utility.init_cc_address()
 
-if cc_address == 0:   # 3 CompanyCommanders is open
+if cc_address == Utility.Case.error.value:   # 3 CompanyCommanders is open
     print("There are 3 Company Commanders already open in the system")
     quit()
 

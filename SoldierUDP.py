@@ -87,12 +87,12 @@ def handle_message(send_msg, sock, cc_address):
 
         case = Utility.switch_case(rec_msg)
 
-        if case == 1:
+        if case == Utility.Case.soldier_to_cc.value:
             # print receive message
             print("The message '{}' reached to Company Commander".format(rec_msg))
             logging.debug("The message '{}' reached to CC {}".format(rec_msg, cc_address))
 
-        elif case == 2:
+        elif case == Utility.Case.soldier_to_bc.value:
             print("The message '{}' reached to Battalion Commander".format(rec_msg))
             logging.debug("The message '{}' reached to BC {}".format(rec_msg, Utility.get_bc_address()))
 
@@ -102,6 +102,7 @@ def handle_message(send_msg, sock, cc_address):
     except:
         logging.error("The message '{}' did'nt reached to CC {}".format(rec_msg, cc_address))
         print("The message '{}' did'nt reached to the Company Commander!!".format(rec_msg))
+
 
 sock = Utility.get_sock()
 # sock.settimeout(5)
@@ -116,16 +117,16 @@ threading1.start()
 msg_str = ""
 
 while msg_str == "":
-    print("Write Your Message:")
-    msg_str = input()
+    msg_str = input("Write Your Message:")
+    msg_str = "1." + msg_str
+    msg_list = msg_str.split(".")
 
-    cc_address = Utility.get_cc_address(msg_str[0])
+    cc_address = Utility.get_cc_address(msg_list[Utility.MessageIndexes.company_num.value])
 
-    if cc_address == 0:
+    if cc_address == Utility.Case.error.value:
         print("ERROR: INVALID Company Number")
         msg_str = ""
         continue
 
-    msg_str = "1." + msg_str
     handle_message(msg_str, sock, cc_address)
     msg_str = ""
