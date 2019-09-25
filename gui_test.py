@@ -3,7 +3,7 @@ import matplotlib.pylab as plt
 import mplcursors
 import matplotlib.animation as animation
 
-c1 = CompanyCommander(1, (5.2, 4.2), 100)
+#c1 = CompanyCommander(1, (5.2, 4.2), 100)
 s1 = Soldier(1, (3, 4), 100)
 s2 = Soldier(2, (5, 6), 100)
 s3 = Soldier(3, (1, 6), 100)
