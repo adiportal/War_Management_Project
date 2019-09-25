@@ -5,6 +5,7 @@ import Entities
 
 logging.basicConfig(filename = 'Log.log', level = logging.DEBUG, format = '%(asctime)s : %(levelname)s : Utility : %(message)s')
 
+
 def get_sock():
     # Initialize socket
     try:
@@ -16,7 +17,6 @@ def get_sock():
     return sock
 
 
-# getSock
 def get_soldier_address():
     IP = '127.0.0.1'
     port = 5001
@@ -70,10 +70,12 @@ def get_cc_address(company_num):
     else:
         return Case.error.value
 
+
 def get_bc_address():
     IP = '127.0.0.1'
     port = 5003
     return (IP, port)
+
 
 # get Battalion Commander Address
 def switch_case(msg_str):
@@ -81,22 +83,27 @@ def switch_case(msg_str):
     msg_list = msg_str.split(".")
 
     # sender = Soldier, receiver = CC
-    if int(msg_list[MessageIndexes.sender.value]) == Sender.soldier.value and int(msg_list[MessageIndexes.receiver.value]) == Receiver.company_commander.value:
+    if int(msg_list[MessageIndexes.sender.value]) == Sender.soldier.value and \
+            int(msg_list[MessageIndexes.receiver.value]) == Receiver.company_commander.value:
         return Case.soldier_to_cc.value
 
     # sender = Soldier, receiver = BC
-    elif int(msg_list[MessageIndexes.sender.value]) == Sender.soldier.value and int(msg_list[MessageIndexes.receiver.value]) == Receiver.battalion_commander and msg_str[-1] != "*":
+    elif int(msg_list[MessageIndexes.sender.value]) == Sender.soldier.value and \
+            int(msg_list[MessageIndexes.receiver.value]) == Receiver.battalion_commander.value and \
+            msg_str[-1] != "*":
         return Case.soldier_to_bc.value
 
     # sender = BC, receiver = CC -> Soldier
-    elif int(msg_list[MessageIndexes.sender]) == Sender.soldier.value and int(msg_list[MessageIndexes.receiver.value]) == Receiver.battalion_commander.value and msg_str[-1] == "*":
+    elif int(msg_list[MessageIndexes.sender.value]) == Sender.soldier.value and \
+            int(msg_list[MessageIndexes.receiver.value]) == Receiver.battalion_commander.value and msg_str[-1] == "*":
         return Case.bc_to_cc_approval.value
 
     # sender = CC, receiver = soldier
-    elif int(msg_list[MessageIndexes.sender.value]) == Sender.company_commander and int(msg_list[MessageIndexes.receiver.value]) == Receiver.soldier.value:
-        return Case.cc_to_soldier
+    elif int(msg_list[MessageIndexes.sender.value]) == Sender.company_commander.value and \
+            int(msg_list[MessageIndexes.receiver.value]) == Receiver.soldier.value:
+        return Case.cc_to_soldier.value
     else:
-        return Case.error
+        return Case.error.value
 
 
 # Check Message                     MSG ICD: Sender.Receiver.MSG (str)
@@ -112,11 +119,11 @@ def is_open(IP, port):
     return result
 
 
-# isOpen
 def main_menu():
     return "Choose your option:\n" \
            "(1)     Initiate a new FieldObject \n" \
            "(2)     Send FieldObject location \n"
+
 
 def new_field_object_opt():
     object_list = []
@@ -162,7 +169,7 @@ def new_field_object_opt():
 
         object_list.append(ammo)
 
-    create_init_message(object_list)
+    return object_list
 
 
 def create_init_message(object_list):
@@ -172,23 +179,71 @@ def create_init_message(object_list):
                      + (object_list[ObjectListIndex.location.value])[Location.Y.value] + "." \
                      + object_list[ObjectListIndex.ammo.value]
     print(message)
-    create_object_field(object_list)
+    return message
 
 
 def create_object_field(object_list):
-
     if int(object_list[ObjectListIndex.object_type.value]) == int(ObjectType.soldier.value):
         soldier = Entities.Soldier(int(object_list[ObjectListIndex.company_num.value]),
-                         (int((object_list[ObjectListIndex.location.value])[Location.X.value]), int((object_list[ObjectListIndex.location.value])[Location.Y.value])),
-                         int(object_list[ObjectListIndex.ammo.value]))
-        print(soldier)
+                                   (float((object_list[ObjectListIndex.location.value])[Location.X.value]),
+                                   float((object_list[ObjectListIndex.location.value])[Location.Y.value])),
+                                   int(object_list[ObjectListIndex.ammo.value]))
+
         return soldier
+
     else:
         btw = Entities.BTW(int(object_list[ObjectListIndex.company_num.value]),
-                           (int((object_list[ObjectListIndex.location.value])[Location.X.value]), int((object_list[ObjectListIndex.location.value])[Location.Y.value])),
+                           (int((object_list[ObjectListIndex.location.value])[Location.X.value]),
+                            int((object_list[ObjectListIndex.location.value])[Location.Y.value])),
                            int(object_list[ObjectListIndex.ammo.value]))
-        print(btw)
+
         return btw
+
+
+def get_line(start, end):
+    x1, y1 = start
+    x2, y2 = end
+    delta_x = x2 - x1
+    delta_y = y2 - y1
+
+    # Determine how steep the line is
+    is_steep = abs(delta_y) > abs(delta_x)
+
+    # Rotate line
+    if is_steep:
+        x1, y1 = y1, x1
+        x2, y2 = y2, x2
+
+    # Swap start and end points if necessary and store swap state
+    swapped = False
+    if x1 > x2:
+        x1, x2 = x2, x1
+        y1, y2 = y2, y1
+        swapped = True
+
+    # Recalculate differentials
+    delta_x = x2 - x1
+    delta_y = y2 - y1
+
+    # Calculate error
+    error = int(delta_x / 2.0)
+    y_step = 1 if y1 < y2 else -1
+
+    # Iterate over bounding box generating points between start and end
+    y = y1
+    points = []
+    for x in range(int(x1), int(x2) + 1):
+        coord = (y, x) if is_steep else (x, y)
+        points.append(coord)
+        error -= abs(delta_y)
+        if error < 0:
+            y += y_step
+            error += delta_x
+
+    # Reverse the list if the coordinates were swapped
+    if swapped:
+        points.reverse()
+    return points
 
 
 # Enum Classes
@@ -223,7 +278,7 @@ class ObjectType(enum.Enum):
     btw = 2
 
 
-class MessageIndexes(enum.Enum):    # sender.receiver.company_num.message
+class MessageIndexes(enum.Enum):    # sender.receiver.company_num.message_type.
     sender = 0
     receiver = 1
     company_num = 2
@@ -242,4 +297,7 @@ class Location(enum.Enum):
     Y = 1
 
 
-new_field_object_opt()
+class MessageType(enum.Enum):
+    location_reporting = 1
+    object_field_init = 2
+

@@ -50,8 +50,10 @@ sock.bind(cc_address)
 print('Listening')
 logging.debug('Listening')
 
-send_msg = "Hello soldier"
-sock.sendto(send_msg.encode(), Utility.get_soldier_address())
+# ##
+# send_msg = "Hello soldier"
+# sock.sendto(send_msg.encode(), Utility.get_soldier_address())
+# ##
 
 while True:
 

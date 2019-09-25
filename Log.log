@@ -940,3 +940,27 @@ O
 2019-09-23 18:49:33,759 : DEBUG : Utility : Message has been sent to CC ('127.0.0.1', 5004) : 1.2.1.asdfasdf
 2019-09-23 18:59:58,649 : DEBUG : Utility : Socket Successfully Created!
 2019-09-23 19:00:07,618 : DEBUG : Utility : Socket Successfully Created!
+2019-09-24 14:13:28,231 : DEBUG : Utility : Socket Successfully Created!
+2019-09-24 14:14:35,935 : DEBUG : Utility : Socket Successfully Created!
+2019-09-24 15:13:45,307 : DEBUG : Utility : Socket Successfully Created!
+2019-09-24 15:13:45,307 : DEBUG : Utility : Socket Successfully Created!
+2019-09-24 15:14:19,160 : DEBUG : Utility : Socket Successfully Created!
+2019-09-24 15:14:29,687 : DEBUG : Utility : Socket Successfully Created!
+2019-09-24 15:15:08,507 : DEBUG : Utility : Socket Successfully Created!
+2019-09-24 15:15:28,357 : DEBUG : Utility : Socket Successfully Created!
+2019-09-25 18:43:35,932 : DEBUG : Utility : Socket Successfully Created!
+2019-09-25 18:44:01,089 : DEBUG : Utility : Socket Successfully Created!
+2019-09-25 18:47:52,411 : DEBUG : Utility : Socket Successfully Created!
+2019-09-25 18:47:52,411 : DEBUG : Utility : Listening
+2019-09-25 18:47:59,830 : DEBUG : Utility : Message has been sent to CC ('127.0.0.1', 5004) : 1.1.2.3
+2019-09-25 18:47:59,844 : ERROR : Utility : The message 'Hello soldier' did'nt reached to CC ('127.0.0.1', 5004)
+2019-09-25 18:49:41,104 : DEBUG : Utility : Socket Successfully Created!
+2019-09-25 18:49:41,105 : DEBUG : Utility : Listening
+2019-09-25 18:49:45,145 : DEBUG : Utility : Message has been sent to CC ('127.0.0.1', 5004) : 1.1.2.3
+2019-09-25 18:49:50,146 : ERROR : Utility : The message '' did'nt reached to CC ('127.0.0.1', 5004)
+2019-09-25 18:50:58,070 : DEBUG : Utility : Socket Successfully Created!
+2019-09-25 18:50:58,070 : DEBUG : Utility : Listening
+2019-09-25 18:51:04,271 : DEBUG : Utility : Socket Successfully Created!
+2019-09-25 18:51:04,272 : DEBUG : Utility : Listening
+2019-09-25 18:51:16,217 : DEBUG : Utility : Message has been sent to CC ('127.0.0.1', 5004) : 1.1.3.asdfsd
+2019-09-25 18:51:21,218 : ERROR : Utility : The message '' did'nt reached to CC ('127.0.0.1', 5004)

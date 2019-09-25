@@ -39,3 +39,15 @@
 #
 # # Start the event loop.
 # app.exec_()
+
+# Test for new_field_object_opt(), create_object_field() and update_location() functions
+
+import Utility
+
+object_list = Utility.new_field_object_opt()
+object_field = Utility.create_object_field(object_list)
+print(object_field)
+
+object_field.update_location(10.25, 12.2)
+
+
