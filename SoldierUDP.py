@@ -19,7 +19,7 @@ def handle_message(send_msg, sock, cc_address):
 
         case = Utility.switch_case(rec_msg)
 
-        if case == 1:
+        if case == Utility.Case.soldier_to_cc.value:
             # print receive message
             print("The message '{}' reached to Company Commander".format(rec_msg))
             logging.debug("The message '{}' reached to CC {}".format(rec_msg, cc_address))

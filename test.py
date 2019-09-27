@@ -48,6 +48,5 @@ object_list = Utility.new_field_object_opt()
 object_field = Utility.create_object_field(object_list)
 print(object_field)
 
-object_field.update_location(10.25, 12.2)
-
+object_field.update_location(1, 2)
 
