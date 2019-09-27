@@ -2,6 +2,7 @@ import socket
 import enum
 import logging
 import Entities
+from pyproj import Geod
 
 logging.basicConfig(filename = 'Log.log', level = logging.DEBUG, format = '%(asctime)s : %(levelname)s : Utility : %(message)s')
 
@@ -42,7 +43,6 @@ def init_cc_address():
 # get Company Commander Address
 def get_cc_address(company_num):
     IP = '127.0.0.1'
-    print(company_num)
     if int(company_num) == Company.company1.value:
         port = 5004
 
@@ -201,50 +201,18 @@ def create_object_field(object_list):
 
 
 def get_line(start, end):
-    x1, y1 = start
-    x2, y2 = end
-    delta_x = x2 - x1
-    delta_y = y2 - y1
+    x1 = start[Location.X.value]
+    y1 = start[Location.Y.value]
 
-    # Determine how steep the line is
-    is_steep = abs(delta_y) > abs(delta_x)
+    x2 = end[Location.X.value]
+    y2 = end[Location.Y.value]
 
-    # Rotate line
-    if is_steep:
-        x1, y1 = y1, x1
-        x2, y2 = y2, x2
+    geod = Geod("+ellps=WGS84")
+    points = geod.npts(x1, y1,
+                       x2, y2,
+                       npts=100)
 
-    # Swap start and end points if necessary and store swap state
-    swapped = False
-    if x1 > x2:
-        x1, x2 = x2, x1
-        y1, y2 = y2, y1
-        swapped = True
-
-    # Recalculate differentials
-    delta_x = x2 - x1
-    delta_y = y2 - y1
-
-    # Calculate error
-    error = int(delta_x / 2.0)
-    y_step = 1 if y1 < y2 else -1
-
-    # Iterate over bounding box generating points between start and end
-    y = y1
-    points = []
-    for x in range(int(x1), int(x2) + 1):
-        coord = (y, x) if is_steep else (x, y)
-        points.append(coord)
-        error -= abs(delta_y)
-        if error < 0:
-            y += y_step
-            error += delta_x
-
-    # Reverse the list if the coordinates were swapped
-    if swapped:
-        points.reverse()
     return points
-
 
 # Enum Classes
 class Sender(enum.Enum):
@@ -280,8 +248,8 @@ class ObjectType(enum.Enum):
 
 class MessageIndexes(enum.Enum):    # sender.receiver.company_num.message_type.
     sender = 0
-    receiver = 1
-    company_num = 2
+    company_num = 1
+    receiver = 2
     message = 3
 
 

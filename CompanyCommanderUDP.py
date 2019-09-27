@@ -7,6 +7,7 @@ logging.basicConfig(filename = 'Log.log', level = logging.DEBUG, format = '%(asc
 
 
 def handle_message(rec_msg, rec_address):
+    print(rec_msg)
     case = Utility.switch_case(rec_msg)
 
     if case == Utility.Case.soldier_to_cc.value:
@@ -42,7 +43,6 @@ if cc_address == Utility.Case.error.value:   # 3 CompanyCommanders is open
     quit()
 
 sock = Utility.get_sock()
-
 
 # Bind the socket with the address
 sock.bind(cc_address)

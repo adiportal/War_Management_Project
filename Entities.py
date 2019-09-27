@@ -1,6 +1,7 @@
 import time
 import Utility
 
+
 class FieldObjects:
     # Attributes
     ID = 1
@@ -31,6 +32,9 @@ class FieldObjects:
             self.x = step[Utility.Location.X.value]
             self.y = step[Utility.Location.Y.value]
             print(self.x, self.y)
+        time.sleep(self.speed)
+        self.x = new_x
+        self.y = new_y
 
 
 class Soldier(FieldObjects):
