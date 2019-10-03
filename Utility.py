@@ -21,7 +21,7 @@ def get_sock():
 def get_soldier_address():
     IP = '127.0.0.1'
     port = 5001
-    return (IP, port)
+    return IP, port
 
 
 # get Soldier Address
@@ -47,7 +47,7 @@ def get_cc_address(company_num):
         port = 5004
 
         if not is_open(IP, port):
-            return (IP, port)
+            return IP, port
         else:
             return Case.error.value
 
@@ -77,8 +77,21 @@ def get_bc_address():
     return (IP, port)
 
 
+def company_num_by_port(port):
+    if port == 5004:
+        return 1
+    elif port == 5005:
+        return 2
+    elif port == 5006:
+        return 3
+    else:
+        return Case.error.value
+
 # get Battalion Commander Address
 def switch_case(msg_str):
+
+    if msg_str[0] == "*":
+        return Case.approval.value
 
     msg_list = msg_str.split(".")
 
@@ -102,6 +115,7 @@ def switch_case(msg_str):
     elif int(msg_list[MessageIndexes.sender.value]) == Sender.company_commander.value and \
             int(msg_list[MessageIndexes.receiver.value]) == Receiver.soldier.value:
         return Case.cc_to_soldier.value
+
     else:
         return Case.error.value
 
@@ -238,6 +252,7 @@ class Case(enum.Enum):
     soldier_to_bc = 2
     bc_to_cc_approval = 3
     cc_to_soldier = 4
+    approval = 5
     error = 0
 
 

@@ -999,3 +999,124 @@ O
 2019-09-25 19:35:53,775 : DEBUG : Utility : Message has been sent to CC ('127.0.0.1', 5004) : 1.1.2.asdfdsf
 2019-09-25 19:35:53,776 : DEBUG : Utility : Received message from Soldier ('127.0.0.1', 5001) : 1.1.2.asdfdsf
 2019-09-25 19:35:53,776 : DEBUG : Utility : The message '1.1.2.asdfdsf' reached to CC ('127.0.0.1', 5004)
+2019-09-28 13:37:17,046 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 13:37:47,544 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 13:37:47,544 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 13:37:55,771 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 13:37:55,772 : DEBUG : Utility : Listening
+2019-09-28 13:41:25,807 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 13:41:25,808 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 13:41:32,424 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 13:41:32,424 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 13:42:49,918 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 13:42:49,921 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 13:43:08,846 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 13:43:39,478 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 13:44:16,671 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 13:44:16,672 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 13:45:03,482 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 13:45:03,483 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 13:45:05,271 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 13:45:05,272 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 13:49:30,988 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 13:49:30,988 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 13:49:38,396 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 13:49:38,398 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 13:49:41,534 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 13:49:41,535 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 13:49:43,397 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 13:49:43,398 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 13:50:31,377 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 13:50:31,378 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 13:50:44,676 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 13:50:44,677 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 13:52:36,593 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 13:52:36,594 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 13:52:42,966 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 13:52:42,966 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 13:52:58,295 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 13:52:58,296 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 13:55:37,745 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 13:55:37,746 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 14:04:23,030 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 14:04:23,031 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 14:04:32,006 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 14:04:32,007 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 14:05:30,440 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 14:05:30,441 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 14:07:36,027 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 14:08:55,938 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 14:08:58,241 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 14:11:04,893 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 14:11:04,894 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 14:11:06,675 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 14:11:06,676 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 14:12:10,465 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 14:12:18,275 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 14:16:03,121 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 14:16:05,935 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 14:16:29,772 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 14:16:31,598 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 14:18:39,424 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 14:18:41,280 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 14:18:50,206 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 14:19:43,575 : DEBUG : Utility : Socket Successfully Created!
+2019-09-28 14:19:47,453 : DEBUG : Utility : Socket Successfully Created!
+2019-09-29 14:50:37,759 : DEBUG : Utility : Socket Successfully Created!
+2019-10-03 17:17:35,028 : DEBUG : Utility : Socket Successfully Created!
+2019-10-03 17:17:49,907 : DEBUG : Utility : Socket Successfully Created!
+2019-10-03 17:18:39,927 : DEBUG : Utility : Socket Successfully Created!
+2019-10-03 17:21:00,100 : DEBUG : Utility : Socket Successfully Created!
+2019-10-03 17:21:53,102 : DEBUG : Utility : Socket Successfully Created!
+2019-10-03 17:23:07,500 : DEBUG : Utility : Socket Successfully Created!
+2019-10-03 17:23:45,192 : DEBUG : Utility : Socket Successfully Created!
+2019-10-03 17:24:34,410 : DEBUG : Utility : Socket Successfully Created!
+2019-10-03 17:25:02,768 : DEBUG : Utility : Socket Successfully Created!
+2019-10-03 17:26:23,823 : DEBUG : Utility : Socket Successfully Created!
+2019-10-03 17:27:46,654 : DEBUG : Utility : Socket Successfully Created!
+2019-10-03 17:28:12,884 : DEBUG : Utility : Socket Successfully Created!
+2019-10-03 17:30:10,497 : DEBUG : Utility : Socket Successfully Created!
+2019-10-03 17:30:12,403 : DEBUG : Utility : Socket Successfully Created!
+2019-10-03 17:30:37,851 : DEBUG : Utility : Socket Successfully Created!
+2019-10-03 17:30:39,566 : DEBUG : Utility : Socket Successfully Created!
+2019-10-03 18:07:08,140 : DEBUG : Utility : Socket Successfully Created!
+2019-10-03 18:07:32,429 : DEBUG : Utility : Socket Successfully Created!
+2019-10-03 18:07:56,773 : DEBUG : Utility : Socket Successfully Created!
+2019-10-03 18:08:47,974 : DEBUG : Utility : Socket Successfully Created!
+2019-10-03 18:08:50,780 : DEBUG : Utility : Socket Successfully Created!
+2019-10-03 18:09:36,973 : DEBUG : Utility : Socket Successfully Created!
+2019-10-03 18:10:52,999 : DEBUG : Utility : Socket Successfully Created!
+2019-10-03 18:10:59,562 : ERROR : Utility : The message '' did'nt reached to CC 0
+2019-10-03 18:13:06,296 : DEBUG : Utility : Socket Successfully Created!
+2019-10-03 18:13:07,948 : DEBUG : Utility : Socket Successfully Created!
+2019-10-03 18:13:12,152 : DEBUG : Utility : Message has been sent to CC ('127.0.0.1', 5002) : 1.1.2.hello
+2019-10-03 18:14:06,686 : DEBUG : Utility : Socket Successfully Created!
+2019-10-03 18:14:11,319 : DEBUG : Utility : Message has been sent to CC ('127.0.0.1', 5002) : 1.1.2.hello
+2019-10-03 18:14:11,320 : DEBUG : Utility : Message has been sent to CC ('127.0.0.1', 5002) : *1.1.2.hello
+2019-10-03 18:14:33,603 : DEBUG : Utility : Socket Successfully Created!
+2019-10-03 18:14:36,286 : DEBUG : Utility : Socket Successfully Created!
+2019-10-03 18:14:40,028 : DEBUG : Utility : Message has been sent to CC ('127.0.0.1', 5002) : 1.1.2.hello
+2019-10-03 18:14:40,028 : DEBUG : Utility : Message has been sent to CC ('127.0.0.1', 5002) : *1.1.2.hello
+2019-10-03 18:16:08,860 : DEBUG : Utility : Socket Successfully Created!
+2019-10-03 18:16:13,115 : DEBUG : Utility : Message has been sent to CC ('127.0.0.1', 5002) : 1.1.2.hello
+2019-10-03 18:16:13,115 : DEBUG : Utility : Message has been sent to CC ('127.0.0.1', 5002) : *1.1.2.hello
+2019-10-03 18:19:58,543 : DEBUG : Utility : Socket Successfully Created!
+2019-10-03 18:20:01,284 : DEBUG : Utility : Socket Successfully Created!
+2019-10-03 18:20:05,607 : DEBUG : Utility : Message has been sent to CC ('127.0.0.1', 5002) : 1.1.2.hello
+2019-10-03 18:20:05,608 : DEBUG : Utility : Message has been sent to CC ('127.0.0.1', 5002) : *1.1.2.hello
+2019-10-03 18:20:05,608 : DEBUG : Utility : The message '**1.1.2.hello' reached to CC ('127.0.0.1', 5002)
+2019-10-03 18:20:39,765 : DEBUG : Utility : Socket Successfully Created!
+2019-10-03 18:20:42,861 : DEBUG : Utility : Socket Successfully Created!
+2019-10-03 18:20:46,181 : DEBUG : Utility : Message has been sent to CC ('127.0.0.1', 5002) : 1.1.2.hello
+2019-10-03 18:20:46,181 : DEBUG : Utility : Message has been sent to CC ('127.0.0.1', 5002) : *1.1.2.hello
+2019-10-03 18:20:46,181 : DEBUG : Utility : The message '**1.1.2.hello' reached to CC ('127.0.0.1', 5002)
+2019-10-03 18:22:23,014 : DEBUG : Utility : Socket Successfully Created!
+2019-10-03 18:22:29,078 : DEBUG : Utility : Message has been sent to CC ('127.0.0.1', 5002) : 1.1.2.hello
+2019-10-03 18:22:37,521 : DEBUG : Utility : Socket Successfully Created!
+2019-10-03 18:22:38,896 : DEBUG : Utility : Socket Successfully Created!
+2019-10-03 18:22:42,520 : DEBUG : Utility : Message has been sent to CC ('127.0.0.1', 5002) : 1.1.2.hello
+2019-10-03 18:45:14,808 : DEBUG : Utility : Socket Successfully Created!
+2019-10-03 18:45:17,778 : DEBUG : Utility : Socket Successfully Created!
+2019-10-03 18:45:24,522 : DEBUG : Utility : Message has been sent to CC ('127.0.0.1', 5002) : 1.1.2.hello
+2019-10-03 18:45:58,255 : DEBUG : Utility : Socket Successfully Created!
+2019-10-03 18:46:26,518 : DEBUG : Utility : Socket Successfully Created!
