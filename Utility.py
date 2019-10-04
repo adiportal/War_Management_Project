@@ -261,11 +261,19 @@ class ObjectType(enum.Enum):
     btw = 2
 
 
-class MessageIndexes(enum.Enum):    # sender.receiver.company_num.message_type.
+class MessageIndexes(enum.Enum):    # sender.company_num.receiver.message_type.message 1.2.1.hello
     sender = 0
     company_num = 1
     receiver = 2
-    message = 3
+    message_type = 3
+    message = 4
+
+
+class MessageType(enum.Enum):
+    update_location = 1
+    move_order = 2
+    engage_order = 3
+    initiate_soldier = 4
 
 
 class ObjectListIndex(enum.Enum):

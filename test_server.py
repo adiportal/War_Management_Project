@@ -13,7 +13,7 @@ def listen():
         # decoding the message to String
         rec_msg = rec_msg.decode('utf-8')
 
-        print(rec_msg)
+        print(str(rec_address) + "  >>  " + rec_msg)
         rec_msg = "*" + rec_msg
         sock.sendto(rec_msg.encode(), rec_address)
 
