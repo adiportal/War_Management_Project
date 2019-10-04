@@ -5,6 +5,9 @@ import threading
 # Initialize the Logger
 logging.basicConfig(filename = 'Log.log', level = logging.DEBUG, format = '%(asctime)s : %(levelname)s : Soldier : %(message)s')
 
+company1 = []
+company2 = []
+company3 = []
 
 def listen():
     print('Listening...\n')
@@ -16,15 +19,40 @@ def listen():
         # decoding the message to String
         rec_msg = rec_msg.decode('utf-8')
         if rec_msg:
-            receive_handler(rec_msg)
+            receive_handler(rec_msg, rec_address)
 
 
-def receive_handler(msg):
+def main_menu():
+    ans = ""
+    while ans == "":
+        ans = input(Utility.main_menu())
+        if not (1 <= int(ans) <= 2):
+            print("You should Enter a number (1-2)")
+            ans = ""
+
+    if ans == "1":
+        list_and_msg = Utility.new_field_object_opt()
+        object_list = list_and_msg[Utility.ListAndMsg.list.value]
+        object_str = list_and_msg[Utility.ListAndMsg.msg.value]
+
+        new_object_field = Utility.create_object_field(object_str)
+        company1.append(new_object_field)
+        return "1 :: " + \
+               object_list[Utility.ObjectListIndex.company_num.value] + " :: "\
+               "2 :: " + \
+               list_and_msg[Utility.ListAndMsg.msg.value]
+    else:
+        print("todo")
+
+
+def receive_handler(msg, address):
     case = Utility.switch_case(msg)
 
     if case == Utility.Case.approval.value:
         print("The Message '{}' Approved".format(msg[1:]))
         return
+    else:
+        print(str(address) + " >> " + msg)
 
 
 # sendMassage
@@ -67,19 +95,18 @@ listen_thread.start()
 msg_str = ""
 
 while msg_str == "":
-    print("Write Your Message:")
-    msg_str = input()
+    msg_str = main_menu()
 
-    cc_address = ("127.0.0.1", 5002)
+    cc_address = Utility.get_cc_address(1)
 
-    # if cc_address == 0:
-    #     print("ERROR: INVALID Company Number")
-    #     msg_str = ""
-    #     continue
+    if cc_address == 0:
+        print("ERROR: INVALID Company Number")
+        msg_str = ""
+        continue
 
-    msg_str = "1." + msg_str
-    send_handler(msg_str, sock, cc_address)
-    print("done")
+    if msg_str != "":
+        send_handler(msg_str, sock, cc_address)
+        print("done")
     msg_str = ""
 
 
