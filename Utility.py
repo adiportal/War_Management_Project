@@ -89,7 +89,7 @@ def company_num_by_port(port):
 
 
 # get Battalion Commander Address
-def switch_case(msg_str):
+def sender_receiver_switch_case(msg_str):
 
     if msg_str[0] == "*":
         return Case.approval.value
@@ -97,31 +97,53 @@ def switch_case(msg_str):
     msg_list = msg_str.split(" :: ")
 
     # sender = Soldier, receiver = CC
-    if int(msg_list[MessageIndexes.sender.value]) == Sender.soldier.value and \
-       int(msg_list[MessageIndexes.receiver.value]) == Receiver.company_commander.value:
+    if int(msg_list[FullMessageIndexes.sender.value]) == Sender.soldier.value and \
+       int(msg_list[FullMessageIndexes.receiver.value]) == Receiver.company_commander.value:
         return Case.soldier_to_cc.value
 
     # sender = Soldier, receiver = BC
-    elif int(msg_list[MessageIndexes.sender.value]) == Sender.soldier.value and \
-            int(msg_list[MessageIndexes.receiver.value]) == Receiver.battalion_commander.value and \
+    elif int(msg_list[FullMessageIndexes.sender.value]) == Sender.soldier.value and \
+            int(msg_list[FullMessageIndexes.receiver.value]) == Receiver.battalion_commander.value and \
             msg_str[-1] != "*":
         return Case.soldier_to_bc.value
 
     # sender = BC, receiver = CC -> Soldier
-    elif int(msg_list[MessageIndexes.sender.value]) == Sender.soldier.value and \
-            int(msg_list[MessageIndexes.receiver.value]) == Receiver.battalion_commander.value and msg_str[-1] == "*":
+    elif int(msg_list[FullMessageIndexes.sender.value]) == Sender.soldier.value and \
+            int(msg_list[FullMessageIndexes.receiver.value]) == Receiver.battalion_commander.value and msg_str[-1] == "*":
         return Case.bc_to_cc_approval.value
 
     # sender = CC, receiver = soldier
-    elif int(msg_list[MessageIndexes.sender.value]) == Sender.company_commander.value and \
-            int(msg_list[MessageIndexes.receiver.value]) == Receiver.soldier.value:
+    elif int(msg_list[FullMessageIndexes.sender.value]) == Sender.company_commander.value and \
+            int(msg_list[FullMessageIndexes.receiver.value]) == Receiver.soldier.value:
         return Case.cc_to_soldier.value
 
     else:
         return Case.error.value
 
 
-# Check Message                     MSG ICD: Sender.Receiver.MSG (str)
+def options_switch_case(msg):
+    msg_list = msg.split(" :: ")
+
+    if int(msg_list[FullMessageIndexes.message_type.value]) == MessageType.update_location.value:
+        return 1
+
+    elif int(msg_list[FullMessageIndexes.message_type.value]) == MessageType.move_order.value:
+        return 2
+
+    elif int(msg_list[FullMessageIndexes.message_type.value]) == MessageType.engage_order.value:
+        return 3
+
+    elif int(msg_list[FullMessageIndexes.message_type.value]) == MessageType.new_field_object.value:
+        return 4
+
+    elif int(msg_list[FullMessageIndexes.message_type.value]) == MessageType.report_location.value:
+        return 5
+
+    else:   # Error
+        return 0
+
+
+# Check Message
 def is_open(IP, port):
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
@@ -193,7 +215,6 @@ def create_init_message(object_list):
               (object_list[ObjectListIndex.location.value])[Location.X.value] + "," +\
               (object_list[ObjectListIndex.location.value])[Location.Y.value] + " ; " +\
               object_list[ObjectListIndex.ammo.value]
-    print(message)
     return message
 
 
@@ -201,7 +222,6 @@ def create_object_field(msg):
     object_list = msg.split(" ; ")
     location_str = object_list[ObjectListIndex.location.value]
     location_list = location_str.split(",")
-    print(location_list, object_list[ObjectListIndex.object_type.value])
 
     if object_list[ObjectListIndex.object_type.value] == str(ObjectType.soldier.value):
         soldier = Entities.Soldier(int(object_list[ObjectListIndex.company_num.value]),
@@ -268,7 +288,7 @@ class ObjectType(enum.Enum):
     btw = 2
 
 
-class MessageIndexes(enum.Enum):    # sender.company_num.receiver.message_type.message
+class FullMessageIndexes(enum.Enum):    # sender.company_num.receiver.message_type.message
     sender = 0
     company_num = 1
     receiver = 2
@@ -280,7 +300,8 @@ class MessageType(enum.Enum):
     update_location = 1
     move_order = 2
     engage_order = 3
-    initiate_soldier = 4
+    new_field_object = 4
+    report_location = 5
 
 
 class ObjectListIndex(enum.Enum):
@@ -295,12 +316,17 @@ class Location(enum.Enum):
     Y = 1
 
 
-class MessageType(enum.Enum):
-    location_reporting = 1
-    object_field_init = 2
-
-
 class ListAndMsg(enum.Enum):
     list = 0
     msg = 1
 
+
+class MenuOptions(enum.Enum):
+    new_field_object = 1
+    field_object_location = 2
+
+
+class ReportMessageIndexes(enum.Enum):
+    company_num = 0
+    id = 1
+    location = 2

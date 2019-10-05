@@ -22,7 +22,23 @@ class FieldObjects:
                "HP: {} \n".format(self.__class__.__name__, self.ID, self.company_number, self.x, self.y, self.ammo,
                                   self.HP)
 
-    def update_location(self, new_x, new_y):
+    def get_company_num(self):
+        return self.company_number
+
+    def get_id(self):
+        return self.ID
+
+    def get_location(self):
+        return self.x, self.y
+
+    def get_str_location(self):
+        return str(self.x) + "," + str(self.y)
+
+    def update_location(self, x, y):
+        self.x == x
+        self.y = y
+
+    def move_to(self, new_x, new_y):
         start = self.x, self.y
         end = new_x, new_y
 

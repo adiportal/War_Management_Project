@@ -24,39 +24,89 @@ def listen():
 
 
 def receive_handler(msg, address):
-    case = Utility.switch_case(msg)
+    sender_receiver_case = Utility.sender_receiver_switch_case(msg)
+    opt_case = Utility.options_switch_case(msg)
     full_msg_list = msg.split(" :: ")
-    msg_str = full_msg_list[Utility.MessageIndexes.message_type.value]
+    msg_str = full_msg_list[Utility.FullMessageIndexes.message.value]
     msg_list = msg_str.split(" ; ")
-    print(str(msg_list))
 
-    if case == Utility.Case.soldier_to_cc.value:
+    if sender_receiver_case == Utility.Case.soldier_to_cc.value:
 
         # printing the message and the client Address
         print('Received message from Soldier {} >> {}'.format(address, msg))
         logging.debug("Received message from Soldier {} >> {}".format(address, msg))
-
-        if int(msg_list[Utility.ObjectType.soldier.value]) == int(Utility.ObjectType.soldier.value):
+        if opt_case == Utility.MessageType.new_field_object.value:
             new_object_field = Utility.create_object_field(msg_str)
             print(new_object_field)
-            company1.append(new_object_field)
+
+            company_num = new_object_field.get_company_num()
+
+            if company_num == Utility.Company.company1.value:
+                company1.append(new_object_field)
+
+            elif company_num == Utility.Company.company2.value:
+                company2.append(new_object_field)
+
+            else:
+                company3.append(new_object_field)
+
+        if opt_case == Utility.MessageType.report_location.value:
+            location = msg_list[Utility.ReportMessageIndexes.location.value].split(",")
+
+            if int(msg_list[Utility.ReportMessageIndexes.company_num.value]) == Utility.Company.company1.value:
+                updated = False
+                for object_field in company1:
+                    if object_field.get_id() == int(msg_list[Utility.ReportMessageIndexes.id.value]):
+                        object_field.update_location(float(location[Utility.Location.X.value]), float(location[Utility.Location.Y.value]))
+                        print("#" + str(object_field.get_id()) + " location was updated to: " + object_field.get_str_location())
+                        updated = True
+                        break
+
+                if not updated:
+                    print("Company 1 doe's not contain #" + msg_list[Utility.ReportMessageIndexes.id.value])
+
+            elif int(msg_list[Utility.ReportMessageIndexes.company_num.value]) == Utility.Company.company2.value:
+                updated = False
+                for object_field in company2:
+                    if object_field.get_id() == int(msg_list[Utility.ReportMessageIndexes.id.value]):
+                        object_field.update_location(float(location[Utility.Location.X.value]),
+                                                     float(location[Utility.Location.Y.value]))
+                        print("#" + str(object_field.get_id()) + " location was updated to: " + object_field.get_str_location())
+                        updated = True
+                        break
+
+                if not updated:
+                    print("Company 2 doe's not contain #" + msg_list[Utility.ReportMessageIndexes.id.value])
+
+            else:
+                updated = False
+                for object_field in company3:
+                    if object_field.get_id() == int(msg_list[Utility.ReportMessageIndexes.id.value]):
+                        object_field.update_location(float(location[Utility.Location.X.value]),
+                                                     float(location[Utility.Location.Y.value]))
+                        print("#" + str(object_field.get_id()) + " location was updated to: " + object_field.get_str_location())
+                        updated = True
+                        break
+
+                if not updated:
+                    print("Company 3 doe's not contain #" + msg_list[Utility.ReportMessageIndexes.id.value])
 
         msg = "*" + msg
         sock.sendto(msg.encode(), Utility.get_soldier_address())
 
-    # elif case == 2:
+    # elif sender_receiver_case == 2:
     #
     #     logging.debug("Received message from Soldier {} : {}".format(address, msg))
     #     sock.sendto(msg.encode(), Utility.get_bc_address())
     #
-    # elif case == 3:
+    # elif sender_receiver_case == 3:
     #
     #     msg = msg[:-1]
     #
     #     logging.debug("Received message from BC {} : {}".format(address, msg))
     #     sock.sendto(msg.encode(), Utility.get_soldier_address())
 
-    else:           # case = 0
+    else:           # sender_receiver_case = 0
         logging.ERROR("An invalid message has reached: \'{}\'".format(msg))
 
 
@@ -104,5 +154,4 @@ while msg_str == "":
 
     if msg_str != "":
         send_handler(msg_str, sock, cc_address)
-        print("done")
     msg_str = ""
