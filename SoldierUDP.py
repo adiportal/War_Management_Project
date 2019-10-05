@@ -1,6 +1,7 @@
 import logging
 import Utility
 import threading
+import time
 
 # Initialize the Logger
 logging.basicConfig(filename = 'Log.log', level = logging.DEBUG, format = '%(asctime)s : %(levelname)s : Soldier : %(message)s')
@@ -62,22 +63,24 @@ def main_menu():
 
 
 def report_location():
-    for field_object in company1:
-        msg = str(Utility.Sender.soldier.value) + \
-              " :: " + \
-              str(field_object.get_company_num()) + \
-              " :: " + \
-              str(Utility.Receiver.company_commander.value) + \
-              " :: " + \
-              str(Utility.MessageType.report_location.value) + \
-              " :: " + \
-              str(field_object.get_company_num()) + \
-              " ; " + \
-              str(field_object.get_id()) + \
-              " ; " + \
-              field_object.get_str_location()
+    while True:
+        for field_object in company1:
+            msg = str(Utility.Sender.soldier.value) + \
+                  " :: " + \
+                  str(field_object.get_company_num()) + \
+                  " :: " + \
+                  str(Utility.Receiver.company_commander.value) + \
+                  " :: " + \
+                  str(Utility.MessageType.report_location.value) + \
+                  " :: " + \
+                  str(field_object.get_company_num()) + \
+                  " ; " + \
+                  str(field_object.get_id()) + \
+                  " ; " + \
+                  field_object.get_str_location()
 
-        send_handler(msg)
+            send_handler(msg)
+            time.sleep(2.0)
 
 
 def receive_handler(msg, address):
@@ -115,7 +118,7 @@ def send_handler(msg):
     #         logging.ERROR("An invalid message has reached: \'{}\'".format(rec_msg))
     #
     except:
-        logging.error("The message '{}' didn't reached to CC {}".format(rec_msg, cc_address))
+        logging.error("The message '{}' didn't reached to CC".format(rec_msg))
         print("The message '{}' did'nt reached to the Company Commander!!".format(rec_msg))
 
 
@@ -123,8 +126,12 @@ def send_handler(msg):
 sock = Utility.get_sock()
 sock.bind(Utility.get_soldier_address())
 
+
 listen_thread = threading.Thread(target=listen)
+report_thread = threading.Thread(target=report_location)
+
 listen_thread.start()
+report_thread.start()
 
 msg_str = ""
 
