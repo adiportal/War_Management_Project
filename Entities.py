@@ -34,21 +34,13 @@ class FieldObjects:
     def get_str_location(self):
         return str(self.x) + "," + str(self.y)
 
-    def update_location(self, x, y):
-        self.x == x
-        self.y = y
+    def get_x(self):
+        return self.x
 
-    def move_to(self, new_x, new_y):
-        start = self.x, self.y
-        end = new_x, new_y
+    def get_y(self):
+        return self.y
 
-        steps = Utility.get_line(start, end)
-        for step in steps:
-            time.sleep(self.speed)
-            self.x = step[Utility.Location.X.value]
-            self.y = step[Utility.Location.Y.value]
-            print(self.x, self.y)
-        time.sleep(self.speed)
+    def update_location(self, new_x, new_y):
         self.x = new_x
         self.y = new_y
 
@@ -59,12 +51,17 @@ class Soldier(FieldObjects):
         self.HP = 100
         self.speed = 1
 
+    def get_speed(self):
+        return self.speed
 
 class BTW(FieldObjects):
     def __init__(self, company_number, location, ammo):
         super().__init__(company_number, location, ammo)
         self.HP = 1000
         self.speed = 2
+
+    def get_speed(self):
+        return self.speed
 
 
 class CompanyCommander:

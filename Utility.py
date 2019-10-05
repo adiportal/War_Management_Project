@@ -156,10 +156,14 @@ def is_open(IP, port):
     return result
 
 
-def main_menu():
+def soldier_main_menu():
     return "Choose your option:\n" \
-           "(1)     Initiate a new FieldObject \n" \
-           "(2)     Send FieldObject location \n"
+           "(1)     Initiate a new FieldObject \n"
+
+
+def cc_main_menu():
+    return "Choose your option:\n" \
+           "(1)     Move FieldObject \n"
 
 
 def new_field_object_opt():
@@ -238,6 +242,18 @@ def create_object_field(msg):
                            int(object_list[ObjectListIndex.ammo.value]))
 
         return btw
+
+
+def create_move_to_message(company_num, field_object_id, new_location):
+
+    message = str(Sender.company_commander.value) + " :: " + \
+              company_num + " :: " + \
+              str(Receiver.soldier.value) + " :: " + \
+              str(MessageType.move_order.value) + " :: " + \
+              company_num + " ; " + \
+              field_object_id + " ; " + new_location
+
+    return message
 
 
 def get_line(start, end):
@@ -330,3 +346,10 @@ class ReportMessageIndexes(enum.Enum):
     company_num = 0
     id = 1
     location = 2
+
+
+class MoveToMessageIndexes(enum.Enum):
+    company_num = 0
+    id = 1
+    location = 2
+

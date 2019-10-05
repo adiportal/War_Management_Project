@@ -23,6 +23,45 @@ def listen():
             receive_handler(rec_msg, rec_address)
 
 
+def main_menu():
+    ans = ""
+    while ans == "":
+        ans = input(Utility.cc_main_menu())
+        if int(ans) != 1:
+            print("You can chose only 1 option for now")
+            ans = ""
+
+    company_num = ""
+    while company_num == "":
+        company_num = input("Enter company num: \n")
+        while not (1 <= int(company_num) <= 3):
+            company_num = input("You should Enter a number between 1-3: \n")
+
+    field_object_id = ""
+    contain = False
+    while field_object_id == "":
+        field_object_id = input("Enter FieldObject ID: \n")
+        for field_object in company1:
+            if field_object.get_id() == int(field_object_id):
+                contain = True
+                break
+        if not contain:
+            print("Company 1 does not contain an FieldObject #" + field_object_id)
+            field_object_id = ""
+
+    new_x = ""
+    while new_x == "":
+        new_x = input("Enter new X: \n")
+
+    new_y = ""
+    while new_y == "":
+        new_y = input("Enter new Y: \n")
+
+    new_location = new_x + "," + new_y
+
+    return Utility.create_move_to_message(company_num, field_object_id, new_location)
+
+
 def receive_handler(msg, address):
     sender_receiver_case = Utility.sender_receiver_switch_case(msg)
     opt_case = Utility.options_switch_case(msg)
@@ -110,12 +149,11 @@ def receive_handler(msg, address):
         logging.ERROR("An invalid message has reached: \'{}\'".format(msg))
 
 
-def send_handler(msg, sock, cc_address):
+def send_handler(msg):
 
-    case = Utility.switch_case(msg)
     rec_msg = ''
     try:
-        sock.sendto(msg.encode(), cc_address)
+        sock.sendto(msg.encode(), soldier_address)
 
     except:
         logging.error("The message '{}' didn't reached to CC {}".format(rec_msg, cc_address))
@@ -143,9 +181,9 @@ listen_thread.start()
 msg_str = ""
 
 while msg_str == "":
-    msg_str = input("Write your message: ")
+    msg_str = main_menu()
 
-    cc_address = ("127.0.0.1", 5002)
+    soldier_address = ("127.0.0.1", 5001)
 
     # if cc_address == 0:
     #     print("ERROR: INVALID Company Number")
@@ -153,5 +191,5 @@ while msg_str == "":
     #     continue
 
     if msg_str != "":
-        send_handler(msg_str, sock, cc_address)
+        send_handler(msg_str)
     msg_str = ""
