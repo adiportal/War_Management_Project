@@ -9,6 +9,7 @@ company1 = []
 company2 = []
 company3 = []
 
+
 def listen():
     print('Listening...\n')
 
@@ -30,23 +31,57 @@ def main_menu():
             print("You should Enter a number (1-2)")
             ans = ""
 
-    if ans == "1":
+    if int(ans) == Utility.MenuOptions.new_field_object.value:
         list_and_msg = Utility.new_field_object_opt()
         object_list = list_and_msg[Utility.ListAndMsg.list.value]
         object_str = list_and_msg[Utility.ListAndMsg.msg.value]
 
         new_object_field = Utility.create_object_field(object_str)
-        company1.append(new_object_field)
-        return "1 :: " + \
-               object_list[Utility.ObjectListIndex.company_num.value] + " :: "\
-               "2 :: " + \
+        company_num = new_object_field.get_company_num()
+
+        if company_num == Utility.Company.company1.value:
+            company1.append(new_object_field)
+
+        elif company_num == Utility.Company.company2.value:
+            company2.append(new_object_field)
+
+        else:
+            company3.append(new_object_field)
+
+        return str(Utility.Sender.soldier.value) + \
+               " :: " + \
+               object_list[Utility.ObjectListIndex.company_num.value] + \
+               " :: " + \
+               str(Utility.Receiver.company_commander.value) + \
+               " :: " + \
+               str(Utility.MessageType.new_field_object.value) + \
+               " :: " + \
                list_and_msg[Utility.ListAndMsg.msg.value]
     else:
-        print("todo")
+        report_location()
+
+
+def report_location():
+    for field_object in company1:
+        msg = str(Utility.Sender.soldier.value) + \
+              " :: " + \
+              str(field_object.get_company_num()) + \
+              " :: " + \
+              str(Utility.Receiver.company_commander.value) + \
+              " :: " + \
+              str(Utility.MessageType.report_location.value) + \
+              " :: " + \
+              str(field_object.get_company_num()) + \
+              " ; " + \
+              str(field_object.get_id()) + \
+              " ; " + \
+              field_object.get_str_location()
+
+        send_handler(msg)
 
 
 def receive_handler(msg, address):
-    case = Utility.switch_case(msg)
+    case = Utility.sender_receiver_switch_case(msg)
 
     if case == Utility.Case.approval.value:
         print("The Message '{}' Approved".format(msg[1:]))
@@ -56,9 +91,8 @@ def receive_handler(msg, address):
 
 
 # sendMassage
-def send_handler(msg, sock, cc_address):
+def send_handler(msg):
 
-    case = Utility.switch_case(msg)
     rec_msg = ''
     try:
         sock.sendto(msg.encode(), cc_address)
@@ -105,8 +139,7 @@ while msg_str == "":
         continue
 
     if msg_str != "":
-        send_handler(msg_str, sock, cc_address)
-        print("done")
+        send_handler(msg_str)
     msg_str = ""
 
 
