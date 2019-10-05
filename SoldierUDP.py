@@ -27,12 +27,11 @@ def listen():
 def main_menu():
     ans = ""
     while ans == "":
-        ans = input(Utility.main_menu())
-        if not (1 <= int(ans) <= 2):
-            print("You should Enter a number (1-2)")
+        ans = input(Utility.soldier_main_menu())
+        if int(ans) != 1:
+            print("You can chose only 1 option for now")
             ans = ""
 
-    if int(ans) == Utility.MenuOptions.new_field_object.value:
         list_and_msg = Utility.new_field_object_opt()
         object_list = list_and_msg[Utility.ListAndMsg.list.value]
         object_str = list_and_msg[Utility.ListAndMsg.msg.value]
@@ -58,8 +57,6 @@ def main_menu():
                str(Utility.MessageType.new_field_object.value) + \
                " :: " + \
                list_and_msg[Utility.ListAndMsg.msg.value]
-    else:
-        report_location()
 
 
 def report_location():
@@ -80,7 +77,38 @@ def report_location():
                   field_object.get_str_location()
 
             send_handler(msg)
-            time.sleep(2.0)
+        time.sleep(2.0)
+
+
+def get_field_object(company_num, id):
+    if int(company_num) == Utility.Company.company1.value:
+        for field_object in company1:
+            if field_object.get_id() == int(id):
+                return field_object
+
+    elif int(company_num) == Utility.Company.company2.value:
+        for field_object in company2:
+            if field_object.get_id() == int(id):
+                return field_object
+
+    else:
+        for field_object in company3:
+            if field_object.get_id() == int(id):
+                return field_object
+
+
+def move_to(field_object, new_x, new_y):
+    start = field_object.get_x(), field_object.get_y()
+    end = float(new_x), float(new_y)
+
+    steps = Utility.get_line(start, end)
+    for step in steps:
+        time.sleep(field_object.get_speed())
+        step_x = step[Utility.Location.X.value]
+        step_y = step[Utility.Location.Y.value]
+        field_object.update_location(step_x, step_y)
+    time.sleep(field_object.get_speed())
+    field_object.update_location(new_x, new_y)
 
 
 def receive_handler(msg, address):
@@ -89,6 +117,25 @@ def receive_handler(msg, address):
     if case == Utility.Case.approval.value:
         print("The Message '{}' Approved".format(msg[1:]))
         return
+
+    elif case == Utility.Case.cc_to_soldier.value:
+        opt_case = Utility.options_switch_case(msg)
+
+        if opt_case == Utility.MessageType.move_order.value:
+            full_msg_list = msg.split(" :: ")
+            msg = full_msg_list[Utility.FullMessageIndexes.message.value]
+            msg_list = msg.split(" ; ")
+            location = msg_list[Utility.MoveToMessageIndexes.location.value]
+            location_list = location.split(",")
+            new_x = location_list[Utility.Location.X.value]
+            new_y = location_list[Utility.Location.Y.value]
+
+            field_object = get_field_object(msg_list[Utility.MoveToMessageIndexes.company_num.value],
+                                            msg_list[Utility.MoveToMessageIndexes.id.value])
+
+            move_to_thread = threading.Thread(target=move_to, args=(field_object, new_x, new_y))
+            move_to_thread.start()
+
     else:
         print(str(address) + " >> " + msg)
 
