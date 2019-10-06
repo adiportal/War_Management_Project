@@ -1,31 +1,124 @@
+# import logging
+# import Utility
+# import Entities
+#
+# # Initialize the Logger
+# logging.basicConfig(filename = 'SoldierLog.log', level = logging.DEBUG, format = '%(asctime)s : %(levelname)s : Soldier : %(message)s')
+#
+# class UDP():
+#     # sendMassage
+#     def handle_message(send_msg, sock, cc_address):
+#
+#         rec_msg = ''
+#         try:
+#             sock.sendto(send_msg.encode(), cc_address)
+#
+#             logging.debug("Message has been sent to CC {} : {}".format(cc_address, send_msg))
+#
+#             rec_msg, cc_address = sock.recvfrom(65527)
+#             rec_msg = rec_msg.decode('utf-8')
+#
+#             case = Utility.switch_case(rec_msg)
+#
+#             if case == 1:
+#                 # print receive message
+#                 print("The message '{}' reached to Company Commander".format(rec_msg))
+#                 logging.debug("The message '{}' reached to CC {}".format(rec_msg, cc_address))
+#
+#             elif case == 2:
+#                 print("The message '{}' reached to Battalion Commander".format(rec_msg))
+#                 logging.debug("The message '{}' reached to BC {}".format(rec_msg, Utility.get_bc_address()))
+#
+#             else:
+#                 logging.ERROR("An invalid message has reached: \'{}\'".format(rec_msg))
+#
+#         except:
+#             logging.error("The message '{}' did'nt reached to CC {}".format(rec_msg, cc_address))
+#             print("The message '{}' did'nt reached to the Company Commander!!".format(rec_msg))
+#
+#     # **Main**
+#     soldier_address = Utility.init_soldier_address()
+#
+#     if soldier_address == 0:  # there is open Soldier
+#         print("There is open Soldier")
+#         quit()
+#
+#     sock = Utility.get_sock()
+#     sock.settimeout(5)
+#     sock.bind(Utility.get_soldier_address())
+#     logging.info(sock)
+#
+#     msg_str = ""
+#
+#     while msg_str == "":
+#         print("Write Your Message:")
+#         msg_str = input()
+#
+#         msg_list = msg_str.split(".")
+#
+#         if Utility.check_message(msg_list[1]):
+#
+#             cc_address = Utility.get_cc_address(msg_str[0])
+#
+#             if cc_address == 0:
+#                 print("ERROR: INVALID Company Number")
+#                 msg_str = ""
+#                 continue
+#
+#             msg_str = "1." + msg_str
+#             handle_message(msg_str, sock, cc_address)
+#             msg_str = ""
+#
+#         else:
+#             print("Invalid Receiver")
+#
 import logging
 import Utility
-import Entities
+import threading
 
 # Initialize the Logger
-logging.basicConfig(filename = 'SoldierLog.log', level = logging.DEBUG, format = '%(asctime)s : %(levelname)s : Soldier : %(message)s')
+logging.basicConfig(filename = 'Log.log', level = logging.DEBUG, format = '%(asctime)s : %(levelname)s : Soldier : %(message)s')
 
-class UDP():
-    # sendMassage
-    def handle_message(send_msg, sock, cc_address):
 
+def listen():
+    print('Listening...\n')
+
+    while True:
+        # set max size of message
+        rec_msg, rec_address = sock.recvfrom(65527)
+
+        # decoding the message to String
+        rec_msg = rec_msg.decode('utf-8')
+        if rec_msg:
+            handle_message(rec_msg, sock, rec_address)
+
+
+# sendMassage
+def handle_message(msg, sock, cc_address):
+
+    case = Utility.switch_case(msg)
+
+    if case == Utility.Case.approval.value:
+        print("The Message '{}' Approved".format(msg[1:]))
+
+
+    else:
         rec_msg = ''
         try:
-            sock.sendto(send_msg.encode(), cc_address)
+            sock.sendto(msg.encode(), cc_address)
 
-            logging.debug("Message has been sent to CC {} : {}".format(cc_address, send_msg))
+            logging.debug("Message has been sent to CC {} : {}".format(cc_address, msg))
 
             rec_msg, cc_address = sock.recvfrom(65527)
             rec_msg = rec_msg.decode('utf-8')
 
-            case = Utility.switch_case(rec_msg)
 
-            if case == 1:
+            if case == Utility.Case.soldier_to_cc.value:
                 # print receive message
                 print("The message '{}' reached to Company Commander".format(rec_msg))
                 logging.debug("The message '{}' reached to CC {}".format(rec_msg, cc_address))
 
-            elif case == 2:
+            elif case == Utility.Case.soldier_to_bc:
                 print("The message '{}' reached to Battalion Commander".format(rec_msg))
                 logging.debug("The message '{}' reached to BC {}".format(rec_msg, Utility.get_bc_address()))
 
@@ -33,42 +126,31 @@ class UDP():
                 logging.ERROR("An invalid message has reached: \'{}\'".format(rec_msg))
 
         except:
-            logging.error("The message '{}' did'nt reached to CC {}".format(rec_msg, cc_address))
+            logging.error("The message '{}' didn't reached to CC {}".format(rec_msg, cc_address))
             print("The message '{}' did'nt reached to the Company Commander!!".format(rec_msg))
 
-    # **Main**
-    soldier_address = Utility.init_soldier_address()
 
-    if soldier_address == 0:  # there is open Soldier
-        print("There is open Soldier")
-        quit()
+# *Main*
+sock = Utility.get_sock()
+sock.bind(Utility.get_soldier_address())
 
-    sock = Utility.get_sock()
-    sock.settimeout(5)
-    sock.bind(Utility.get_soldier_address())
-    logging.info(sock)
+listen_thread = threading.Thread(target=listen)
+listen_thread.start()
 
+msg_str = ""
+
+while msg_str == "":
+    print("Write Your Message:")
+    msg_str = input()
+
+    cc_address = ("127.0.0.1", 5002)
+
+    # if cc_address == 0:
+    #     print("ERROR: INVALID Company Number")
+    #     msg_str = ""
+    #     continue
+
+    msg_str = "1." + msg_str
+    handle_message(msg_str, sock, cc_address)
+    print("done")
     msg_str = ""
-
-    while msg_str == "":
-        print("Write Your Message:")
-        msg_str = input()
-
-        msg_list = msg_str.split(".")
-
-        if Utility.check_message(msg_list[1]):
-
-            cc_address = Utility.get_cc_address(msg_str[0])
-
-            if cc_address == 0:
-                print("ERROR: INVALID Company Number")
-                msg_str = ""
-                continue
-
-            msg_str = "1." + msg_str
-            handle_message(msg_str, sock, cc_address)
-            msg_str = ""
-
-        else:
-            print("Invalid Receiver")
-

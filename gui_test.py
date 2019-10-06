@@ -25,29 +25,28 @@ company3 = []
 
 
 def create_plot():
+    x = []
+    y = []
+    color = []
+    marker = []
+    labels = []
     for s in soldiers:
+        x.append(s.x)
+        y.append(s.y)
         if s.company_number == 1:
-            company1.append(s)
-            if type(s) == Soldier:
-                ax.plot(s.x, s.y, marker='o', markersize=5, color="blue", picker=5, label=s.__str__())
-            else:
-                ax.plot(s.x, s.y, marker='*', markersize=5, color="blue", picker=5, label=s.__str__())
-
+            color.append('blue')
         elif s.company_number == 2:
-            company2.append(s)
-            if type(s) == Soldier:
-                ax.plot(s.x, s.y, marker='o', markersize=5, color="red", picker=5, label=s.__str__())
-            else:
-                ax.plot(s.x, s.y, marker='*', markersize=5, color="red", picker=5, label=s.__str__())
-
-        elif s.company_number == 3:
-            company3.append(s)
-            if type(s) == Soldier:
-                ax.plot(s.x, s.y, marker='o', markersize=5, color="green", picker=5, label=s.__str__())
-            else:
-                ax.plot(s.x, s.y, marker='*', markersize=5, color="green", picker=5, label=s.__str__())
+            color.append('red')
         else:
-            continue
+            color.append('green')
+        if type(s) == Soldier:
+            marker.append('o')
+        else:
+            marker.append('*')
+        labels.append(s.__str__())
+
+    for xp, yp, c, m, l in zip(x, y, color, marker, labels):
+        ax.scatter([xp], [yp], color=c, marker=m, label=l, picker=5)
 
     mplcursors.cursor(hover=True, highlight=True).connect("add",
                                                           lambda sel: sel.annotation.set_text(sel.artist.get_label()))
