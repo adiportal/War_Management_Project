@@ -3,6 +3,18 @@ import Utility
 import threading
 import time
 
+from Entities import Packet
+from Utility import Case
+from Utility import ObjectType
+from Utility import FullMessageIndexes
+from Utility import MessageType
+from Utility import ObjectListIndex
+from Utility import Location
+from Utility import MenuOptions, new_field_object_opt, ListAndMsg, Company, Sender, Receiver, MessageType, \
+                    get_cc_address
+from Utility import ReportMessageIndexes
+from Utility import MoveToMessageIndexes
+
 # Initialize the Logger
 logging.basicConfig(filename = 'Log.log', level = logging.DEBUG, format = '%(asctime)s : %(levelname)s : Soldier : %(message)s')
 
@@ -28,35 +40,31 @@ def main_menu():
     ans = ""
     while ans == "":
         ans = input(Utility.soldier_main_menu())
-        if int(ans) != 1:
+        if int(ans) != MenuOptions.new_field_object.value:
             print("You can chose only 1 option for now")
             ans = ""
 
-        list_and_msg = Utility.new_field_object_opt()
-        object_list = list_and_msg[Utility.ListAndMsg.list.value]
-        object_str = list_and_msg[Utility.ListAndMsg.msg.value]
+        obj_and_msg = new_field_object_opt()
+        field_object = obj_and_msg[ListAndMsg.list.value]
+        message = obj_and_msg[ListAndMsg.msg.value]
 
-        new_object_field = Utility.create_object_field(object_str)
-        company_num = new_object_field.get_company_num()
+        company_num = field_object.get_company_num()
 
-        if company_num == Utility.Company.company1.value:
-            company1.append(new_object_field)
+        if company_num == Company.company1.value:
+            company1.append(field_object)
 
-        elif company_num == Utility.Company.company2.value:
-            company2.append(new_object_field)
+        elif company_num == Company.company2.value:
+            company2.append(field_object)
 
         else:
-            company3.append(new_object_field)
+            company3.append(field_object)
 
-        return str(Utility.Sender.soldier.value) + \
-               " :: " + \
-               object_list[Utility.ObjectListIndex.company_num.value] + \
-               " :: " + \
-               str(Utility.Receiver.company_commander.value) + \
-               " :: " + \
-               str(Utility.MessageType.new_field_object.value) + \
-               " :: " + \
-               list_and_msg[Utility.ListAndMsg.msg.value]
+        packet = Packet(Sender.soldier.value,
+                        company_num,
+                        Receiver.company_commander.value,
+                        MessageType.new_field_object,
+                        message)
+        return packet
 
 
 def report_location():
@@ -180,20 +188,20 @@ report_thread = threading.Thread(target=report_location)
 listen_thread.start()
 report_thread.start()
 
-msg_str = ""
+packet = ""
 
-while msg_str == "":
-    msg_str = main_menu()
+while packet == "":
+    packet = main_menu()
 
-    cc_address = Utility.get_cc_address(1)
+    cc_address = get_cc_address(1)
 
     if cc_address == 0:
         print("ERROR: INVALID Company Number")
-        msg_str = ""
+        packet = ""
         continue
 
-    if msg_str != "":
-        send_handler(msg_str)
-    msg_str = ""
+    if packet != "":
+        send_handler(packet)
+    packet = ""
 
 

@@ -3,6 +3,7 @@ import enum
 import logging
 import Entities
 from pyproj import Geod
+from Entities import Soldier, BTW, InitMessage
 
 logging.basicConfig(filename = 'Log.log', level = logging.DEBUG, format = '%(asctime)s : %(levelname)s : Utility : %(message)s')
 
@@ -167,7 +168,6 @@ def cc_main_menu():
 
 
 def new_field_object_opt():
-    object_list = []
 
     object_type = ""
     while object_type == "":
@@ -178,16 +178,12 @@ def new_field_object_opt():
             print("You should Enter a number (1-2)")
             object_type = ""
 
-    object_list.append(object_type)
-
     company_num = ""
     while company_num == "":
         company_num = input("Enter Company number (1-3): ")
         if not (1 <= int(company_num) <= 3):
             print("You should Enter a number (1-3)")
             company_num = ""
-
-    object_list.append(company_num)
 
     x = ""
     y = ""
@@ -199,8 +195,6 @@ def new_field_object_opt():
 
     location = [x, y]
 
-    object_list.append(location)
-
     ammo = ""
     while ammo == "":
         ammo = input("Enter Ammo amount: ")
@@ -208,40 +202,44 @@ def new_field_object_opt():
             print("You should enter a number greater then 0: ")
             ammo = ""
 
-        object_list.append(ammo)
-        list_and_msg = [object_list, create_init_message(object_list)]
-    return list_and_msg
-
-
-def create_init_message(object_list):
-    message = object_list[ObjectListIndex.object_type.value] + " ; " +\
-              object_list[ObjectListIndex.company_num.value] + " ; " +\
-              (object_list[ObjectListIndex.location.value])[Location.X.value] + "," +\
-              (object_list[ObjectListIndex.location.value])[Location.Y.value] + " ; " +\
-              object_list[ObjectListIndex.ammo.value]
-    return message
-
-
-def create_object_field(msg):
-    object_list = msg.split(" ; ")
-    location_str = object_list[ObjectListIndex.location.value]
-    location_list = location_str.split(",")
-
-    if object_list[ObjectListIndex.object_type.value] == str(ObjectType.soldier.value):
-        soldier = Entities.Soldier(int(object_list[ObjectListIndex.company_num.value]),
-                                   (float(location_list[Location.X.value]),
-                                   float(location_list[Location.Y.value])),
-                                   int(object_list[ObjectListIndex.ammo.value]))
-
-        return soldier
-
+    if object_type == ObjectType.soldier.value:
+        field_object = Soldier(company_num, location, ammo)
     else:
-        btw = Entities.BTW(int(object_list[ObjectListIndex.company_num.value]),
-                           (float(location_list[Location.X.value]),
-                           float(location_list[Location.Y.value])),
-                           int(object_list[ObjectListIndex.ammo.value]))
+        field_object = BTW(company_num, location, ammo)
 
-        return btw
+    obj_and_msg = field_object, InitMessage(field_object)
+    return obj_and_msg
+
+
+# def create_init_message(field_object):
+#     message = field_object[ObjectListIndex.object_type.value] + " ; " + \
+#               field_object[ObjectListIndex.company_num.value] + " ; " + \
+#               (field_object[ObjectListIndex.location.value])[Location.X.value] + "," + \
+#               (field_object[ObjectListIndex.location.value])[Location.Y.value] + " ; " + \
+#               field_object[ObjectListIndex.ammo.value]
+#     return message
+
+
+# def create_object_field(msg):
+#     object_list = msg.split(" ; ")
+#     location_str = object_list[ObjectListIndex.location.value]
+#     location_list = location_str.split(",")
+#
+#     if object_list[ObjectListIndex.object_type.value] == str(ObjectType.soldier.value):
+#         soldier = Entities.Soldier(int(object_list[ObjectListIndex.company_num.value]),
+#                                    (float(location_list[Location.X.value]),
+#                                    float(location_list[Location.Y.value])),
+#                                    int(object_list[ObjectListIndex.ammo.value]))
+#
+#         return soldier
+#
+#     else:
+#         btw = Entities.BTW(int(object_list[ObjectListIndex.company_num.value]),
+#                            (float(location_list[Location.X.value]),
+#                            float(location_list[Location.Y.value])),
+#                            int(object_list[ObjectListIndex.ammo.value]))
+#
+#         return btw
 
 
 def create_move_to_message(company_num, field_object_id, new_location):
@@ -350,6 +348,6 @@ class ReportMessageIndexes(enum.Enum):
 
 class MoveToMessageIndexes(enum.Enum):
     company_num = 0
-    id = 1
+    field_object_id = 1
     location = 2
 

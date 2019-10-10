@@ -1,4 +1,3 @@
-import time
 import Utility
 
 
@@ -34,6 +33,9 @@ class FieldObjects:
     def get_str_location(self):
         return str(self.x) + "," + str(self.y)
 
+    def get_ammo(self):
+        return self.ammo
+
     def get_x(self):
         return self.x
 
@@ -53,6 +55,7 @@ class Soldier(FieldObjects):
 
     def get_speed(self):
         return self.speed
+
 
 class BTW(FieldObjects):
     def __init__(self, company_number, location, ammo):
@@ -76,3 +79,79 @@ class CompanyCommander:
         self.y = location[1]
         self.ammo = ammo
         self.HP = 100
+
+
+class Packet:
+    ID = 1
+
+    def __init__(self, sender, company_num, receiver, message_type, message):
+        self.ID = Packet.ID
+        Packet.ID += 1
+        self.sender = sender
+        self.company_num = company_num
+        self.receiver = receiver
+        self.message_type = message_type
+        self.message = message
+
+    def get_id(self):
+        return self.ID
+
+    def get_sender(self):
+        return self.sender
+
+    def get_company_num(self):
+        return self.company_num
+
+    def get_receiver(self):
+        return self.receiver
+
+    def get_message_type(self):
+        return self.message_type
+
+    def get_message(self):
+        return self.message
+
+    def __str__(self):
+        return "[ Sender: {}, Company: {}, Receiver: {}, Message Type: {}, Message: {} ]".format(self.sender,
+                                                                                                 self.company_num,
+                                                                                                 self.receiver,
+                                                                                                 self.message_type,
+                                                                                                 self.message)
+
+
+class InitMessage:
+
+    def __init__(self, field_object):
+        self.field_object = field_object
+
+    def __str__(self):
+        return "|| ID: {}, Company: {}, Location: {}, Ammo: {} ||".format(self.field_object.get_id(),
+                                                                          self.field_object.get_company_num(),
+                                                                          self.field_object.get_location(),
+                                                                          self.field_object.get_ammo())
+
+
+class UpdateFieldObjectMessage:
+
+    def __init__(self, field_object):
+        self.field_object = field_object
+
+    def __str__(self):
+        return "|| ID: {}, Company: {}, Location: {}, Ammo: {} ||".format(self.field_object.get_id(),
+                                                                          self.field_object.get_company_num(),
+                                                                          self.field_object.get_location(),
+                                                                          self.field_object.get_ammo())
+
+
+class MoveOrderMessage:
+
+    def __init__(self, company_num, field_object_id, location):
+        self.company_num = company_num
+        self.field_object_id = field_object_id
+        self.location = location
+
+    def __str__(self):
+        return "|| Company: {}, ID: {}, MoveTo Location: {} ||".format(self.company_num,
+                                                                       self.field_object_id,
+                                                                       self.location)
+

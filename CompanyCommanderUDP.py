@@ -10,6 +10,7 @@ company1 = []
 company2 = []
 company3 = []
 
+
 def listen():
     print('Listening...\n')
 
@@ -153,6 +154,7 @@ def send_handler(msg):
 
     rec_msg = ''
     try:
+        print(msg)
         sock.sendto(msg.encode(), soldier_address)
 
     except:
