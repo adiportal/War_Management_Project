@@ -1,9 +1,8 @@
 import socket
 import enum
 import logging
-import Entities
 from pyproj import Geod
-from Entities import Soldier, BTW, InitMessage
+import Entities
 
 logging.basicConfig(filename = 'Log.log', level = logging.DEBUG, format = '%(asctime)s : %(levelname)s : Utility : %(message)s')
 
@@ -90,54 +89,52 @@ def company_num_by_port(port):
 
 
 # get Battalion Commander Address
-def sender_receiver_switch_case(msg_str):
+def sender_receiver_switch_case(packet):
 
-    if msg_str[0] == "*":
+    if packet.is_approved():
         return Case.approval.value
 
-    msg_list = msg_str.split(" :: ")
-
     # sender = Soldier, receiver = CC
-    if int(msg_list[FullMessageIndexes.sender.value]) == Sender.soldier.value and \
-       int(msg_list[FullMessageIndexes.receiver.value]) == Receiver.company_commander.value:
+    if packet.get_sender() == Sender.soldier.value and \
+       packet.get_receiver() == Receiver.company_commander.value:
         return Case.soldier_to_cc.value
 
     # sender = Soldier, receiver = BC
-    elif int(msg_list[FullMessageIndexes.sender.value]) == Sender.soldier.value and \
-            int(msg_list[FullMessageIndexes.receiver.value]) == Receiver.battalion_commander.value and \
-            msg_str[-1] != "*":
+    elif packet.get_sender() == Sender.soldier.value and \
+            packet.get_receiver() == Receiver.battalion_commander.value and \
+            not packet.is_bc_approved():
         return Case.soldier_to_bc.value
 
     # sender = BC, receiver = CC -> Soldier
-    elif int(msg_list[FullMessageIndexes.sender.value]) == Sender.soldier.value and \
-            int(msg_list[FullMessageIndexes.receiver.value]) == Receiver.battalion_commander.value and msg_str[-1] == "*":
+    elif packet.get_sender() == Sender.soldier.value and \
+            packet.get_receiver() == Receiver.battalion_commander.value and \
+            packet.is_bc_approved():
         return Case.bc_to_cc_approval.value
 
     # sender = CC, receiver = soldier
-    elif int(msg_list[FullMessageIndexes.sender.value]) == Sender.company_commander.value and \
-            int(msg_list[FullMessageIndexes.receiver.value]) == Receiver.soldier.value:
+    elif packet.get_sender() == Sender.company_commander.value and \
+            packet.get_receiver() == Receiver.soldier.value:
         return Case.cc_to_soldier.value
 
     else:
         return Case.error.value
 
 
-def options_switch_case(msg):
-    msg_list = msg.split(" :: ")
+def options_switch_case(packet):
 
-    if int(msg_list[FullMessageIndexes.message_type.value]) == MessageType.update_location.value:
+    if packet.get_message_type() == MessageType.update_location.value:
         return 1
 
-    elif int(msg_list[FullMessageIndexes.message_type.value]) == MessageType.move_order.value:
+    elif packet.get_message_type() == MessageType.move_order.value:
         return 2
 
-    elif int(msg_list[FullMessageIndexes.message_type.value]) == MessageType.engage_order.value:
+    elif packet.get_message_type() == MessageType.engage_order.value:
         return 3
 
-    elif int(msg_list[FullMessageIndexes.message_type.value]) == MessageType.new_field_object.value:
+    elif packet.get_message_type() == MessageType.new_field_object.value:
         return 4
 
-    elif int(msg_list[FullMessageIndexes.message_type.value]) == MessageType.report_location.value:
+    elif packet.get_message_type() == MessageType.report_location.value:
         return 5
 
     else:   # Error
@@ -193,7 +190,7 @@ def new_field_object_opt():
 
         y = input("Enter Y: ")
 
-    location = [x, y]
+    location = float(x), float(y)
 
     ammo = ""
     while ammo == "":
@@ -202,13 +199,12 @@ def new_field_object_opt():
             print("You should enter a number greater then 0: ")
             ammo = ""
 
-    if object_type == ObjectType.soldier.value:
-        field_object = Soldier(company_num, location, ammo)
+    if int(object_type) == ObjectType.soldier.value:
+        field_object = Entities.Soldier(int(company_num), location, int(ammo))
     else:
-        field_object = BTW(company_num, location, ammo)
+        field_object = Entities.BTW(int(company_num), location, int(ammo))
 
-    obj_and_msg = field_object, InitMessage(field_object)
-    return obj_and_msg
+    return field_object
 
 
 # def create_init_message(field_object):
@@ -220,38 +216,31 @@ def new_field_object_opt():
 #     return message
 
 
-# def create_object_field(msg):
-#     object_list = msg.split(" ; ")
-#     location_str = object_list[ObjectListIndex.location.value]
-#     location_list = location_str.split(",")
-#
-#     if object_list[ObjectListIndex.object_type.value] == str(ObjectType.soldier.value):
-#         soldier = Entities.Soldier(int(object_list[ObjectListIndex.company_num.value]),
-#                                    (float(location_list[Location.X.value]),
-#                                    float(location_list[Location.Y.value])),
-#                                    int(object_list[ObjectListIndex.ammo.value]))
-#
-#         return soldier
-#
-#     else:
-#         btw = Entities.BTW(int(object_list[ObjectListIndex.company_num.value]),
-#                            (float(location_list[Location.X.value]),
-#                            float(location_list[Location.Y.value])),
-#                            int(object_list[ObjectListIndex.ammo.value]))
-#
-#         return btw
+def create_object_field(field_object):
+    if type(field_object) is Entities.Soldier:
+        soldier = Entities.Soldier(field_object.get_company_num(),
+                                   (field_object.get_location()[Location.X.value],
+                                    field_object.get_location()[Location.Y.value]),
+                                   field_object.get_ammo())
+
+        return soldier
+
+    else:
+        btw = Entities.BTW(field_object.get_company_num(),
+                           (field_object.get_location()[Location.X.value],
+                            field_object.get_location()[Location.Y.value]),
+                           field_object.get_ammo())
+
+        return btw
 
 
 def create_move_to_message(company_num, field_object_id, new_location):
 
-    message = str(Sender.company_commander.value) + " :: " + \
-              company_num + " :: " + \
-              str(Receiver.soldier.value) + " :: " + \
-              str(MessageType.move_order.value) + " :: " + \
-              company_num + " ; " + \
-              field_object_id + " ; " + new_location
+    message = Entities.MoveOrderMessage(company_num, field_object_id, new_location)
+    packet = Entities.Packet(Sender.company_commander.value, company_num, Receiver.soldier.value,
+                             MessageType.move_order.value, message)
 
-    return message
+    return packet
 
 
 def get_line(start, end):

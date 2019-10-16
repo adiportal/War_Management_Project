@@ -92,6 +92,8 @@ class Packet:
         self.receiver = receiver
         self.message_type = message_type
         self.message = message
+        self.approved = False
+        self.bc_approval = False
 
     def get_id(self):
         return self.ID
@@ -111,12 +113,51 @@ class Packet:
     def get_message(self):
         return self.message
 
+    def is_approved(self):
+        return self.approved
+
+    def is_bc_approved(self):
+        return self.bc_approval
+
+    def set_approval(self, status):
+        self.approved = status
+
+    def bc_approval(self, status):
+        self.bc_approval = status
+
     def __str__(self):
-        return "[ Sender: {}, Company: {}, Receiver: {}, Message Type: {}, Message: {} ]".format(self.sender,
-                                                                                                 self.company_num,
-                                                                                                 self.receiver,
-                                                                                                 self.message_type,
-                                                                                                 self.message)
+
+        if self.sender == Utility.Sender.soldier.value:
+            sender = "Soldier"
+        elif self.sender == Utility.Sender.company_commander.value:
+            sender = "CC"
+        else:
+            sender = "BC"
+
+        if self.receiver == Utility.Receiver.soldier.value:
+            receiver = "Soldier"
+        elif self.receiver == Utility.Receiver.company_commander.value:
+            receiver = "CC"
+        else:
+            receiver = "BC"
+
+        if self.message_type == Utility.MessageType.update_location.value:
+            message_type = "Update Location"
+        elif self.message_type == Utility.MessageType.move_order.value:
+            message_type = "Move Order"
+        elif self.message_type == Utility.MessageType.engage_order.value:
+            message_type = "Engage Order"
+        elif self.message_type == Utility.MessageType.new_field_object.value:
+            message_type = "New FieldObject"
+        else:
+            message_type = "Report Location"
+
+        return "[ #{}. Sender: {}, Company: {}, Receiver: {}, Message Type: {}, Message: {} ]".format(self.ID,
+                                                                                                      sender,
+                                                                                                      self.company_num,
+                                                                                                      receiver,
+                                                                                                      message_type,
+                                                                                                      self.message)
 
 
 class InitMessage:
@@ -125,16 +166,19 @@ class InitMessage:
         self.field_object = field_object
 
     def __str__(self):
-        return "|| ID: {}, Company: {}, Location: {}, Ammo: {} ||".format(self.field_object.get_id(),
-                                                                          self.field_object.get_company_num(),
-                                                                          self.field_object.get_location(),
-                                                                          self.field_object.get_ammo())
+        return "|| ID: {}, Company: {}, Location: ({}), Ammo: {} ||".format(self.field_object.get_id(),
+                                                                            self.field_object.get_company_num(),
+                                                                            self.field_object.get_location(),
+                                                                            self.field_object.get_ammo())
 
 
 class UpdateFieldObjectMessage:
 
     def __init__(self, field_object):
         self.field_object = field_object
+
+    def get_field_object(self):
+        return self.field_object
 
     def __str__(self):
         return "|| ID: {}, Company: {}, Location: {}, Ammo: {} ||".format(self.field_object.get_id(),
@@ -150,8 +194,17 @@ class MoveOrderMessage:
         self.field_object_id = field_object_id
         self.location = location
 
+    def get_company_num(self):
+        return self.company_num
+
+    def get_field_object_id(self):
+        return self.field_object_id
+
+    def get_new_location(self):
+        return self.location
+
     def __str__(self):
-        return "|| Company: {}, ID: {}, MoveTo Location: {} ||".format(self.company_num,
-                                                                       self.field_object_id,
-                                                                       self.location)
+        return "|| Company: {}, ID: {}, MoveTo Location: ({}) ||".format(self.company_num,
+                                                                         self.field_object_id,
+                                                                         self.location)
 

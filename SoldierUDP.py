@@ -1,22 +1,15 @@
 import logging
-import Utility
 import threading
 import time
-
-from Entities import Packet
-from Utility import Case
-from Utility import ObjectType
-from Utility import FullMessageIndexes
-from Utility import MessageType
-from Utility import ObjectListIndex
-from Utility import Location
+import pickle
+from Entities import Packet, MoveOrderMessage, UpdateFieldObjectMessage
 from Utility import MenuOptions, new_field_object_opt, ListAndMsg, Company, Sender, Receiver, MessageType, \
-                    get_cc_address
-from Utility import ReportMessageIndexes
-from Utility import MoveToMessageIndexes
+                    Case, Location, MoveToMessageIndexes, get_cc_address, soldier_main_menu, \
+                    get_line, sender_receiver_switch_case, options_switch_case, get_sock, get_soldier_address
 
 # Initialize the Logger
-logging.basicConfig(filename = 'Log.log', level = logging.DEBUG, format = '%(asctime)s : %(levelname)s : Soldier : %(message)s')
+logging.basicConfig(filename='Log.log', level=logging.DEBUG, format='%(asctime)s : %(levelname)s : '
+                                                                    'Soldier : %(message)s')
 
 company1 = []
 company2 = []
@@ -28,27 +21,25 @@ def listen():
 
     while True:
         # set max size of message
-        rec_msg, rec_address = sock.recvfrom(65527)
+        rec_packet, rec_address = sock.recvfrom(65527)
 
         # decoding the message to String
-        rec_msg = rec_msg.decode('utf-8')
-        if rec_msg:
-            receive_handler(rec_msg, rec_address)
+        rec_packet = pickle.loads(rec_packet)
+        if rec_packet:
+            receive_handler(rec_packet, rec_address)
 
 
 def main_menu():
     ans = ""
     while ans == "":
-        ans = input(Utility.soldier_main_menu())
+        ans = input(soldier_main_menu())
         if int(ans) != MenuOptions.new_field_object.value:
             print("You can chose only 1 option for now")
             ans = ""
 
-        obj_and_msg = new_field_object_opt()
-        field_object = obj_and_msg[ListAndMsg.list.value]
-        message = obj_and_msg[ListAndMsg.msg.value]
+        field_object = new_field_object_opt()
 
-        company_num = field_object.get_company_num()
+        company_num = int(field_object.get_company_num())
 
         if company_num == Company.company1.value:
             company1.append(field_object)
@@ -59,42 +50,34 @@ def main_menu():
         else:
             company3.append(field_object)
 
-        packet = Packet(Sender.soldier.value,
-                        company_num,
-                        Receiver.company_commander.value,
-                        MessageType.new_field_object,
-                        message)
-        return packet
+        send_packet = Packet(Sender.soldier.value,
+                             company_num,
+                             Receiver.company_commander.value,
+                             MessageType.new_field_object.value,
+                             field_object)
+        print(type(field_object))
+        print(send_packet)
+        return send_packet
 
 
 def report_location():
     while True:
         for field_object in company1:
-            msg = str(Utility.Sender.soldier.value) + \
-                  " :: " + \
-                  str(field_object.get_company_num()) + \
-                  " :: " + \
-                  str(Utility.Receiver.company_commander.value) + \
-                  " :: " + \
-                  str(Utility.MessageType.report_location.value) + \
-                  " :: " + \
-                  str(field_object.get_company_num()) + \
-                  " ; " + \
-                  str(field_object.get_id()) + \
-                  " ; " + \
-                  field_object.get_str_location()
+            message = UpdateFieldObjectMessage(field_object)
+            send_packet = Packet(Sender.soldier.value, field_object.get_company_num(), Receiver.company_commander.value,
+                                 MessageType.report_location.value, message)
 
-            send_handler(msg)
+            send_handler(send_packet)
         time.sleep(2.0)
 
 
 def get_field_object(company_num, id):
-    if int(company_num) == Utility.Company.company1.value:
+    if int(company_num) == Company.company1.value:
         for field_object in company1:
             if field_object.get_id() == int(id):
                 return field_object
 
-    elif int(company_num) == Utility.Company.company2.value:
+    elif int(company_num) == Company.company2.value:
         for field_object in company2:
             if field_object.get_id() == int(id):
                 return field_object
@@ -109,51 +92,51 @@ def move_to(field_object, new_x, new_y):
     start = field_object.get_x(), field_object.get_y()
     end = float(new_x), float(new_y)
 
-    steps = Utility.get_line(start, end)
+    steps = get_line(start, end)
     for step in steps:
         time.sleep(field_object.get_speed())
-        step_x = step[Utility.Location.X.value]
-        step_y = step[Utility.Location.Y.value]
+        step_x = step[Location.X.value]
+        step_y = step[Location.Y.value]
         field_object.update_location(step_x, step_y)
     time.sleep(field_object.get_speed())
     field_object.update_location(new_x, new_y)
 
 
-def receive_handler(msg, address):
-    case = Utility.sender_receiver_switch_case(msg)
+def receive_handler(rec_packet, address):
+    case = sender_receiver_switch_case(rec_packet)
 
-    if case == Utility.Case.approval.value:
-        print("The Message '{}' Approved".format(msg[1:]))
+    if case == Case.approval.value:
+        print("The Packet #{} Approved".format(rec_packet.get_id()))
         return
 
-    elif case == Utility.Case.cc_to_soldier.value:
-        opt_case = Utility.options_switch_case(msg)
+    elif case == Case.cc_to_soldier.value:
+        opt_case = options_switch_case(rec_packet)
 
-        if opt_case == Utility.MessageType.move_order.value:
-            full_msg_list = msg.split(" :: ")
-            msg = full_msg_list[Utility.FullMessageIndexes.message.value]
-            msg_list = msg.split(" ; ")
-            location = msg_list[Utility.MoveToMessageIndexes.location.value]
-            location_list = location.split(",")
-            new_x = location_list[Utility.Location.X.value]
-            new_y = location_list[Utility.Location.Y.value]
+        if opt_case == MessageType.move_order.value:
+            message = rec_packet.get_message()
+            location = message.get_new_location()
+            new_x = location[Location.X.value]
+            new_y = location[Location.Y.value]
 
-            field_object = get_field_object(msg_list[Utility.MoveToMessageIndexes.company_num.value],
-                                            msg_list[Utility.MoveToMessageIndexes.id.value])
+            field_object = get_field_object(message.get_company_num(), message.get_field_object_id())
+
+            print("****")
+            print(field_object)
 
             move_to_thread = threading.Thread(target=move_to, args=(field_object, new_x, new_y))
             move_to_thread.start()
 
     else:
-        print(str(address) + " >> " + msg)
+        print(str(address) + " >> " + rec_packet)
 
 
 # sendMassage
-def send_handler(msg):
+def send_handler(send_packet):
 
     rec_msg = ''
     try:
-        sock.sendto(msg.encode(), cc_address)
+        byte_packet = pickle.dumps(send_packet)
+        sock.sendto(byte_packet, cc_address)
 
     #     logging.debug("Message has been sent to CC {} : {}".format(cc_address, msg))
     #
@@ -178,8 +161,8 @@ def send_handler(msg):
 
 
 # **Main**
-sock = Utility.get_sock()
-sock.bind(Utility.get_soldier_address())
+sock = get_sock()
+sock.bind(get_soldier_address())
 
 
 listen_thread = threading.Thread(target=listen)
