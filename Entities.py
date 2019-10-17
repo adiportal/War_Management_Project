@@ -1,7 +1,3 @@
-import time
-import Utility
-
-
 class FieldObjects:
     # Attributes
     ID = 1
@@ -53,3 +49,38 @@ class CompanyCommander:
         self.y = location[1]
         self.ammo = ammo
         self.HP = 100
+
+
+class Packet:
+    ID = 1
+
+    def __init__(self, sender, company_num, receiver, message_type, message):
+        self.ID = Packet.ID
+        Packet.ID += 1
+        self.sender = sender
+        self.company_num = company_num
+        self.receiver = receiver
+        self.message_type = message_type
+        self.message = message
+
+    def get_id(self):
+        return self.ID
+
+    def get_sender(self):
+        return self.sender
+
+    def get_company_num(self):
+        return self.company_num
+
+    def get_receiver(self):
+        return self.receiver
+
+    def get_message_type(self):
+        return self.message_type
+
+    def get_message(self):
+        return self.message
+
+    def __str__(self):
+        return "[ {}, {}, {}, {}, {} ]".format(self.sender, self.company_num, self.receiver, self.message_type,
+                                               self.message)

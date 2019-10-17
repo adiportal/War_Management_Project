@@ -54,7 +54,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.canvas = MyMplCanvas(self.main_widget)  ###attention###
         vbox.addWidget(self.canvas)
 
-
         self.setLayout(vbox)
 
         self.main_widget.setFocus()
