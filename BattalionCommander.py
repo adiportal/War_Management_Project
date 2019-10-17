@@ -2,7 +2,8 @@ import logging
 import Utility
 
 # Initialize the Logger
-logging.basicConfig(filename='BattalionCommander.log', level=logging.DEBUG, format='%(asctime)s : %(levelname)s : BC : %(message)s')
+logging.basicConfig(filename='BattalionCommanderLog.log', level=logging.DEBUG, format='%(asctime)s : %(levelname)s : '
+                                                                                      'BC : %(message)s')
 
 
 def handle_message(rec_msg):

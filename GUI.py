@@ -1,6 +1,12 @@
 import sys
+import threading
+import time
+
 import numpy as np
 import matplotlib
+
+import CompanyCommanderUDP
+
 matplotlib.use('Qt5Agg')
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QHBoxLayout, QSizePolicy, QWidget, \
@@ -26,22 +32,10 @@ class MyMplCanvas(FigureCanvas):
 
 
 class ApplicationWindow(QtWidgets.QMainWindow):
-    soldiers = []
+    soldiers = CompanyCommanderUDP.company1
     picked_soldier = []
 
-    s1 = Soldier(1, (3, 4), 100)
-    s2 = Soldier(2, (5, 6), 100)
-    s3 = Soldier(3, (1, 6), 100)
-    s4 = BTW(1, (2, 3), 100)
-    s5 = BTW(2, (3, 3.5), 100)
-    s6 = BTW(3, (4.2, 3.7), 100)
-    s7 = Soldier(1, (5.3, 4), 100)
-    s8 = Soldier(2, (2.6, 4.3), 100)
-    s9 = Soldier(3, (7, 5.2), 100)
-
-    c1 = CompanyCommander(2, (2, 4), 100)
-
-    soldiers = [s1, s2, s3, s4, s5, s6, s7, s8, s9]
+    c1 = CompanyCommander(1, (2, 4), 100)
 
     def __init__(self):
         QtWidgets.QMainWindow.__init__(self)
@@ -63,9 +57,15 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.tooltip_coords = 0, 0
         self.tooltip_text = ''
 
-        self.ani = FuncAnimation(self.canvas.figure, self.animate, interval=100, blit=False)
+        self.ani = FuncAnimation(self.canvas.figure, self.animate, interval=1000, blit=False)
         self.canvas.figure.canvas.mpl_connect('pick_event', self.on_pick)
         self.canvas.mpl_connect("motion_notify_event", self.on_hover)
+
+    def update_field(self):
+        while True:
+            self.soldiers = CompanyCommanderUDP.company1
+            time.sleep(2.0)
+            print(self.soldiers)
 
     def animate(self, i):
         self.canvas.ax.clear()
@@ -177,11 +177,11 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                     self.tooltip.set_text(line.get_label())
                     self.tooltip.set_x(line.get_xdata())
                     self.tooltip.set_y(line.get_ydata())
-                    #if self.c1.company_number == self.get_company_num(line.get_xdata(), line.get_ydata()):
-                    self.tooltip.set_visible(True)
-                    self.tooltip_coords = line.get_xdata(), line.get_ydata()
-                    self.tooltip_text = line.get_label()
-                    break
+                    if self.c1.company_number == self.get_company_num(line.get_xdata(), line.get_ydata()):
+                        self.tooltip.set_visible(True)
+                        self.tooltip_coords = line.get_xdata(), line.get_ydata()
+                        self.tooltip_text = line.get_label()
+                        break
             else:
                 self.tooltip.set_visible(False)
         self.tooltip_visible = self.tooltip._visible
@@ -190,9 +190,12 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
 
 if __name__ == "__main__":
+    CompanyCommanderUDP.main()
     App = QApplication(sys.argv)
     aw = ApplicationWindow()
     aw.show()
+    #update_field_thread = threading.Thread(target=aw.update_field)
+    #update_field_thread.start()
     sys.exit(App.exec_())
 
 

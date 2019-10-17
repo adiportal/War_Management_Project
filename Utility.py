@@ -1,8 +1,8 @@
 import socket
 import enum
 import logging
-import Entities
 from pyproj import Geod
+import Entities
 
 logging.basicConfig(filename = 'Log.log', level = logging.DEBUG, format = '%(asctime)s : %(levelname)s : Utility : %(message)s')
 
@@ -18,7 +18,7 @@ def get_sock():
     return sock
 
 
-def get_soldier_address():
+def get_field_address():
     IP = '127.0.0.1'
     port = 5001
     return IP, port
@@ -87,40 +87,61 @@ def company_num_by_port(port):
     else:
         return Case.error.value
 
-# get Battalion Commander Address
-def switch_case(msg_str):
 
-    if msg_str[0] == "*":
+# get Battalion Commander Address
+def sender_receiver_switch_case(packet):
+
+    if packet.is_approved():
         return Case.approval.value
 
-    msg_list = msg_str.split(".")
-
     # sender = Soldier, receiver = CC
-    if int(msg_list[MessageIndexes.sender.value]) == Sender.soldier.value and \
-            int(msg_list[MessageIndexes.receiver.value]) == Receiver.company_commander.value:
+    if packet.get_sender() == Sender.soldier.value and \
+       packet.get_receiver() == Receiver.company_commander.value:
         return Case.soldier_to_cc.value
 
     # sender = Soldier, receiver = BC
-    elif int(msg_list[MessageIndexes.sender.value]) == Sender.soldier.value and \
-            int(msg_list[MessageIndexes.receiver.value]) == Receiver.battalion_commander.value and \
-            msg_str[-1] != "*":
+    elif packet.get_sender() == Sender.soldier.value and \
+            packet.get_receiver() == Receiver.battalion_commander.value and \
+            not packet.is_bc_approved():
         return Case.soldier_to_bc.value
 
     # sender = BC, receiver = CC -> Soldier
-    elif int(msg_list[MessageIndexes.sender.value]) == Sender.soldier.value and \
-            int(msg_list[MessageIndexes.receiver.value]) == Receiver.battalion_commander.value and msg_str[-1] == "*":
+    elif packet.get_sender() == Sender.soldier.value and \
+            packet.get_receiver() == Receiver.battalion_commander.value and \
+            packet.is_bc_approved():
         return Case.bc_to_cc_approval.value
 
     # sender = CC, receiver = soldier
-    elif int(msg_list[MessageIndexes.sender.value]) == Sender.company_commander.value and \
-            int(msg_list[MessageIndexes.receiver.value]) == Receiver.soldier.value:
+    elif packet.get_sender() == Sender.company_commander.value and \
+            packet.get_receiver() == Receiver.soldier.value:
         return Case.cc_to_soldier.value
 
     else:
         return Case.error.value
 
 
-# Check Message                     MSG ICD: Sender.Receiver.MSG (str)
+def options_switch_case(packet):
+
+    if packet.get_message_type() == MessageType.update_location.value:
+        return 1
+
+    elif packet.get_message_type() == MessageType.move_order.value:
+        return 2
+
+    elif packet.get_message_type() == MessageType.engage_order.value:
+        return 3
+
+    elif packet.get_message_type() == MessageType.new_field_object.value:
+        return 4
+
+    elif packet.get_message_type() == MessageType.report_location.value:
+        return 5
+
+    else:   # Error
+        return 0
+
+
+# Check Message
 def is_open(IP, port):
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
@@ -133,14 +154,17 @@ def is_open(IP, port):
     return result
 
 
-def main_menu():
+def soldier_main_menu():
     return "Choose your option:\n" \
-           "(1)     Initiate a new FieldObject \n" \
-           "(2)     Send FieldObject location \n"
+           "(1)     Initiate a new FieldObject \n"
+
+
+def cc_main_menu():
+    return "Choose your option:\n" \
+           "(1)     Move FieldObject \n"
 
 
 def new_field_object_opt():
-    object_list = []
 
     object_type = ""
     while object_type == "":
@@ -151,16 +175,12 @@ def new_field_object_opt():
             print("You should Enter a number (1-2)")
             object_type = ""
 
-    object_list.append(object_type)
-
     company_num = ""
     while company_num == "":
         company_num = input("Enter Company number (1-3): ")
         if not (1 <= int(company_num) <= 3):
             print("You should Enter a number (1-3)")
             company_num = ""
-
-    object_list.append(company_num)
 
     x = ""
     y = ""
@@ -170,9 +190,7 @@ def new_field_object_opt():
 
         y = input("Enter Y: ")
 
-    location = [x, y]
-
-    object_list.append(location)
+    location = float(x), float(y)
 
     ammo = ""
     while ammo == "":
@@ -181,37 +199,48 @@ def new_field_object_opt():
             print("You should enter a number greater then 0: ")
             ammo = ""
 
-        object_list.append(ammo)
+    if int(object_type) == ObjectType.soldier.value:
+        field_object = Entities.Soldier(int(company_num), location, int(ammo))
+    else:
+        field_object = Entities.BTW(int(company_num), location, int(ammo))
 
-    return object_list
-
-
-def create_init_message(object_list):
-    message = "1.2." + object_list[ObjectListIndex.object_type.value] + "." \
-                     + object_list[ObjectListIndex.company_num.value] + "."\
-                     + (object_list[ObjectListIndex.location.value])[Location.X.value] + "," \
-                     + (object_list[ObjectListIndex.location.value])[Location.Y.value] + "." \
-                     + object_list[ObjectListIndex.ammo.value]
-    print(message)
-    return message
+    return field_object
 
 
-def create_object_field(object_list):
-    if int(object_list[ObjectListIndex.object_type.value]) == int(ObjectType.soldier.value):
-        soldier = Entities.Soldier(int(object_list[ObjectListIndex.company_num.value]),
-                                   (float((object_list[ObjectListIndex.location.value])[Location.X.value]),
-                                   float((object_list[ObjectListIndex.location.value])[Location.Y.value])),
-                                   int(object_list[ObjectListIndex.ammo.value]))
+# def create_init_message(field_object):
+#     message = field_object[ObjectListIndex.object_type.value] + " ; " + \
+#               field_object[ObjectListIndex.company_num.value] + " ; " + \
+#               (field_object[ObjectListIndex.location.value])[Location.X.value] + "," + \
+#               (field_object[ObjectListIndex.location.value])[Location.Y.value] + " ; " + \
+#               field_object[ObjectListIndex.ammo.value]
+#     return message
+
+
+def create_object_field(field_object):
+    if type(field_object) is Entities.Soldier:
+        soldier = Entities.Soldier(field_object.get_company_num(),
+                                   (field_object.get_location()[Location.X.value],
+                                    field_object.get_location()[Location.Y.value]),
+                                   field_object.get_ammo())
 
         return soldier
 
     else:
-        btw = Entities.BTW(int(object_list[ObjectListIndex.company_num.value]),
-                           (int((object_list[ObjectListIndex.location.value])[Location.X.value]),
-                            int((object_list[ObjectListIndex.location.value])[Location.Y.value])),
-                           int(object_list[ObjectListIndex.ammo.value]))
+        btw = Entities.BTW(field_object.get_company_num(),
+                           (field_object.get_location()[Location.X.value],
+                            field_object.get_location()[Location.Y.value]),
+                           field_object.get_ammo())
 
         return btw
+
+
+def create_move_to_message(company_num, field_object_id, new_location):
+
+    message = Entities.MoveOrderMessage(company_num, field_object_id, new_location)
+    packet = Entities.Packet(Sender.company_commander.value, company_num, Receiver.soldier.value,
+                             MessageType.move_order.value, message)
+
+    return packet
 
 
 def get_line(start, end):
@@ -227,6 +256,7 @@ def get_line(start, end):
                        npts=100)
 
     return points
+
 
 # Enum Classes
 class Sender(enum.Enum):
@@ -261,11 +291,20 @@ class ObjectType(enum.Enum):
     btw = 2
 
 
-class MessageIndexes(enum.Enum):    # sender.receiver.company_num.message_type.
+class FullMessageIndexes(enum.Enum):    # sender.company_num.receiver.message_type.message
     sender = 0
     company_num = 1
     receiver = 2
-    message = 3
+    message_type = 3
+    message = 4
+
+
+class MessageType(enum.Enum):
+    update_location = 1
+    move_order = 2
+    engage_order = 3
+    new_field_object = 4
+    report_location = 5
 
 
 class ObjectListIndex(enum.Enum):
@@ -280,6 +319,23 @@ class Location(enum.Enum):
     Y = 1
 
 
-class MessageType(enum.Enum):
-    location_reporting = 1
-    object_field_init = 2
+class ListAndMsg(enum.Enum):
+    list = 0
+    msg = 1
+
+
+class MenuOptions(enum.Enum):
+    new_field_object = 1
+    field_object_location = 2
+
+
+class ReportMessageIndexes(enum.Enum):
+    company_num = 0
+    id = 1
+    location = 2
+
+
+class MoveToMessageIndexes(enum.Enum):
+    company_num = 0
+    field_object_id = 1
+    location = 2
