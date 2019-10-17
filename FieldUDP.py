@@ -2,9 +2,9 @@ import logging
 import threading
 import time
 import pickle
-from Entities import Packet, MoveOrderMessage, UpdateFieldObjectMessage
-from Utility import MenuOptions, new_field_object_opt, ListAndMsg, Company, Sender, Receiver, MessageType, \
-                    Case, Location, MoveToMessageIndexes, get_cc_address, soldier_main_menu, \
+from Entities import Packet, UpdateFieldObjectMessage, Soldier, BTW
+from Utility import MenuOptions, new_field_object_opt, Company, Sender, Receiver, MessageType, \
+                    Case, Location, get_cc_address, soldier_main_menu, \
                     get_line, sender_receiver_switch_case, options_switch_case, get_sock, get_soldier_address
 
 # Initialize the Logger
@@ -14,6 +14,17 @@ logging.basicConfig(filename='Log.log', level=logging.DEBUG, format='%(asctime)s
 company1 = []
 company2 = []
 company3 = []
+
+s1 = Soldier(1, (2, 4), 25)
+s2 = Soldier(1, (2, 5), 25)
+s3 = Soldier(1, (7, 3), 25)
+s4 = Soldier(1, (9, 1), 25)
+s5 = Soldier(1, (1, 4), 25)
+
+btw1 = BTW(1, (2, 9), 50)
+btw2 = BTW(1, (7, 1), 50)
+
+company1 = [s1, s2, s3, s4, s5, btw1, btw2]
 
 
 def listen():
@@ -55,7 +66,6 @@ def main_menu():
                              Receiver.company_commander.value,
                              MessageType.new_field_object.value,
                              field_object)
-        print(type(field_object))
         print(send_packet)
         return send_packet
 
@@ -120,9 +130,6 @@ def receive_handler(rec_packet, address):
 
             field_object = get_field_object(message.get_company_num(), message.get_field_object_id())
 
-            print("****")
-            print(field_object)
-
             move_to_thread = threading.Thread(target=move_to, args=(field_object, new_x, new_y))
             move_to_thread.start()
 
@@ -174,7 +181,7 @@ report_thread.start()
 packet = ""
 
 while packet == "":
-    packet = main_menu()
+    # packet = main_menu()
 
     cc_address = get_cc_address(1)
 
@@ -183,8 +190,15 @@ while packet == "":
         packet = ""
         continue
 
-    if packet != "":
-        send_handler(packet)
-    packet = ""
+    for soldier in company1:
+        packet = Packet(Sender.soldier.value,
+                        soldier.get_company_num(),
+                        Receiver.company_commander.value,
+                        MessageType.new_field_object.value,
+                        soldier)
+
+        if packet != "":
+            send_handler(packet)
+        packet = ""
 
 

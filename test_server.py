@@ -12,5 +12,6 @@ while True:
 
     # decoding the message to String
     rec_msg = pickle.loads(rec_msg)
-
     print(rec_msg)
+
+

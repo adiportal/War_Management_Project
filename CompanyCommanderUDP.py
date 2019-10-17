@@ -1,9 +1,9 @@
 import logging
 import pickle
 import threading
-from Utility import Company, MessageType, Case, Location, create_object_field, sender_receiver_switch_case, \
+from Utility import Company, MessageType, Case, create_object_field, sender_receiver_switch_case, \
                     options_switch_case, get_sock, get_soldier_address, cc_main_menu, create_move_to_message, \
-                    ReportMessageIndexes, init_cc_address
+                    init_cc_address
 from Entities import Packet
 
 # Initialize the Logger
@@ -74,8 +74,8 @@ def receive_handler(packet, address):
     if sender_receiver_case == Case.soldier_to_cc.value:
 
         # printing the message and the client Address
-        print('Received message from Soldier {} >> {}'.format(address, packet))
-        logging.debug("Received message from Soldier {} >> {}".format(address, packet))
+        # print('Received message from Soldier {} >> {}'.format(address, packet))
+        # logging.debug("Received message from Soldier {} >> {}".format(address, packet))
         if opt_case == MessageType.new_field_object.value:
             new_object_field = create_object_field(message)
 
@@ -84,7 +84,7 @@ def receive_handler(packet, address):
             if int(company_num) == Company.company1.value:
                 company1.append(new_object_field)
 
-            elif (company_num) == Company.company2.value:
+            elif company_num == Company.company2.value:
                 company2.append(new_object_field)
 
             else:
@@ -98,13 +98,13 @@ def receive_handler(packet, address):
                 for object_field in company1:
                     if object_field.get_id() == int(updated_object.get_id()):
                         object_field = updated_object
-                        print("FieldObject #" + str(object_field.get_id()) + " location was updated to: " +
-                              object_field.get_str_location())
+                        print("FieldObject #" + str(object_field.get_id()) + " location was updated to: (" +
+                              object_field.get_str_location() + "}")
                         updated = True
                         break
 
                 if not updated:
-                    print("Company 1 doe's not contain #" + updated_object.get_id())
+                    print("Company 1 doe's not contain #" + str(updated_object.get_id()))
 
             elif int(updated_object.get_company_num()) == Company.company2.value:
                 updated = False
@@ -117,7 +117,7 @@ def receive_handler(packet, address):
                         break
 
                 if not updated:
-                    print("Company 2 doe's not contain #" + updated_object.get_id())
+                    print("Company 2 does not contain #" + updated_object.get_id())
 
             else:
                 updated = False
@@ -130,7 +130,7 @@ def receive_handler(packet, address):
                         break
 
                 if not updated:
-                    print("Company 3 doe's not contain #" + updated_object.get_id())
+                    print("Company 3 does not contain #" + updated_object.get_id())
 
         packet.set_approval(True)
         byte_packet = pickle.dumps(packet)
@@ -183,18 +183,11 @@ logging.info(sock)
 listen_thread = threading.Thread(target=listen)
 listen_thread.start()
 
-msg_str = ""
 
-while msg_str == "":
-    msg_str = main_menu()
+soldier_address = ("127.0.0.1", 5001)
 
-    soldier_address = ("127.0.0.1", 5001)
+# if cc_address == 0:
+#     print("ERROR: INVALID Company Number")
+#     msg_str = ""
+#     continue
 
-    # if cc_address == 0:
-    #     print("ERROR: INVALID Company Number")
-    #     msg_str = ""
-    #     continue
-
-    if msg_str != "":
-        send_handler(msg_str)
-    msg_str = ""

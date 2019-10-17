@@ -31,7 +31,7 @@ class FieldObjects:
         return self.x, self.y
 
     def get_str_location(self):
-        return str(self.x) + "," + str(self.y)
+        return str(self.x) + ", " + str(self.y)
 
     def get_ammo(self):
         return self.ammo
