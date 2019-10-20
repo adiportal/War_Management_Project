@@ -1,11 +1,13 @@
 import logging
 import threading
+from pyproj import _datadir, datadir
 import time
 import pickle
 from Entities import Packet, UpdateFieldObjectMessage, Soldier, BTW
 from Utility import MenuOptions, new_field_object_opt, Company, Sender, Receiver, MessageType, \
                     Case, Location, get_cc_address, soldier_main_menu, \
                     get_line, sender_receiver_switch_case, options_switch_case, get_sock, get_field_address
+
 
 # Initialize the Logger
 logging.basicConfig(filename='FieldLog.log', level=logging.DEBUG, format='%(asctime)s : %(levelname)s : '
@@ -28,6 +30,7 @@ company1 = [s1, s2, s3, s4, s5, btw1, btw2]
 
 
 def listen():
+    print('Listening...')
     logging.debug('Listening...')
 
     while True:

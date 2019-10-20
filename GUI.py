@@ -1,12 +1,10 @@
 import sys
 import threading
 import time
-
 import numpy as np
 import matplotlib
-
 import CompanyCommanderUDP
-
+from CompanyCommanderUDP import send_handler
 matplotlib.use('Qt5Agg')
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QHBoxLayout, QSizePolicy, QWidget, \
@@ -14,7 +12,8 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QHBox
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from matplotlib.animation import FuncAnimation
-from Entities import Soldier, CompanyCommander, BTW, FieldObjects
+from Entities import Soldier, CompanyCommander
+from Utility import create_move_to_message
 
 
 class MyMplCanvas(FigureCanvas):
@@ -45,7 +44,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         vbox = QtWidgets.QVBoxLayout(self.main_widget)
 
-        self.canvas = MyMplCanvas(self.main_widget)  ###attention###
+        self.canvas = MyMplCanvas(self.main_widget)
         vbox.addWidget(self.canvas)
 
         self.setLayout(vbox)
@@ -163,7 +162,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         y_data = event.ydata
         if len(self.picked_soldier) > 0:
             soldier = self.picked_soldier.pop(0)
-            soldier.update_location(x_data, y_data)
+            packet = create_move_to_message(soldier.get_company_num(), soldier.get_id(), (x_data, y_data))
+            send_handler(packet)
 
         print(x_data, y_data)
         MyMplCanvas.fig.canvas.mpl_connect('pick_event', self.on_pick)
@@ -189,13 +189,26 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.canvas.draw()
 
 
-if __name__ == "__main__":
+def company_commander_thread():
     CompanyCommanderUDP.main()
+
+
+def gui_thread():
     App = QApplication(sys.argv)
     aw = ApplicationWindow()
     aw.show()
-    #update_field_thread = threading.Thread(target=aw.update_field)
-    #update_field_thread.start()
+    update_field_thread = threading.Thread(target=aw.update_field)
+    update_field_thread.start()
     sys.exit(App.exec_())
+
+
+def main():
+    cc_thread = threading.Thread(target=company_commander_thread)
+    gui_thread1 = threading.Thread(target=gui_thread)
+
+    cc_thread.start()
+    gui_thread1.start()
+
+main()
 
 

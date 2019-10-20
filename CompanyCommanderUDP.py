@@ -1,6 +1,7 @@
 import logging
 import pickle
 import threading
+
 from Utility import Company, MessageType, Case, create_object_field, sender_receiver_switch_case, \
                     options_switch_case, get_sock, get_field_address, cc_main_menu, create_move_to_message, \
                     init_cc_address
@@ -188,7 +189,6 @@ def main():
 
     listen_thread = threading.Thread(target=listen)
     listen_thread.start()
-
     # if cc_address == 0:
     #     print("ERROR: INVALID Company Number")
     #     msg_str = ""
