@@ -16,6 +16,7 @@ from Entities import Soldier, CompanyCommander
 from Utility import create_move_to_message
 
 
+# Class for creating matplotlib canvas (where the plot is going to be located)
 class MyMplCanvas(FigureCanvas):
     fig = Figure(figsize=(10, 12), dpi=200)
     ax = fig.add_subplot(1, 1, 1)
@@ -30,11 +31,12 @@ class MyMplCanvas(FigureCanvas):
         FigureCanvas.updateGeometry(self)
 
 
+# The whole window of the application with all the elements
 class ApplicationWindow(QtWidgets.QMainWindow):
-    soldiers = CompanyCommanderUDP.company1
+    soldiers = []  # company1 list from the 3 lists of the company commander
     picked_soldier = []
 
-    c1 = CompanyCommander(1, (2, 4), 100)
+    c1 = CompanyCommander(1, (2, 4), 100)  # Initialize the company commander entity
 
     def __init__(self):
         QtWidgets.QMainWindow.__init__(self)
@@ -44,7 +46,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         vbox = QtWidgets.QVBoxLayout(self.main_widget)
 
-        self.canvas = MyMplCanvas(self.main_widget)
+        self.canvas = MyMplCanvas(self.main_widget)  # canvas calls for the matplotlib canvas
         vbox.addWidget(self.canvas)
 
         self.setLayout(vbox)
@@ -56,18 +58,26 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.tooltip_coords = 0, 0
         self.tooltip_text = ''
 
+        # Starting the animation using the animate function, update every 1000 miliseconds
         self.ani = FuncAnimation(self.canvas.figure, self.animate, interval=1000, blit=False)
+
+        # Starting the pick event (first you pick an existing point and after that a new location)
         self.canvas.figure.canvas.mpl_connect('pick_event', self.on_pick)
+
+        # Starting the hover event (on hovering a marker an informative label shows up)
         self.canvas.mpl_connect("motion_notify_event", self.on_hover)
 
+    # function for a thread, updates the soldiers list
     def update_field(self):
         while True:
             self.soldiers = CompanyCommanderUDP.company1
             time.sleep(2.0)
-            print(self.soldiers)
+            # print(self.soldiers)
 
+    # function for the FuncAnimation option, clears and create the plot again
     def animate(self, i):
         self.canvas.ax.clear()
+        # Starting the properties of the marker's labels
         self.tooltip = self.canvas.ax.annotate(self.tooltip_text, self.tooltip_coords,
                                                xytext=self.set_xy_text(self.tooltip_coords),
                                                textcoords="offset points",
@@ -75,10 +85,11 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                                                va=self.set_va_value(self.set_xy_text(self.tooltip_coords)),
                                                size=6, bbox=dict(facecolor='yellow', boxstyle="round", alpha=0.8),
                                                arrowprops=dict(shrink=15, facecolor='black', width=3, headlength=8))
-        self.tooltip.set_visible(self.tooltip_visible)
+        self.tooltip.set_visible(self.tooltip_visible)  # Set the visibility of the label according to its current mode
         self.create_plot()
 
-    def set_xy_text(self, coords):
+    def set_xy_text(self, coords):  # function to help set the position of the text in the label according to the
+                                    # loccation of the marker in the plot
         self.canvas.ax.set_xlim(0, 10)
         self.canvas.ax.set_ylim(0, 10)
         x_lim = self.canvas.ax.get_xlim()
@@ -95,6 +106,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         return x_value, y_value
 
     @staticmethod
+    # function to help set the horizontal alignment of the label
     def set_ha_value(xy_text):
         if xy_text[0] < 0:
             return 'right'
@@ -102,12 +114,14 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             return 'left'
 
     @staticmethod
+    # function to help set the vertical alignment of the label
     def set_va_value(xy_text):
         if xy_text[1] > 0:
             return 'bottom'
         else:
             return 'top'
 
+    # function for plotting the field objects according to their type and company
     def create_plot(self):
         x = []
         y = []
@@ -129,13 +143,18 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                 marker.append('*')
             labels.append(s.__str__())
 
-        for xp, yp, c, m, l in zip(x, y, color, marker, labels):
+        for xp, yp, c, m, l in zip(x, y, color, marker, labels):  # zip connects together all the elements in the lists
+                                                                  # that located on the same indexes
             MyMplCanvas.ax.plot([xp], [yp], color=c, marker=m, markersize=5, label=l, picker=10)
 
+    # function for handling the pick event when picking a marker to move
     def on_pick(self, event):
         this_point = event.artist
+
+        # x_data and y_data of the point that was picked by the user
         x_data = this_point.get_xdata()
         y_data = this_point.get_ydata()
+
         ind = event.ind
 
         if self.c1.company_number == self.get_company_num(x_data, y_data):
@@ -147,36 +166,50 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                     break
 
             print(str(float(x_data[ind])) + ", " + str(float(y_data[ind])))
-            print(str(ApplicationWindow.soldiers[index].__str__()))
+            print(str(self.soldiers[index].__str__()))
 
+            # turns on the on click event
             MyMplCanvas.fig.canvas.mpl_connect('button_press_event', self.on_click)
+            # turns off the on pick event (so only click on point to move is able)
             MyMplCanvas.fig.canvas.mpl_disconnect(MyMplCanvas.fig.canvas.mpl_connect('pick_event', self.on_pick))
 
+    # returns the soldier's company according to the location
     def get_company_num(self, x_data, y_data):
         for soldier in self.soldiers:
             if soldier.x == x_data and soldier.y == y_data:
                 return soldier.company_number
 
+    # function for handling the click event for choosing a new location
     def on_click(self, event):
+        # x and y values that was chosen
         x_data = event.xdata
         y_data = event.ydata
-        if len(self.picked_soldier) > 0:
-            soldier = self.picked_soldier.pop(0)
+        if len(self.picked_soldier) > 0:  # means that a field object actually was chosen
+
+            soldier = self.picked_soldier.pop(0)  # empty the list for the next field object
+
+            # Send move message for the chosen field object with UDP
             packet = create_move_to_message(soldier.get_company_num(), soldier.get_id(), (x_data, y_data))
             send_handler(packet)
 
         print(x_data, y_data)
-        MyMplCanvas.fig.canvas.mpl_connect('pick_event', self.on_pick)
+        MyMplCanvas.fig.canvas.mpl_connect('pick_event', self.on_pick)  # turns on again the pick event
+        # turns off the click event
         MyMplCanvas.fig.canvas.mpl_disconnect(MyMplCanvas.fig.canvas.mpl_connect('button_press_event', self.on_click))
 
+    # function for handling the hover event for showing labels for markers
     def on_hover(self, event):
-        if event.inaxes == self.canvas.ax:
-            for line in self.canvas.ax.lines:
-                contains, index = line.contains(event)
+        if event.inaxes == self.canvas.ax:  # event.inaxes = the axes that the event occurs in
+                                            # self.canves.ax = our axes
+
+            for line in self.canvas.ax.lines:  # all the markers we plotted
+                contains, index = line.contains(event)  # is the artist contains the picked point
                 if contains:
-                    self.tooltip.set_text(line.get_label())
+                    self.tooltip.set_text(line.get_label())  # sets the right label for the point
                     self.tooltip.set_x(line.get_xdata())
                     self.tooltip.set_y(line.get_ydata())
+
+                    # check if the current company commander is the cc of the picked field object
                     if self.c1.company_number == self.get_company_num(line.get_xdata(), line.get_ydata()):
                         self.tooltip.set_visible(True)
                         self.tooltip_coords = line.get_xdata(), line.get_ydata()
