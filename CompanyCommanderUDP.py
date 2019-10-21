@@ -1,9 +1,8 @@
 import logging
 import pickle
 import threading
-from Utility import Company, MessageType, Case, create_object_field, sender_receiver_switch_case, \
-                    options_switch_case, get_sock, get_field_address, create_move_to_message, \
-                    init_cc_address
+from Utility import Company, MessageType, Case, sender_receiver_switch_case, options_switch_case, get_sock, \
+                    get_field_address, init_cc_address
 
 
 # Initialize the Logger
