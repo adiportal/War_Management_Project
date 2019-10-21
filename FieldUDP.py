@@ -1,15 +1,17 @@
 import logging
 import threading
+from pyproj import _datadir, datadir
 import time
 import pickle
 from Entities import Packet, UpdateFieldObjectMessage, Soldier, BTW
 from Utility import MenuOptions, new_field_object_opt, Company, Sender, Receiver, MessageType, \
                     Case, Location, get_cc_address, soldier_main_menu, \
-                    get_line, sender_receiver_switch_case, options_switch_case, get_sock, get_soldier_address
+                    get_line, sender_receiver_switch_case, options_switch_case, get_sock, get_field_address
+
 
 # Initialize the Logger
-logging.basicConfig(filename='Log.log', level=logging.DEBUG, format='%(asctime)s : %(levelname)s : '
-                                                                    'Soldier : %(message)s')
+logging.basicConfig(filename='FieldLog.log', level=logging.DEBUG, format='%(asctime)s : %(levelname)s : '
+                                                                         'Soldier : %(message)s')
 
 company1 = []
 company2 = []
@@ -28,7 +30,8 @@ company1 = [s1, s2, s3, s4, s5, btw1, btw2]
 
 
 def listen():
-    print('Listening...\n')
+    print('Listening...')
+    logging.debug('Listening...')
 
     while True:
         # set max size of message
@@ -40,34 +43,34 @@ def listen():
             receive_handler(rec_packet, rec_address)
 
 
-def main_menu():
-    ans = ""
-    while ans == "":
-        ans = input(soldier_main_menu())
-        if int(ans) != MenuOptions.new_field_object.value:
-            print("You can chose only 1 option for now")
-            ans = ""
-
-        field_object = new_field_object_opt()
-
-        company_num = int(field_object.get_company_num())
-
-        if company_num == Company.company1.value:
-            company1.append(field_object)
-
-        elif company_num == Company.company2.value:
-            company2.append(field_object)
-
-        else:
-            company3.append(field_object)
-
-        send_packet = Packet(Sender.soldier.value,
-                             company_num,
-                             Receiver.company_commander.value,
-                             MessageType.new_field_object.value,
-                             field_object)
-        print(send_packet)
-        return send_packet
+# def main_menu():
+#     ans = ""
+#     while ans == "":
+#         ans = input(soldier_main_menu())
+#         if int(ans) != MenuOptions.new_field_object.value:
+#             print("You can chose only 1 option for now")
+#             ans = ""
+#
+#         field_object = new_field_object_opt()
+#
+#         company_num = int(field_object.get_company_num())
+#
+#         if company_num == Company.company1.value:
+#             company1.append(field_object)
+#
+#         elif company_num == Company.company2.value:
+#             company2.append(field_object)
+#
+#         else:
+#             company3.append(field_object)
+#
+#         send_packet = Packet(Sender.soldier.value,
+#                              company_num,
+#                              Receiver.company_commander.value,
+#                              MessageType.new_field_object.value,
+#                              field_object)
+#         print(send_packet)
+#         return send_packet
 
 
 def report_location():
@@ -169,7 +172,7 @@ def send_handler(send_packet):
 
 # **Main**
 sock = get_sock()
-sock.bind(get_soldier_address())
+sock.bind(get_field_address())
 
 
 listen_thread = threading.Thread(target=listen)
@@ -200,5 +203,3 @@ while packet == "":
         if packet != "":
             send_handler(packet)
         packet = ""
-
-

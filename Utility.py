@@ -18,7 +18,7 @@ def get_sock():
     return sock
 
 
-def get_soldier_address():
+def get_field_address():
     IP = '127.0.0.1'
     port = 5001
     return IP, port
@@ -339,4 +339,3 @@ class MoveToMessageIndexes(enum.Enum):
     company_num = 0
     field_object_id = 1
     location = 2
-
