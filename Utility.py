@@ -4,9 +4,13 @@ import logging
 from pyproj import Geod
 import Entities
 
-logging.basicConfig(filename = 'Log.log', level = logging.DEBUG, format = '%(asctime)s : %(levelname)s : Utility : %(message)s')
+
+# Initialize the Logger
+logging.basicConfig(filename='UtilityLog.log', level=logging.DEBUG,
+                    format='%(asctime)s : %(levelname)s : Utility : %(message)s')
 
 
+# get_sock() - creating a new socket and returns it
 def get_sock():
     # Initialize socket
     try:
@@ -18,13 +22,13 @@ def get_sock():
     return sock
 
 
+# Getters
 def get_field_address():
     IP = '127.0.0.1'
     port = 5001
     return IP, port
 
 
-# get Soldier Address
 def init_cc_address():
     IP = '127.0.0.1'
     port = 5004
@@ -40,7 +44,6 @@ def init_cc_address():
     return (IP, port)
 
 
-# get Company Commander Address
 def get_cc_address(company_num):
     IP = '127.0.0.1'
     if int(company_num) == Company.company1.value:
@@ -88,7 +91,7 @@ def company_num_by_port(port):
         return Case.error.value
 
 
-# get Battalion Commander Address
+# sender_receiver_case(packet) - get the packet and returns the case of sender-receiver
 def sender_receiver_switch_case(packet):
 
     if packet.is_approved():
@@ -120,6 +123,7 @@ def sender_receiver_switch_case(packet):
         return Case.error.value
 
 
+# option_switch_case(packet) - return the case according to the packet MessageType
 def options_switch_case(packet):
 
     if packet.get_message_type() == MessageType.update_location.value:
@@ -141,7 +145,7 @@ def options_switch_case(packet):
         return 0
 
 
-# Check Message
+# is_open(IP, port) - return a boolean variable that tells if address (IP, port) is in use
 def is_open(IP, port):
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
@@ -154,86 +158,8 @@ def is_open(IP, port):
     return result
 
 
-def soldier_main_menu():
-    return "Choose your option:\n" \
-           "(1)     Initiate a new FieldObject \n"
-
-
-def cc_main_menu():
-    return "Choose your option:\n" \
-           "(1)     Move FieldObject \n"
-
-
-def new_field_object_opt():
-
-    object_type = ""
-    while object_type == "":
-        object_type = input("Enter FieldObject type: \n"
-                            "(1)     Soldier \n"
-                            "(2)     BTW \n")
-        if not (1 <= int(object_type) <= 2):
-            print("You should Enter a number (1-2)")
-            object_type = ""
-
-    company_num = ""
-    while company_num == "":
-        company_num = input("Enter Company number (1-3): ")
-        if not (1 <= int(company_num) <= 3):
-            print("You should Enter a number (1-3)")
-            company_num = ""
-
-    x = ""
-    y = ""
-    while x == "":
-        x = input("Enter Location: \n"
-                  "Enter X: ")
-
-        y = input("Enter Y: ")
-
-    location = float(x), float(y)
-
-    ammo = ""
-    while ammo == "":
-        ammo = input("Enter Ammo amount: ")
-        if not int(ammo) >= 0:
-            print("You should enter a number greater then 0: ")
-            ammo = ""
-
-    if int(object_type) == ObjectType.soldier.value:
-        field_object = Entities.Soldier(int(company_num), location, int(ammo))
-    else:
-        field_object = Entities.BTW(int(company_num), location, int(ammo))
-
-    return field_object
-
-
-# def create_init_message(field_object):
-#     message = field_object[ObjectListIndex.object_type.value] + " ; " + \
-#               field_object[ObjectListIndex.company_num.value] + " ; " + \
-#               (field_object[ObjectListIndex.location.value])[Location.X.value] + "," + \
-#               (field_object[ObjectListIndex.location.value])[Location.Y.value] + " ; " + \
-#               field_object[ObjectListIndex.ammo.value]
-#     return message
-
-
-def create_object_field(field_object):
-    if type(field_object) is Entities.Soldier:
-        soldier = Entities.Soldier(field_object.get_company_num(),
-                                   (field_object.get_location()[Location.X.value],
-                                    field_object.get_location()[Location.Y.value]),
-                                   field_object.get_ammo())
-
-        return soldier
-
-    else:
-        btw = Entities.BTW(field_object.get_company_num(),
-                           (field_object.get_location()[Location.X.value],
-                            field_object.get_location()[Location.Y.value]),
-                           field_object.get_ammo())
-
-        return btw
-
-
+# create_move_to_message(company_num, field_object_id, new_location) - create a MoveOrderMessage and Packet and returns
+#                                                                      the Packet
 def create_move_to_message(company_num, field_object_id, new_location):
 
     message = Entities.MoveOrderMessage(company_num, field_object_id, new_location)
@@ -243,6 +169,7 @@ def create_move_to_message(company_num, field_object_id, new_location):
     return packet
 
 
+# get_line(start, end) - get a start and end points and return a list of lined steps
 def get_line(start, end):
     x1 = start[Location.X.value]
     y1 = start[Location.Y.value]
@@ -259,6 +186,7 @@ def get_line(start, end):
 
 
 # Enum Classes
+# Cases
 class Sender(enum.Enum):
     soldier = 1
     company_commander = 2

@@ -2,7 +2,7 @@ import logging
 import pickle
 import threading
 from Utility import Company, MessageType, Case, create_object_field, sender_receiver_switch_case, \
-                    options_switch_case, get_sock, get_field_address, cc_main_menu, create_move_to_message, \
+                    options_switch_case, get_sock, get_field_address, create_move_to_message, \
                     init_cc_address
 
 
@@ -49,7 +49,7 @@ def receive_handler(packet, address):
 
         # New FieldObject message
         if opt_case == MessageType.new_field_object.value:
-            new_object_field = create_object_field(message)
+            new_object_field = message
             logging.debug("New FieldObject was created: #{}".format(new_object_field.get_id()))
 
             company_num = new_object_field.get_company_num()
