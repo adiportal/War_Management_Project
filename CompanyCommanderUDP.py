@@ -115,18 +115,6 @@ def receive_handler(packet, address):
         sock.sendto(byte_packet, get_field_address())
         logging.debug("Approval packet has been sent: {}".format(packet))
 
-    # elif sender_receiver_case == 2:
-    #
-    #     logging.debug("Received message from Soldier {} : {}".format(address, msg))
-    #     sock.sendto(msg.encode(), Utility.get_bc_address())
-    #
-    # elif sender_receiver_case == 3:
-    #
-    #     msg = msg[:-1]
-    #
-    #     logging.debug("Received message from BC {} : {}".format(address, msg))
-    #     sock.sendto(msg.encode(), Utility.get_soldier_address())
-
     # Error Case
     else:
         logging.debug("Invalid Message:".format(packet))
