@@ -1,82 +1,12 @@
 import Utility
 
 
-# class FieldObjects:
-#     # Attributes
-#     ID = 1
-#
-#     def __init__(self, company_number, location, ammo):
-#         self.ID = FieldObjects.ID
-#         FieldObjects.ID += 1
-#         self.company_number = company_number
-#         self.x = location[0]
-#         self.y = location[1]
-#         self.ammo = ammo
-#
-#     def __str__(self):
-#         return "{} #{}: \n" \
-#                "Company Number: {} \n" \
-#                "Location: ({}, {}) \n" \
-#                "Ammo: {} \n" \
-#                "HP: {} \n".format(self.__class__.__name__, self.ID, self.company_number, self.x, self.y, self.ammo,
-#                                   self.HP)
-#
-#     def update_location(self, new_x, new_y):
-#         self.x = new_x
-#         self.y = new_y
-#
-#
-# class Soldier(FieldObjects):
-#     def __init__(self, company_number, location, ammo):
-#         super().__init__(company_number, location, ammo)
-#         self.HP = 100
-#         self.speed = 1
-#
-#
-# class BTW(FieldObjects):
-#     def __init__(self, company_number, location, ammo):
-#         super().__init__(company_number, location, ammo)
-#         self.HP = 1000
-#         self.speed = 2
-#
-#
-# class CompanyCommander:
-#     # Attributes
-#     ID = 1
-#
-#     def __init__(self, company_number, location, ammo):
-#         self.ID = CompanyCommander.ID
-#         CompanyCommander.ID += 1
-#         self.company_number = company_number
-#         self.x = location[0]
-#         self.y = location[1]
-#         self.ammo = ammo
-#         self.HP = 100
-#
-#
-# class Packet:
-#     ID = 1
-#
-#     def __init__(self, sender, company_num, receiver, message_type, message):
-#         self.ID = Packet.ID
-#         Packet.ID += 1
-#         self.sender = sender
-#         self.company_num = company_num
-#         self.receiver = receiver
-#         self.message_type = message_type
-#         self.message = message
-#
-#     def get_id(self):
-#         return self.ID
-#
-#     def get_sender(self):
-#         return self.sender
-#
-
+# FieldObject
 class FieldObjects:
     # Attributes
     ID = 1
 
+    # Constructor
     def __init__(self, company_number, location, ammo):
         self.ID = FieldObjects.ID
         FieldObjects.ID += 1
@@ -85,6 +15,7 @@ class FieldObjects:
         self.y = location[1]
         self.ammo = ammo
 
+    # toString
     def __str__(self):
         return "{} #{}: \n" \
                "Company Number: {} \n" \
@@ -93,6 +24,7 @@ class FieldObjects:
                "HP: {} \n".format(self.__class__.__name__, self.ID, self.company_number, self.x, self.y, self.ammo,
                                   self.HP)
 
+    # Getters
     def get_company_num(self):
         return self.company_number
 
@@ -114,35 +46,44 @@ class FieldObjects:
     def get_y(self):
         return self.y
 
+    # update_location(new_x, new_y) - update the FieldObject location
     def update_location(self, new_x, new_y):
         self.x = new_x
         self.y = new_y
 
 
+# Soldier
 class Soldier(FieldObjects):
+    # Constructor
     def __init__(self, company_number, location, ammo):
         super().__init__(company_number, location, ammo)
         self.HP = 100
         self.speed = 1
 
+    # Getters
     def get_speed(self):
         return self.speed
 
 
+# BTW
 class BTW(FieldObjects):
+    # Constructor
     def __init__(self, company_number, location, ammo):
         super().__init__(company_number, location, ammo)
         self.HP = 1000
         self.speed = 2
 
+    # Getters
     def get_speed(self):
         return self.speed
 
 
+# CompanyCommander
 class CompanyCommander:
     # Attributes
     ID = 1
 
+    # Constructor
     def __init__(self, company_number, location, ammo):
         self.ID = CompanyCommander.ID
         CompanyCommander.ID += 1
@@ -153,9 +94,12 @@ class CompanyCommander:
         self.HP = 100
 
 
+# Packet
 class Packet:
+    # Attributes
     ID = 1
 
+    # Constructor
     def __init__(self, sender, company_num, receiver, message_type, message):
         self.ID = Packet.ID
         Packet.ID += 1
@@ -167,6 +111,7 @@ class Packet:
         self.approved = False
         self.bc_approval = False
 
+    # Getters
     def get_id(self):
         return self.ID
 
@@ -191,12 +136,15 @@ class Packet:
     def is_bc_approved(self):
         return self.bc_approval
 
+    # set_approval(status) - change the packet approval to the boolean variable that it gets
     def set_approval(self, status):
         self.approved = status
 
+    # bc_approval(status) - change the packet approval to the boolean variable that it gets
     def bc_approval(self, status):
         self.bc_approval = status
 
+    # toString
     def __str__(self):
 
         if self.sender == Utility.Sender.soldier.value:
@@ -232,11 +180,13 @@ class Packet:
                                                                                                       self.message)
 
 
+# InitMessage
 class InitMessage:
-
+    # Constructor
     def __init__(self, field_object):
         self.field_object = field_object
 
+    # toString
     def __str__(self):
         return "|| ID: {}, Company: {}, Location: ({}), Ammo: {} ||".format(self.field_object.get_id(),
                                                                             self.field_object.get_company_num(),
@@ -244,14 +194,17 @@ class InitMessage:
                                                                             self.field_object.get_ammo())
 
 
+# UpdateFieldObjectMessage
 class UpdateFieldObjectMessage:
-
+    # Constructor
     def __init__(self, field_object):
         self.field_object = field_object
 
+    # Getters
     def get_field_object(self):
         return self.field_object
 
+    # toString
     def __str__(self):
         return "|| ID: {}, Company: {}, Location: {}, Ammo: {} ||".format(self.field_object.get_id(),
                                                                           self.field_object.get_company_num(),
@@ -259,13 +212,15 @@ class UpdateFieldObjectMessage:
                                                                           self.field_object.get_ammo())
 
 
+# MoveOrderMessage
 class MoveOrderMessage:
-
+    # Constructor
     def __init__(self, company_num, field_object_id, location):
         self.company_num = company_num
         self.field_object_id = field_object_id
         self.location = location
 
+    # Getters
     def get_company_num(self):
         return self.company_num
 
@@ -275,23 +230,8 @@ class MoveOrderMessage:
     def get_new_location(self):
         return self.location
 
+    # toString
     def __str__(self):
         return "|| Company: {}, ID: {}, MoveTo Location: ({}) ||".format(self.company_num,
                                                                          self.field_object_id,
                                                                          self.location)
-
-    def get_company_num(self):
-        return self.company_num
-
-    def get_receiver(self):
-        return self.receiver
-
-    def get_message_type(self):
-        return self.message_type
-
-    def get_message(self):
-        return self.message
-
-    def __str__(self):
-        return "[ {}, {}, {}, {}, {} ]".format(self.sender, self.company_num, self.receiver, self.message_type,
-                                               self.message)

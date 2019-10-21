@@ -153,7 +153,7 @@ report_thread = threading.Thread(target=report_location)
 listen_thread.start()
 report_thread.start()
 
-
+packet = ""
 while packet == "":
     # packet = main_menu()
 
