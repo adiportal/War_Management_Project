@@ -242,5 +242,5 @@ def main():
     cc_thread.start()
     gui_thread1.start()
 
-main()
 
+main()

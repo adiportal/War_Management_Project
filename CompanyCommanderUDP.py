@@ -1,24 +1,26 @@
-
 import logging
 import pickle
 import threading
-
 from Utility import Company, MessageType, Case, create_object_field, sender_receiver_switch_case, \
                     options_switch_case, get_sock, get_field_address, cc_main_menu, create_move_to_message, \
                     init_cc_address
-from Entities import Packet
+
 
 # Initialize the Logger
 logging.basicConfig(filename='CompanyCommanderLog.log', level=logging.DEBUG, format='%(asctime)s : %(levelname)s : '
                                                                                     'CC : %(message)s')
 
+# Initialize Companies
 company1 = []
 company2 = []
 company3 = []
 
+# Initialize Socket
 sock = get_sock()
 
 
+# listen() - Listening to incoming packets on background, while receiving a packet, it goes to receive_handler() func
+#            to handle the message.
 def listen():
     print('Listening...\n')
     logging.debug("Listening...")
@@ -33,56 +35,19 @@ def listen():
             receive_handler(rec_packet, get_field_address())
 
 
-# def main_menu():
-#     ans = ""
-#     while ans == "":
-#         ans = input(cc_main_menu())
-#         if int(ans) != 1:
-#             print("You can chose only 1 option for now")
-#             ans = ""
-#
-#     company_num = ""
-#     while company_num == "":
-#         company_num = input("Enter company num: \n")
-#         while not (1 <= int(company_num) <= 3):
-#             company_num = input("You should Enter a number between 1-3: \n")
-#
-#     field_object_id = ""
-#     contain = False
-#     while field_object_id == "":
-#         field_object_id = input("Enter FieldObject ID: \n")
-#         for field_object in company1:
-#             if field_object.get_id() == int(field_object_id):
-#                 contain = True
-#                 break
-#         if not contain:
-#             print("Company 1 does not contain an FieldObject #" + field_object_id)
-#             field_object_id = ""
-#
-#     new_x = ""
-#     while new_x == "":
-#         new_x = input("Enter new X: \n")
-#
-#     new_y = ""
-#     while new_y == "":
-#         new_y = input("Enter new Y: \n")
-#
-#     new_location = float(new_x), float(new_y)
-#
-#     return create_move_to_message(company_num, field_object_id, new_location)
-
-
+# receive_handler(packet, address) - Receive the packet and the address that it came from, check the case and act
+#                                    according to the case
 def receive_handler(packet, address):
     sender_receiver_case = sender_receiver_switch_case(packet)
     opt_case = options_switch_case(packet)
     message = packet.get_message()
 
+    # Soldier >> CompanyCommander
     if sender_receiver_case == Case.soldier_to_cc.value:
 
-        # printing the message and the client Address
-        # print('Received message from Soldier {} >> {}'.format(address, packet))
         logging.debug("Received message from Soldier {} >> {}".format(address, packet))
 
+        # New FieldObject message
         if opt_case == MessageType.new_field_object.value:
             new_object_field = create_object_field(message)
             logging.debug("New FieldObject was created: #{}".format(new_object_field.get_id()))
@@ -101,6 +66,7 @@ def receive_handler(packet, address):
             logging.debug("New FieldObject #{} from company {} was appended to company list".format
                           (new_object_field.get_id(), new_object_field.get_company_num()))
 
+        # Report Location message
         if opt_case == MessageType.report_location.value:
             updated_object = message.get_field_object()
 
@@ -143,6 +109,7 @@ def receive_handler(packet, address):
                 if not updated:
                     logging.debug("Company 3 does not contain #" + updated_object.get_id())
 
+        # change the packet approval to True and send it back to sender
         packet.set_approval(True)
         byte_packet = pickle.dumps(packet)
         sock.sendto(byte_packet, get_field_address())
@@ -160,37 +127,31 @@ def receive_handler(packet, address):
     #     logging.debug("Received message from BC {} : {}".format(address, msg))
     #     sock.sendto(msg.encode(), Utility.get_soldier_address())
 
-    else:           # sender_receiver_case = 0
+    # Error Case
+    else:
         logging.debug("Invalid Message:".format(packet))
 
 
+# send_handler(packet) - if the CompanyCommander want to order on movement or engagement, after doing the action on
+#                        the GUI, it create a packet and the packet goes to send_handler() to handle the message
 def send_handler(packet):
-
-    rec_msg = ''
     try:
         byte_packet = pickle.dumps(packet)
         sock.sendto(byte_packet, get_field_address())
         logging.debug("A Packet has been sent: {}".format(packet))
-
     except:
         logging.error("The packet '{}' didn't reached to Field {}".format(packet, get_field_address()))
 
 
+# Main
 def main():
     # Initialize Server Address
     cc_address = init_cc_address()
-
-    # if cc_address == 0:  # 3 CompanyCommanders is open
-    #     print("There are 3 Company Commanders already open in the system")
-    #     quit()
 
     # Bind the socket with the address
     sock.bind(cc_address)
     logging.info("A new socket has been initiated: {}".format(sock))
 
+    # start listen() func on background
     listen_thread = threading.Thread(target=listen)
     listen_thread.start()
-    # if cc_address == 0:
-    #     print("ERROR: INVALID Company Number")
-    #     msg_str = ""
-    #     continue

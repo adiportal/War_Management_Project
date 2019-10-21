@@ -1,6 +1,5 @@
 import logging
 import threading
-from pyproj import _datadir, datadir
 import time
 import pickle
 from Entities import Packet, UpdateFieldObjectMessage, Soldier, BTW
