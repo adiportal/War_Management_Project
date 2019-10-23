@@ -137,7 +137,7 @@ def send_handler(send_packet):
         print("The message '{}' did'nt reached to the Company Commander!!".format(send_packet))
 
 
-# *Main*
+# **Main**
 
 # Initiate Socket
 sock = get_sock()
