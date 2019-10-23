@@ -99,7 +99,7 @@ def receive_handler(packet, address):
                 updated = False
                 for object_field in company3:
                     if object_field.get_id() == updated_object.get_id():
-                        object_field = updated_object
+                        company1[object_field.get_id - 1] = updated_object
                         logging.debug("#" + str(object_field.get_id()) + " location was updated to: " +
                                       object_field.get_str_location())
                         updated = True
