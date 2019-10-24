@@ -141,7 +141,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                 marker.append('o')
             else:
                 marker.append('*')
-            labels.append(s._str_())
+            labels.append(s.__str__())
 
         for xp, yp, c, m, l in zip(x, y, color, marker, labels):  # zip connects together all the elements in the lists
                                                                   # that located on the same indexes
@@ -166,7 +166,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                     break
 
             print(str(float(x_data[ind])) + ", " + str(float(y_data[ind])))
-            print(str(self.soldiers[index]._str_()))
+            print(str(self.soldiers[index].__str__()))
 
             # turns on the on click event
             MyMplCanvas.fig.canvas.mpl_connect('button_press_event', self.on_click)

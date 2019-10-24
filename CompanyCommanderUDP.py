@@ -1,9 +1,9 @@
 import logging
 import pickle
 import threading
-from Utility import Company, MessageType, Case, sender_receiver_switch_case, options_switch_case, get_sock, \
-                    get_field_address, init_cc_address
-
+from Utility import Company, MessageType, Case, sender_receiver_switch_case, \
+    options_switch_case, get_sock, get_field_address, create_move_to_message, \
+    init_cc_address
 
 # Initialize the Logger
 logging.basicConfig(filename='CompanyCommanderLog.log', level=logging.DEBUG, format='%(asctime)s : %(levelname)s : '
@@ -73,10 +73,11 @@ def receive_handler(packet, address):
                 updated = False
                 for object_field in company1:
                     if object_field.get_id() == int(updated_object.get_id()):
-                        object_field = updated_object
+                        company1[object_field.get_id() - 1] = updated_object
                         logging.debug("FieldObject #" + str(object_field.get_id()) + " location was updated to: (" +
                                       object_field.get_str_location() + ")")
                         updated = True
+                        print("cc", company1[0])
                         break
 
                 if not updated:
@@ -99,7 +100,7 @@ def receive_handler(packet, address):
                 updated = False
                 for object_field in company3:
                     if object_field.get_id() == updated_object.get_id():
-                        company1[object_field.get_id - 1] = updated_object
+                        object_field = updated_object
                         logging.debug("#" + str(object_field.get_id()) + " location was updated to: " +
                                       object_field.get_str_location())
                         updated = True
@@ -125,6 +126,7 @@ def send_handler(packet):
     try:
         byte_packet = pickle.dumps(packet)
         sock.sendto(byte_packet, get_field_address())
+        print("A Packet has been sent to Field: {}".format(packet))
         logging.debug("A Packet has been sent: {}".format(packet))
     except:
         logging.error("The packet '{}' didn't reached to Field {}".format(packet, get_field_address()))
