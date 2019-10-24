@@ -27,6 +27,7 @@ s5 = Soldier(1, (1, 4), 25)
 btw1 = BTW(1, (2, 9), 50)
 btw2 = BTW(1, (7, 1), 50)
 
+
 # Adding FieldObjects to their companies
 company1 = [s1, s2, s3, s4, s5, btw1, btw2]
 
@@ -153,7 +154,6 @@ listen_thread.start()
 report_thread.start()
 
 cc_address = get_cc_address(1)
-
 if cc_address == 0:
     print("ERROR: INVALID Company Number")
 
@@ -164,5 +164,6 @@ for soldier in company1:
                     Receiver.company_commander.value,
                     MessageType.new_field_object.value,
                     soldier)
+
     send_handler(packet)
-print("Done Initialization!")
+    print("Done Initialization!")
