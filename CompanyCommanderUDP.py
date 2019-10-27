@@ -47,7 +47,7 @@ def receive_handler(packet, address):
         logging.debug("Received message from Soldier {} >> {}".format(address, packet))
 
         # New FieldObject message
-        if opt_case == MessageType.new_field_object.value:
+        if opt_case == MessageType.alive.value:
             new_object_field = message
             logging.debug("New FieldObject was created: #{}".format(new_object_field.get_id()))
 
@@ -66,7 +66,7 @@ def receive_handler(packet, address):
                           (new_object_field.get_id(), new_object_field.get_company_num()))
 
         # Report Location message
-        if opt_case == MessageType.report_location.value:
+        if opt_case == MessageType.alive.value:
             updated_object = message.get_field_object()
 
             if int(updated_object.get_company_num()) == Company.company1.value:

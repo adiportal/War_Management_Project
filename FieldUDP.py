@@ -2,7 +2,7 @@ import logging
 import threading
 import time
 import pickle
-from Entities import Packet, UpdateFieldObjectMessage, Soldier, BTW
+from Entities import Packet, Soldier, BTW, AliveMessage
 from Utility import Company, Sender, Receiver, MessageType, Case, Location, get_cc_address, get_line, \
                     sender_receiver_switch_case, options_switch_case, get_sock, get_field_address
 
@@ -48,14 +48,14 @@ def listen():
             receive_handler(rec_packet, rec_address)
 
 
-# report_location - A background function that reporting the FieldObjects on the field their status to their
-#                   CompanyCommanders every 2 seconds by moving the packet it creates to the send_handler() func
-def report_location():
+# report_alive - A background function that reporting the status of the FieldObjects on the field status to their
+#                CompanyCommanders every 2 seconds by moving the packet it creates to the send_handler() func
+def report_alive():
     while True:
         for field_object in company1:
-            message = UpdateFieldObjectMessage(field_object)
+            message = AliveMessage(field_object)
             send_packet = Packet(Sender.soldier.value, field_object.get_company_num(), Receiver.company_commander.value,
-                                 MessageType.report_location.value, message)
+                                 MessageType.alive.value, message)
 
             send_handler(send_packet)
         time.sleep(2.0)
@@ -148,7 +148,7 @@ sock.bind(get_field_address())
 
 # Initiate and Start listen and report_location threads
 listen_thread = threading.Thread(target=listen)
-report_thread = threading.Thread(target=report_location)
+report_thread = threading.Thread(target=report_alive)
 
 listen_thread.start()
 report_thread.start()
@@ -169,9 +169,10 @@ while packet == "":
         packet = Packet(Sender.soldier.value,
                         soldier.get_company_num(),
                         Receiver.company_commander.value,
-                        MessageType.new_field_object.value,
+                        MessageType.alive.value,
                         soldier)
 
         if packet != "":
             send_handler(packet)
+            time.sleep(0.100)
         packet = ""

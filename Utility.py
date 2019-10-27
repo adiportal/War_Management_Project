@@ -41,7 +41,7 @@ def init_cc_address():
     if count == 3:
         return Case.error
 
-    return (IP, port)
+    return IP, port
 
 
 def get_cc_address(company_num):
@@ -126,7 +126,7 @@ def sender_receiver_switch_case(packet):
 # option_switch_case(packet) - return the case according to the packet MessageType
 def options_switch_case(packet):
 
-    if packet.get_message_type() == MessageType.update_location.value:
+    if packet.get_message_type() == MessageType.alive.value:
         return 1
 
     elif packet.get_message_type() == MessageType.move_order.value:
@@ -134,12 +134,6 @@ def options_switch_case(packet):
 
     elif packet.get_message_type() == MessageType.engage_order.value:
         return 3
-
-    elif packet.get_message_type() == MessageType.new_field_object.value:
-        return 4
-
-    elif packet.get_message_type() == MessageType.report_location.value:
-        return 5
 
     else:   # Error
         return 0
@@ -167,6 +161,18 @@ def create_move_to_message(company_num, field_object_id, new_location):
                              MessageType.move_order.value, message)
 
     return packet
+
+
+# contain(company, id) - check if FieldObject is in company list by ID. If the searched FieldObject is in the list,
+#                        it returns the index of the object. else, it returns -1.
+def contain(company, id):
+    count = 0
+    for field_object in company:
+        if field_object.get_id() == id:
+            return count
+        else:
+            count += 1
+    return -1
 
 
 # get_line(start, end) - get a start and end points and return a list of lined steps
@@ -228,11 +234,9 @@ class FullMessageIndexes(enum.Enum):    # sender.company_num.receiver.message_ty
 
 
 class MessageType(enum.Enum):
-    update_location = 1
+    alive = 1
     move_order = 2
     engage_order = 3
-    new_field_object = 4
-    report_location = 5
 
 
 class ObjectListIndex(enum.Enum):
@@ -250,11 +254,6 @@ class Location(enum.Enum):
 class ListAndMsg(enum.Enum):
     list = 0
     msg = 1
-
-
-class MenuOptions(enum.Enum):
-    new_field_object = 1
-    field_object_location = 2
 
 
 class ReportMessageIndexes(enum.Enum):

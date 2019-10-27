@@ -7,8 +7,7 @@ import CompanyCommanderUDP
 from CompanyCommanderUDP import send_handler
 matplotlib.use('Qt5Agg')
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QHBoxLayout, QSizePolicy, QWidget, \
-    QTextBrowser, QLineEdit
+from PyQt5.QtWidgets import QApplication
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from matplotlib.animation import FuncAnimation
