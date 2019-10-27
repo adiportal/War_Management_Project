@@ -127,6 +127,7 @@ def send_handler(packet):
         logging.error("The packet '{}' didn't reached to Field {}".format(packet, get_field_address()))
 
 
+# get_company(company_num) - get the company number and returns the list of FieldObject of this company number
 def get_company(company_num):
     if company_num == Company.company1.value:
         return company1
@@ -134,6 +135,7 @@ def get_company(company_num):
         return company2
     else:
         return company3
+
 
 # Main
 def main():
