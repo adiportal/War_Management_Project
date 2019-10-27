@@ -77,7 +77,7 @@ def get_cc_address(company_num):
 def get_bc_address():
     IP = '127.0.0.1'
     port = 5003
-    return (IP, port)
+    return IP, port
 
 
 def company_num_by_port(port):

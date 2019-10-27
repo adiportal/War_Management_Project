@@ -1,3 +1,4 @@
+import sys
 import logging
 import threading
 import time
@@ -56,6 +57,7 @@ def report_alive():
             message = AliveMessage(field_object)
             send_packet = Packet(Sender.soldier.value, field_object.get_company_num(), Receiver.company_commander.value,
                                  MessageType.alive.value, message)
+            time.sleep(0.100)
 
             send_handler(send_packet)
         time.sleep(2.0)
@@ -100,13 +102,8 @@ def move_to(field_object, new_x, new_y):
 def receive_handler(rec_packet, address):
     case = sender_receiver_switch_case(rec_packet)
 
-    # Approval
-    if case == Case.approval.value:
-        print("The Packet #{} Approved".format(rec_packet.get_id()))
-        return
-
     # CompanyCommander >> Soldier
-    elif case == Case.cc_to_soldier.value:
+    if case == Case.cc_to_soldier.value:
         opt_case = options_switch_case(rec_packet)
 
         # Move Order message
@@ -153,26 +150,21 @@ report_thread = threading.Thread(target=report_alive)
 listen_thread.start()
 report_thread.start()
 
-packet = ""
-while packet == "":
-    # packet = main_menu()
+cc_address = get_cc_address(1)
 
-    cc_address = get_cc_address(1)
+if cc_address == 0:
+    print("ERROR: INVALID Company Number")
+    logging.error("INVALID Company Number")
+    sys.exit()
 
-    if cc_address == 0:
-        print("ERROR: INVALID Company Number")
-        packet = ""
-        continue
+# sending all the FieldObjects on the company1 list
+for field_object in company1:
+    message = AliveMessage(field_object)
+    packet = Packet(Sender.soldier.value,
+                    field_object.get_company_num(),
+                    Receiver.company_commander.value,
+                    MessageType.alive.value,
+                    message)
 
-    # sending all the FieldObjects on the company1 list
-    for soldier in company1:
-        packet = Packet(Sender.soldier.value,
-                        soldier.get_company_num(),
-                        Receiver.company_commander.value,
-                        MessageType.alive.value,
-                        soldier)
-
-        if packet != "":
-            send_handler(packet)
-            time.sleep(0.100)
-        packet = ""
+    send_handler(packet)
+    time.sleep(0.100)
