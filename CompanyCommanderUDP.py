@@ -133,7 +133,7 @@ def send_handler(packet):
 
 
 # Main
-def main():
+def main(company_num, location):
     # Initialize Server Address
     cc_address = init_cc_address()
 

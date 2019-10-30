@@ -17,7 +17,7 @@ from Utility import create_move_to_message
 
 # Class for creating matplotlib canvas (where the plot is going to be located)
 class MyMplCanvas(FigureCanvas):
-    fig = Figure(figsize=(10, 12), dpi=200)
+    fig = Figure(figsize=(10, 12), dpi=100)
     ax = fig.add_subplot(1, 1, 1)
 
     def __init__(self, parent=None):
@@ -222,8 +222,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.canvas.draw()
 
 
-def company_commander_thread():
-    CompanyCommanderUDP.main()
+def company_commander_thread(company_num, location):
+    CompanyCommanderUDP.main(company_num, location)
 
 
 def gui_thread():
@@ -235,11 +235,9 @@ def gui_thread():
     sys.exit(App.exec_())
 
 
-def main():
-    cc_thread = threading.Thread(target=company_commander_thread)
+def main(company_num, location):
+    cc_thread = threading.Thread(target=company_commander_thread, args=(company_num, location))
     gui_thread1 = threading.Thread(target=gui_thread)
 
     cc_thread.start()
     gui_thread1.start()
-
-main()
