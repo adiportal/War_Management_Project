@@ -58,7 +58,7 @@ class Soldier(FieldObjects):
     def __init__(self, company_number, location, ammo):
         super().__init__(company_number, location, ammo)
         self.HP = 100
-        self.speed = 0.2
+        self.speed = 1
 
     # Getters
     def get_speed(self):
@@ -74,7 +74,7 @@ class BTW(FieldObjects):
     def __init__(self, company_number, location, ammo):
         super().__init__(company_number, location, ammo)
         self.HP = 1000
-        self.speed = 0.6
+        self.speed = 2
 
     # Getters
     def get_speed(self):
