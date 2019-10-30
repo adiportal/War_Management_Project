@@ -58,11 +58,14 @@ class Soldier(FieldObjects):
     def __init__(self, company_number, location, ammo):
         super().__init__(company_number, location, ammo)
         self.HP = 100
-        self.speed = 0.2
+        self.speed = 1
 
     # Getters
     def get_speed(self):
         return self.speed
+
+    def get_hp(self):
+        return self.HP
 
 
 # BTW
@@ -71,11 +74,14 @@ class BTW(FieldObjects):
     def __init__(self, company_number, location, ammo):
         super().__init__(company_number, location, ammo)
         self.HP = 1000
-        self.speed = 0.6
+        self.speed = 2
 
     # Getters
     def get_speed(self):
         return self.speed
+
+    def get_hp(self):
+        return self.HP
 
 
 # CompanyCommander
@@ -161,16 +167,12 @@ class Packet:
         else:
             receiver = "BC"
 
-        if self.message_type == Utility.MessageType.update_location.value:
-            message_type = "Update Location"
+        if self.message_type == Utility.MessageType.alive.value:
+            message_type = "Alive"
         elif self.message_type == Utility.MessageType.move_order.value:
             message_type = "Move Order"
-        elif self.message_type == Utility.MessageType.engage_order.value:
-            message_type = "Engage Order"
-        elif self.message_type == Utility.MessageType.new_field_object.value:
-            message_type = "New FieldObject"
         else:
-            message_type = "Report Location"
+            message_type = "Engage Order"
 
         return "[ #{}. Sender: {}, Company: {}, Receiver: {}, Message Type: {}, Message: {} ]".format(self.ID,
                                                                                                       sender,
@@ -180,25 +182,19 @@ class Packet:
                                                                                                       self.message)
 
 
-# InitMessage
-class InitMessage:
+# AliveMessage
+class AliveMessage:
     # Constructor
     def __init__(self, field_object):
         self.field_object = field_object
 
     # toString
     def __str__(self):
-        return "|| ID: {}, Company: {}, Location: ({}), Ammo: {} ||".format(self.field_object.get_id(),
-                                                                            self.field_object.get_company_num(),
-                                                                            self.field_object.get_location(),
-                                                                            self.field_object.get_ammo())
-
-
-# UpdateFieldObjectMessage
-class UpdateFieldObjectMessage:
-    # Constructor
-    def __init__(self, field_object):
-        self.field_object = field_object
+        return "|| ID: {}, Company: {}, Location: ({}), HP: {}, Ammo: {} ||".format(self.field_object.get_id(),
+                                                                                    self.field_object.get_company_num(),
+                                                                                    self.field_object.get_location(),
+                                                                                    self.get_hp(),
+                                                                                    self.field_object.get_ammo())
 
     # Getters
     def get_field_object(self):
@@ -206,10 +202,11 @@ class UpdateFieldObjectMessage:
 
     # toString
     def __str__(self):
-        return "|| ID: {}, Company: {}, Location: {}, Ammo: {} ||".format(self.field_object.get_id(),
-                                                                          self.field_object.get_company_num(),
-                                                                          self.field_object.get_location(),
-                                                                          self.field_object.get_ammo())
+        return "|| ID: {}, Company: {}, Location: {}, HP: {}, Ammo: {} ||".format(self.field_object.get_id(),
+                                                                                  self.field_object.get_company_num(),
+                                                                                  self.field_object.get_location(),
+                                                                                  self.field_object.get_hp(),
+                                                                                  self.field_object.get_ammo())
 
 
 # MoveOrderMessage

@@ -10,11 +10,26 @@ logging.basicConfig(filename='UtilityLog.log', level=logging.DEBUG,
                     format='%(asctime)s : %(levelname)s : Utility : %(message)s')
 
 
-# get_sock() - creating a new socket and returns it
-def get_sock():
+# get_cc_sock() - creating a new socket for cc and returns it
+def get_cc_sock():
     # Initialize socket
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+        logging.debug("Socket Successfully Created!")
+    except socket.error as err:
+        logging.error("Socket creation failed with error {}".format(err))
+
+    return sock
+
+
+# get_field_sock() - creating a new socket for field and returns it
+def get_field_sock():
+    # Initialize socket
+    try:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         logging.debug("Socket Successfully Created!")
     except socket.error as err:
         logging.error("Socket creation failed with error {}".format(err))
@@ -30,7 +45,7 @@ def get_field_address():
 
 
 def init_cc_address():
-    IP = '127.0.0.1'
+    IP = ''
     port = 5004
     count = 0
 
@@ -41,11 +56,11 @@ def init_cc_address():
     if count == 3:
         return Case.error
 
-    return (IP, port)
+    return IP, port
 
 
 def get_cc_address(company_num):
-    IP = '127.0.0.1'
+    IP = '255.255.255.255'
     if int(company_num) == Company.company1.value:
         port = 5004
 
@@ -77,7 +92,7 @@ def get_cc_address(company_num):
 def get_bc_address():
     IP = '127.0.0.1'
     port = 5003
-    return (IP, port)
+    return IP, port
 
 
 def company_num_by_port(port):
@@ -126,7 +141,7 @@ def sender_receiver_switch_case(packet):
 # option_switch_case(packet) - return the case according to the packet MessageType
 def options_switch_case(packet):
 
-    if packet.get_message_type() == MessageType.update_location.value:
+    if packet.get_message_type() == MessageType.alive.value:
         return 1
 
     elif packet.get_message_type() == MessageType.move_order.value:
@@ -134,12 +149,6 @@ def options_switch_case(packet):
 
     elif packet.get_message_type() == MessageType.engage_order.value:
         return 3
-
-    elif packet.get_message_type() == MessageType.new_field_object.value:
-        return 4
-
-    elif packet.get_message_type() == MessageType.report_location.value:
-        return 5
 
     else:   # Error
         return 0
@@ -167,6 +176,18 @@ def create_move_to_message(company_num, field_object_id, new_location):
                              MessageType.move_order.value, message)
 
     return packet
+
+
+# contain(company, id) - check if FieldObject is in company list by ID. If the searched FieldObject is in the list,
+#                        it returns the index of the object. else, it returns -1.
+def contain(company, id):
+    count = 0
+    for field_object in company:
+        if field_object.get_id() == id:
+            return count
+        else:
+            count += 1
+    return -1
 
 
 # get_line(start, end) - get a start and end points and return a list of lined steps
@@ -228,11 +249,9 @@ class FullMessageIndexes(enum.Enum):    # sender.company_num.receiver.message_ty
 
 
 class MessageType(enum.Enum):
-    update_location = 1
+    alive = 1
     move_order = 2
     engage_order = 3
-    new_field_object = 4
-    report_location = 5
 
 
 class ObjectListIndex(enum.Enum):
@@ -250,11 +269,6 @@ class Location(enum.Enum):
 class ListAndMsg(enum.Enum):
     list = 0
     msg = 1
-
-
-class MenuOptions(enum.Enum):
-    new_field_object = 1
-    field_object_location = 2
 
 
 class ReportMessageIndexes(enum.Enum):

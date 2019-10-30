@@ -71,8 +71,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         while True:
             self.soldiers = CompanyCommanderUDP.company1
             time.sleep(2.0)
-            if len(self.soldiers) > 1:
-                print(self.soldiers[0])
+
 
     # function for the FuncAnimation option, clears and create the plot again
     def animate(self, i):
@@ -165,9 +164,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                     self.picked_soldier.append(soldier)
                     break
 
-            print(str(float(x_data[ind])) + ", " + str(float(y_data[ind])))
-            print(str(self.soldiers[index].__str__()))
-
             # turns on the on click event
             MyMplCanvas.fig.canvas.mpl_connect('button_press_event', self.on_click)
             # turns off the on pick event (so only click on point to move is able)
@@ -192,7 +188,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             packet = create_move_to_message(soldier.get_company_num(), soldier.get_id(), (x_data, y_data))
             send_handler(packet)
 
-        print(x_data, y_data)
         MyMplCanvas.fig.canvas.mpl_connect('pick_event', self.on_pick)  # turns on again the pick event
         # turns off the click event
         MyMplCanvas.fig.canvas.mpl_disconnect(MyMplCanvas.fig.canvas.mpl_connect('button_press_event', self.on_click))

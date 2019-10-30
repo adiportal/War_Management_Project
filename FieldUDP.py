@@ -1,10 +1,11 @@
+import sys
 import logging
 import threading
 import time
 import pickle
-from Entities import Packet, UpdateFieldObjectMessage, Soldier, BTW
+from Entities import Packet, Soldier, BTW, AliveMessage
 from Utility import Company, Sender, Receiver, MessageType, Case, Location, get_cc_address, get_line, \
-                    sender_receiver_switch_case, options_switch_case, get_sock, get_field_address
+                    sender_receiver_switch_case, options_switch_case, get_field_sock, get_field_address
 
 
 # Initialize the Logger
@@ -48,14 +49,15 @@ def listen():
             receive_handler(rec_packet, rec_address)
 
 
-# report_location - A background function that reporting the FieldObjects on the field their status to their
-#                   CompanyCommanders every 2 seconds by moving the packet it creates to the send_handler() func
-def report_location():
+# report_alive - A background function that reporting the status of the FieldObjects on the field status to their
+#                CompanyCommanders every 2 seconds by moving the packet it creates to the send_handler() func
+def report_alive():
     while True:
         for field_object in company1:
-            message = UpdateFieldObjectMessage(field_object)
+            message = AliveMessage(field_object)
             send_packet = Packet(Sender.soldier.value, field_object.get_company_num(), Receiver.company_commander.value,
-                                 MessageType.report_location.value, message)
+                                 MessageType.alive.value, message)
+            time.sleep(0.100)
 
             send_handler(send_packet)
         time.sleep(2.0)
@@ -100,13 +102,8 @@ def move_to(field_object, new_x, new_y):
 def receive_handler(rec_packet, address):
     case = sender_receiver_switch_case(rec_packet)
 
-    # Approval
-    if case == Case.approval.value:
-        print("The Packet #{} Approved".format(rec_packet.get_id()))
-        return
-
     # CompanyCommander >> Soldier
-    elif case == Case.cc_to_soldier.value:
+    if case == Case.cc_to_soldier.value:
         opt_case = options_switch_case(rec_packet)
 
         # Move Order message
@@ -141,29 +138,33 @@ def send_handler(send_packet):
 # **Main**
 
 # Initiate Socket
-sock = get_sock()
+sock = get_field_sock()
 
 # Binding Socket
 sock.bind(get_field_address())
 
 # Initiate and Start listen and report_location threads
 listen_thread = threading.Thread(target=listen)
-report_thread = threading.Thread(target=report_location)
+report_thread = threading.Thread(target=report_alive)
 
 listen_thread.start()
 report_thread.start()
 
 cc_address = get_cc_address(1)
+
 if cc_address == 0:
     print("ERROR: INVALID Company Number")
+    logging.error("INVALID Company Number")
+    sys.exit()
 
 # sending all the FieldObjects on the company1 list
-for soldier in company1:
+for field_object in company1:
+    message = AliveMessage(field_object)
     packet = Packet(Sender.soldier.value,
-                    soldier.get_company_num(),
+                    field_object.get_company_num(),
                     Receiver.company_commander.value,
-                    MessageType.new_field_object.value,
-                    soldier)
+                    MessageType.alive.value,
+                    message)
 
     send_handler(packet)
-    print("Done Initialization!")
+    time.sleep(0.100)
