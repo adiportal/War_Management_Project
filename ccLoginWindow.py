@@ -31,19 +31,19 @@ class Ui_CompanyCommanderLogin(object):
         self.label_4.setGeometry(QtCore.QRect(20, 100, 41, 16))
         self.label_4.setObjectName("label_4")
         self.lineEdit_x_location = QtWidgets.QLineEdit(self.groupBox)
-        self.lineEdit_x_location.setGeometry(QtCore.QRect(100, 70, 41, 20))
+        self.lineEdit_x_location.setGeometry(QtCore.QRect(100, 70, 51, 20))
         self.lineEdit_x_location.setObjectName("lineEdit_x_location")
         self.lineEdit_y_location = QtWidgets.QLineEdit(self.groupBox)
-        self.lineEdit_y_location.setGeometry(QtCore.QRect(100, 100, 41, 20))
+        self.lineEdit_y_location.setGeometry(QtCore.QRect(100, 100, 51, 20))
         self.lineEdit_y_location.setObjectName("lineEdit_y_location")
         self.pushButton_login = QtWidgets.QPushButton(self.groupBox)
         self.pushButton_login.setGeometry(QtCore.QRect(140, 140, 71, 21))
         self.pushButton_login.setStyleSheet("background-color: rgb(0, 209, 255);\n"
-        "color: rgb(255, 255, 255);\n"
-        "background-color: rgb(0, 0, 127);")
+                                            "color: rgb(255, 255, 255);\n"
+                                            "background-color: rgb(0, 0, 127);")
         self.pushButton_login.setObjectName("pushButton_login")
         self.comboBox = QtWidgets.QComboBox(self.groupBox)
-        self.comboBox.setGeometry(QtCore.QRect(100, 40, 41, 21))
+        self.comboBox.setGeometry(QtCore.QRect(100, 40, 51, 21))
         self.comboBox.setObjectName("comboBox")
         CompanyCommanderLogin.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(CompanyCommanderLogin)
@@ -82,13 +82,14 @@ class Ui_CompanyCommanderLogin(object):
         company_num_input = self.comboBox.currentText()
 
         if company_num_input == 'Choose:':
-            self.message_box("You need to choose company number!")
+            self.message_box("Please choose company number!")
 
         if x_location_input == '' or y_location_input == '':
-            self.message_box("You need to fill your location!")
+            self.message_box("Please fill your location!")
 
         else:
             location = (float(x_location_input), float(y_location_input))
+            CompanyCommanderLogin.close()
             GUI.main(int(company_num_input), location)
 
     @staticmethod
