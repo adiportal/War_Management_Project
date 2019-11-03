@@ -5,7 +5,7 @@
 # Created by: PyQt5 UI code generator 5.13.1
 #
 # WARNING! All changes made in this file will be lost!
-
+import time
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMessageBox
@@ -81,16 +81,32 @@ class Ui_CompanyCommanderLogin(object):
         y_location_input = self.lineEdit_y_location.text()
         company_num_input = self.comboBox.currentText()
 
+        # True/ False variables for validation
+        correct_company_num = False
+        correct_x_location = False
+        correct_y_location = False
+
+        # Checking validation and raising error message box if needed
         if company_num_input == 'Choose:':
             self.message_box("Please choose company number!")
-
-        if x_location_input == '' or y_location_input == '':
-            self.message_box("Please fill your location!")
-
         else:
+            correct_company_num = True
+
+        if x_location_input == '':
+            self.message_box("Please fill your x location!")
+        else:
+            correct_x_location = True
+
+        if y_location_input == '':
+            self.message_box("Please fill your y location!")
+        else:
+            correct_y_location = True
+
+        # If all conditions correct, the login window will be closed and the GUI will be open
+        if correct_company_num is True and correct_x_location is True and correct_y_location is True:
             location = (float(x_location_input), float(y_location_input))
-            CompanyCommanderLogin.close()
             GUI.main(int(company_num_input), location)
+            CompanyCommanderLogin.close()
 
     @staticmethod
     def message_box(message):

@@ -276,7 +276,6 @@ class ReportMessageIndexes(enum.Enum):
     id = 1
     location = 2
 
-
 class MoveToMessageIndexes(enum.Enum):
     company_num = 0
     field_object_id = 1
