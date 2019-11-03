@@ -116,7 +116,7 @@ class Ui_CompanyCommanderLogin(object):
         mb.setText(message)
         mb.setStandardButtons(QMessageBox.Ok)
         mb.exec_()
-
+        print()
 
 if __name__ == "__main__":
     import sys
