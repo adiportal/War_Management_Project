@@ -31,16 +31,18 @@ class MyMplCanvas(FigureCanvas):
 
 
 # The whole window of the application with all the elements
+
+
 class ApplicationWindow(QtWidgets.QMainWindow):
     soldiers = []  # company1 list from the 3 lists of the company commander
     picked_soldier = []
 
-    c1 = CompanyCommander(1, (2, 4), 100)  # Initialize the company commander entity
+    c1 = CompanyCommander(1, (7.5, 3.5), 100)  # Initialize the company commander entity
 
     def __init__(self):
         QtWidgets.QMainWindow.__init__(self)
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
-        self.setWindowTitle("Main Window")
+        self.setWindowTitle("Company Commander " + str(self.c1.company_number))
         self.main_widget = QtWidgets.QWidget(self)
 
         vbox = QtWidgets.QVBoxLayout(self.main_widget)
@@ -71,7 +73,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         while True:
             self.soldiers = CompanyCommanderUDP.company1
             time.sleep(2.0)
-
 
     # function for the FuncAnimation option, clears and create the plot again
     def animate(self, i):
@@ -145,6 +146,19 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         for xp, yp, c, m, l in zip(x, y, color, marker, labels):  # zip connects together all the elements in the lists
                                                                   # that located on the same indexes
             MyMplCanvas.ax.plot([xp], [yp], color=c, marker=m, markersize=5, label=l, picker=10)
+
+        # Plot the company commander location
+        MyMplCanvas.ax.plot(self.c1.x, self.c1.y, color="black", marker='o', markersize=7, label=self.c1.__str__(),
+                            picker=10, markeredgecolor=self.get_color(self.c1.company_number), markeredgewidth=1.5)
+
+    @staticmethod
+    def get_color(company_num):
+        if company_num == 1:
+            return "blue"
+        elif company_num == 2:
+            return "red"
+        else:
+            return "green"
 
     # function for handling the pick event when picking a marker to move
     def on_pick(self, event):

@@ -10,6 +10,7 @@ import time
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMessageBox
 import GUI
+from Utility import is_open
 
 
 class Ui_CompanyCommanderLogin(object):
@@ -101,6 +102,12 @@ class Ui_CompanyCommanderLogin(object):
             self.message_box("Please fill your y location!")
         else:
             correct_y_location = True
+
+        ##########
+        if not is_open("ip", "port"):
+            self.message_box("The user is already open!")
+        ##########
+
 
         # If all conditions correct, the login window will be closed and the GUI will be open
         if correct_company_num is True and correct_x_location is True and correct_y_location is True:
