@@ -7,7 +7,7 @@ import CompanyCommanderUDP
 from CompanyCommanderUDP import send_handler
 matplotlib.use('Qt5Agg')
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication, QPushButton, QMessageBox
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from matplotlib.animation import FuncAnimation
@@ -258,3 +258,4 @@ def main(company_num, location):
 
     cc_thread.start()
     gui_thread1.start()
+

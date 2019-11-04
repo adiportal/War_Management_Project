@@ -81,6 +81,7 @@ class Ui_CompanyCommanderLogin(object):
         y_location_input = self.lineEdit_y_location.text()
         company_num_input = self.comboBox.currentText()
 
+
         # True/ False variables for validation
         correct_company_num = False
         correct_x_location = False
@@ -103,10 +104,11 @@ class Ui_CompanyCommanderLogin(object):
         else:
             correct_y_location = True
 
-        if in_use(get_cc_send_address(int(company_num_input))):
-            self.message_box("The user is already open!")
-        else:
-            cc_open = True
+        if company_num_input != 'Choose:':
+            if in_use(get_cc_send_address(int(company_num_input))):
+                self.message_box("The user is already open!")
+            else:
+                cc_open = True
 
         # If all conditions correct, the login window will be closed and the GUI will be open
         if correct_company_num is True and correct_x_location is True and correct_y_location is True and cc_open is True:
