@@ -19,6 +19,9 @@ from Utility import create_move_to_message
 class MyMplCanvas(FigureCanvas):
     fig = Figure(figsize=(10, 12), dpi=100)
     ax = fig.add_subplot(1, 1, 1)
+    ax.get_xaxis().set_visible(False)
+    ax.get_yaxis().set_visible(False)
+
 
     def __init__(self, parent=None):
 
@@ -48,6 +51,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         vbox = QtWidgets.QVBoxLayout(self.main_widget)
 
         self.canvas = MyMplCanvas(self.main_widget)  # canvas calls for the matplotlib canvas
+
         vbox.addWidget(self.canvas)
 
         self.setLayout(vbox)
@@ -123,6 +127,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     # function for plotting the field objects according to their type and company
     def create_plot(self):
+        self.canvas.ax.get_yaxis().set_visible(False)
+        self.canvas.ax.get_xaxis().set_visible(False)
+
         x = []
         y = []
         color = []
