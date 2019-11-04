@@ -45,7 +45,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def __init__(self):
         QtWidgets.QMainWindow.__init__(self)
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
-        self.setWindowTitle("Company Commander " + str(CompanyCommanderUDP.company_commander.company_number))
+
         self.main_widget = QtWidgets.QWidget(self)
 
         vbox = QtWidgets.QVBoxLayout(self.main_widget)
@@ -71,6 +71,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         # Starting the hover event (on hovering a marker an informative label shows up)
         self.canvas.mpl_connect("motion_notify_event", self.on_hover)
+        self.setWindowTitle("Company Commander " + str(CompanyCommanderUDP.company_commander.company_number))
 
     # function for a thread, updates the soldiers list
     def update_field(self):

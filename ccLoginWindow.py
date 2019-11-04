@@ -108,7 +108,6 @@ class Ui_CompanyCommanderLogin(object):
         else:
             cc_open = True
 
-
         # If all conditions correct, the login window will be closed and the GUI will be open
         if correct_company_num is True and correct_x_location is True and correct_y_location is True and cc_open is True:
             location = (float(x_location_input), float(y_location_input))
