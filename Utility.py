@@ -147,9 +147,9 @@ def options_switch_case(packet):
         return 0
 
 
-# is_open(IP, port) - return a boolean variable that tells if address (IP, port) is in use. True = already open
+# in_use(IP, port) - return a boolean variable that tells if address (IP, port) is in use. True = already open
 #                                                                                           False = free to use
-def is_open(address):
+def in_use(address):
     IP = address[0]
     port = address[1]
 
