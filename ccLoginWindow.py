@@ -5,11 +5,11 @@
 # Created by: PyQt5 UI code generator 5.13.1
 #
 # WARNING! All changes made in this file will be lost!
-import time
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMessageBox
 import GUI
+from Utility import in_use, init_cc_address, get_cc_send_address
 
 
 class Ui_CompanyCommanderLogin(object):
@@ -85,6 +85,7 @@ class Ui_CompanyCommanderLogin(object):
         correct_company_num = False
         correct_x_location = False
         correct_y_location = False
+        cc_open = False
 
         # Checking validation and raising error message box if needed
         if company_num_input == 'Choose:':
@@ -102,8 +103,14 @@ class Ui_CompanyCommanderLogin(object):
         else:
             correct_y_location = True
 
+        if in_use(get_cc_send_address(int(company_num_input))):
+            self.message_box("The user is already open!")
+        else:
+            cc_open = True
+
+
         # If all conditions correct, the login window will be closed and the GUI will be open
-        if correct_company_num is True and correct_x_location is True and correct_y_location is True:
+        if correct_company_num is True and correct_x_location is True and correct_y_location is True and cc_open is True:
             location = (float(x_location_input), float(y_location_input))
             GUI.main(int(company_num_input), location)
             CompanyCommanderLogin.close()

@@ -19,6 +19,9 @@ from Utility import create_move_to_message
 class MyMplCanvas(FigureCanvas):
     fig = Figure(figsize=(10, 12), dpi=100)
     ax = fig.add_subplot(1, 1, 1)
+    ax.get_xaxis().set_visible(False)
+    ax.get_yaxis().set_visible(False)
+
 
     def __init__(self, parent=None):
 
@@ -31,21 +34,24 @@ class MyMplCanvas(FigureCanvas):
 
 
 # The whole window of the application with all the elements
+
+
 class ApplicationWindow(QtWidgets.QMainWindow):
     soldiers = []  # company1 list from the 3 lists of the company commander
     picked_soldier = []
 
-    c1 = CompanyCommander(1, (2, 4), 100)  # Initialize the company commander entity
+    company_commander = CompanyCommanderUDP.company_commander  # Initialize the company commander entity
 
     def __init__(self):
         QtWidgets.QMainWindow.__init__(self)
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
-        self.setWindowTitle("Main Window")
+        self.setWindowTitle("Company Commander " + str(self.company_commander.company_number))
         self.main_widget = QtWidgets.QWidget(self)
 
         vbox = QtWidgets.QVBoxLayout(self.main_widget)
 
         self.canvas = MyMplCanvas(self.main_widget)  # canvas calls for the matplotlib canvas
+
         vbox.addWidget(self.canvas)
 
         self.setLayout(vbox)
@@ -69,9 +75,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     # function for a thread, updates the soldiers list
     def update_field(self):
         while True:
-            self.soldiers = CompanyCommanderUDP.company1
+            self.soldiers = CompanyCommanderUDP.company1 + CompanyCommanderUDP.company2 + CompanyCommanderUDP.company3
             time.sleep(2.0)
-
 
     # function for the FuncAnimation option, clears and create the plot again
     def animate(self, i):
@@ -122,6 +127,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     # function for plotting the field objects according to their type and company
     def create_plot(self):
+        self.canvas.ax.get_yaxis().set_visible(False)
+        self.canvas.ax.get_xaxis().set_visible(False)
+
         x = []
         y = []
         color = []
@@ -146,6 +154,19 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                                                                   # that located on the same indexes
             MyMplCanvas.ax.plot([xp], [yp], color=c, marker=m, markersize=5, label=l, picker=10)
 
+        # Plot the company commander location
+        MyMplCanvas.ax.plot(self.company_commander.x, self.company_commander.y, color="black", marker='o', markersize=7, label=self.company_commander.__str__(),
+                            picker=10, markeredgecolor=self.get_color(self.company_commander.company_number), markeredgewidth=1.5)
+
+    @staticmethod
+    def get_color(company_num):
+        if company_num == 1:
+            return "blue"
+        elif company_num == 2:
+            return "red"
+        else:
+            return "green"
+
     # function for handling the pick event when picking a marker to move
     def on_pick(self, event):
         this_point = event.artist
@@ -156,7 +177,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         ind = event.ind
 
-        if self.c1.company_number == self.get_company_num(x_data, y_data):
+        if self.company_commander.company_number == self.get_company_num(x_data, y_data):
 
             for soldier in self.soldiers:
                 if soldier.x == x_data and soldier.y == y_data:
@@ -205,7 +226,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                     self.tooltip.set_y(line.get_ydata())
 
                     # check if the current company commander is the cc of the picked field object
-                    if self.c1.company_number == self.get_company_num(line.get_xdata(), line.get_ydata()):
+                    if self.company_commander.company_number == self.get_company_num(line.get_xdata(), line.get_ydata()):
                         self.tooltip.set_visible(True)
                         self.tooltip_coords = line.get_xdata(), line.get_ydata()
                         self.tooltip_text = line.get_label()

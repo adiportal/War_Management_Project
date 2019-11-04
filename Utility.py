@@ -11,12 +11,23 @@ logging.basicConfig(filename='UtilityLog.log', level=logging.DEBUG,
 
 
 # get_cc_sock() - creating a new socket for cc and returns it
-def get_cc_sock():
+def get_cc_listen_sock():
     # Initialize socket
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+        logging.debug("Socket Successfully Created!")
+    except socket.error as err:
+        logging.error("Socket creation failed with error {}".format(err))
+
+    return sock
+
+
+def get_cc_send_sock():
+    # Initialize socket
+    try:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         logging.debug("Socket Successfully Created!")
     except socket.error as err:
         logging.error("Socket creation failed with error {}".format(err))
@@ -40,50 +51,52 @@ def get_field_sock():
 # Getters
 def get_field_address():
     IP = '127.0.0.1'
-    port = 5001
+    port = 5007
     return IP, port
 
 
-def init_cc_address():
+# for FieldUDP
+def get_cc_address():
+    return '255.255.255.255', 5008
+
+
+def get_cc_receive_address():
+    return '', 5008
+
+
+def get_cc_send_address(company_num):
+    IP = '127.0.0.1'
+
+    if int(company_num) == Company.company1.value:
+        port = 5011
+        return IP, port
+
+    elif int(company_num) == Company.company2.value:
+        port = 5012
+        return IP, port
+
+    elif int(company_num) == Company.company3.value:
+        port = 5013
+        return IP, port
+
+    else:
+        return Case.error.value
+
+
+def init_cc_address(company_num):
     IP = ''
-    port = 5004
-    count = 0
 
-    while not is_open(IP, port) and count != 3:
-        port += 1
-        count += 1
-
-    if count == 3:
-        return Case.error
-
-    return IP, port
-
-
-def get_cc_address(company_num):
-    IP = '255.255.255.255'
     if int(company_num) == Company.company1.value:
         port = 5004
-
-        if not is_open(IP, port):
-            return IP, port
-        else:
-            return Case.error.value
+        return IP, port
 
     elif int(company_num) == Company.company2.value:
         port = 5005
-
-        if not is_open(IP, port):
-            return IP, port
-        else:
-            return Case.error.value
+        return IP, port
 
     elif int(company_num) == Company.company3.value:
         port = 5006
-
-        if not is_open(IP, port):
-            return IP, port
-        else:
-            return Case.error.value
+        return IP, port
 
     else:
         return Case.error.value
@@ -154,15 +167,19 @@ def options_switch_case(packet):
         return 0
 
 
-# is_open(IP, port) - return a boolean variable that tells if address (IP, port) is in use
-def is_open(IP, port):
+# in_use(IP, port) - return a boolean variable that tells if address (IP, port) is in use. True = already open
+#                                                                                           False = free to use
+def in_use(address):
+    IP = address[0]
+    port = address[1]
+
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
     try:
         sock.bind((IP, port))
-        result = True
-    except:
         result = False
+    except:
+        result = True
     sock.close()
     return result
 
