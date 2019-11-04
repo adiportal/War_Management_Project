@@ -71,7 +71,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     # function for a thread, updates the soldiers list
     def update_field(self):
         while True:
-            self.soldiers = CompanyCommanderUDP.company1
+            self.soldiers = CompanyCommanderUDP.company1 + CompanyCommanderUDP.company2 + CompanyCommanderUDP.company3
             time.sleep(2.0)
 
     # function for the FuncAnimation option, clears and create the plot again

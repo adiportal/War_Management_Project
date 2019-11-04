@@ -6,7 +6,7 @@ import pickle
 
 import Utility
 from Entities import Packet, Soldier, BTW, AliveMessage
-from Utility import Company, Sender, Receiver, MessageType, Case, Location, get_cc_address, get_line, \
+from Utility import Company, Sender, Receiver, MessageType, Case, Location, get_line, get_cc_address, \
                     sender_receiver_switch_case, options_switch_case, get_field_sock, get_field_address
 
 
@@ -20,7 +20,8 @@ company2 = []
 company3 = []
 
 
-# Initialize Soldiers and BYWs
+# Initialize Soldiers and BTWs
+# Company 1
 s1 = Soldier(1, (2, 4), 25)
 s2 = Soldier(1, (2, 5), 25)
 s3 = Soldier(1, (7, 3), 25)
@@ -28,11 +29,30 @@ s4 = Soldier(1, (9, 1), 25)
 s5 = Soldier(1, (1, 4), 25)
 
 btw1 = BTW(1, (2, 9), 50)
-btw2 = BTW(1, (7, 1), 50)
 
+
+# Company 2
+s6 = Soldier(2, (3.56, 2), 25)
+s7 = Soldier(2, (6.6787, 0.677), 25)
+s8 = Soldier(2, (1.7878, 6.2), 25)
+s9 = Soldier(2, (7.456, 9.88), 25)
+s10 = Soldier(2, (0.41, 6.667), 25)
+
+btw2 = BTW(2, (7, 1), 50)
+
+# Company 3
+s11 = Soldier(3, (5.387, 5.888), 25)
+s12 = Soldier(3, (4.123, 2.222), 25)
+s13 = Soldier(3, (3.7878, 7.777), 25)
+s14 = Soldier(3, (5.222, 1.56), 25)
+s15 = Soldier(3, (7.8, 3.6), 25)
+
+btw3 = BTW(3, (6.872, 6.999), 50)
 
 # Adding FieldObjects to their companies
-company1 = [s1, s2, s3, s4, s5, btw1, btw2]
+company1 = [s1, s2, s3, s4, s5, btw1]
+company2 = [s6, s7, s8, s9, s10, btw2]
+company3 = [s11, s12, s13, s14, s15, btw3]
 
 
 # listen() - Listening to incoming packets on background, while receiving a packet, it goes to receive_handler() func
@@ -56,6 +76,22 @@ def listen():
 def report_alive():
     while True:
         for field_object in company1:
+            message = AliveMessage(field_object)
+            send_packet = Packet(Sender.soldier.value, field_object.get_company_num(), Receiver.company_commander.value,
+                                 MessageType.alive.value, message)
+            time.sleep(0.100)
+
+            send_handler(send_packet)
+
+        for field_object in company2:
+            message = AliveMessage(field_object)
+            send_packet = Packet(Sender.soldier.value, field_object.get_company_num(), Receiver.company_commander.value,
+                                 MessageType.alive.value, message)
+            time.sleep(0.100)
+
+            send_handler(send_packet)
+
+        for field_object in company3:
             message = AliveMessage(field_object)
             send_packet = Packet(Sender.soldier.value, field_object.get_company_num(), Receiver.company_commander.value,
                                  MessageType.alive.value, message)
@@ -128,7 +164,7 @@ def receive_handler(rec_packet, address):
 
 # send_handler(send_packet) - Sending the packet that it gets
 def send_handler(send_packet):
-    cc_address = get_cc_address(send_packet.get_company_num())
+    cc_address = get_cc_address()
     try:
         byte_packet = pickle.dumps(send_packet)
         sock.sendto(byte_packet, cc_address)
@@ -138,8 +174,31 @@ def send_handler(send_packet):
         print("The message '{}' did'nt reached to the Company Commander!!".format(send_packet))
 
 
-# **Main**
+# def init_field():
+#     for field_object in company1:
+#         message = AliveMessage(field_object)
+#         packet = Packet(Sender.soldier.value,
+#                         field_object.get_company_num(),
+#                         Receiver.company_commander.value,
+#                         MessageType.alive.value,
+#                         message)
+#
+#         send_handler(packet)
+#         time.sleep(0.100)
+#
+#     for field_object in company2:
+#         message = AliveMessage(field_object)
+#         packet = Packet(Sender.soldier.value,
+#                         field_object.get_company_num(),
+#                         Receiver.company_commander.value,
+#                         MessageType.alive.value,
+#                         message)
+#
+#         send_handler(packet)
+#         time.sleep(0.100)
 
+
+# **Main**
 # Initiate Socket
 sock = get_field_sock()
 
@@ -154,15 +213,7 @@ listen_thread.start()
 report_thread.start()
 
 
-# sending all the FieldObjects on the company1 list
-for field_object in company1:
-    message = AliveMessage(field_object)
-    packet = Packet(Sender.soldier.value,
-                    field_object.get_company_num(),
-                    Receiver.company_commander.value,
-                    MessageType.alive.value,
-                    message)
+# sending all the FieldObjects
+# init_field()
 
-    send_handler(packet)
-    time.sleep(0.100)
 

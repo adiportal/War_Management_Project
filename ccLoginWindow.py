@@ -9,7 +9,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMessageBox
 import GUI
-from Utility import in_use, get_cc_address, init_cc_address
+from Utility import in_use, init_cc_address, get_cc_send_address
 
 
 class Ui_CompanyCommanderLogin(object):
@@ -103,7 +103,7 @@ class Ui_CompanyCommanderLogin(object):
         else:
             correct_y_location = True
 
-        if in_use(init_cc_address(int(company_num_input))):
+        if in_use(get_cc_send_address(int(company_num_input))):
             self.message_box("The user is already open!")
         else:
             cc_open = True

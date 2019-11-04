@@ -1,8 +1,9 @@
 import logging
 import pickle
 import threading
-from Utility import Company, MessageType, Case, sender_receiver_switch_case, options_switch_case, get_cc_sock, \
-    get_field_address, contain, init_cc_address
+from Utility import Company, MessageType, Case, sender_receiver_switch_case, options_switch_case, \
+    get_field_address, contain, init_cc_address, get_cc_listen_sock, get_cc_send_sock, get_cc_receive_address, \
+    get_cc_send_address
 from Entities import CompanyCommander
 
 
@@ -11,8 +12,11 @@ company1 = []
 company2 = []
 company3 = []
 
-# Initialize Socket
-sock = get_cc_sock()
+# Initialize Listen Socket
+listen_sock = get_cc_listen_sock()
+
+# Initialize Listen Socket
+send_sock = get_cc_send_sock()
 
 # Initiate CC
 company_commander = CompanyCommander(1, (0, 0), 0)
@@ -26,7 +30,7 @@ def listen():
 
     while True:
         # set max size of message
-        rec_packet, rec_address = sock.recvfrom(65527)
+        rec_packet, rec_address = listen_sock.recvfrom(65527)
 
         # decoding the message to String
         rec_packet = pickle.loads(rec_packet)
@@ -121,7 +125,7 @@ def receive_handler(packet, address):
 def send_handler(packet):
     try:
         byte_packet = pickle.dumps(packet)
-        sock.sendto(byte_packet, get_field_address())
+        send_sock.sendto(byte_packet, get_field_address())
         logging.debug("A Packet has been sent: {}".format(packet))
     except:
         logging.error("The packet '{}' didn't reached to Field {}".format(packet, get_field_address()))
@@ -147,16 +151,21 @@ def main(company_num, location):
     # Initialize the Logger
     logging.basicConfig(filename='CompanyCommanderLog.log', level=logging.DEBUG, format='%(asctime)s : %(levelname)s : '
                                                                                         'CC : %(message)s')
-    # Initialize Server Address
-    cc_address = init_cc_address(company_num)
+    # Initialize receiver address
+    cc_receiver_address = get_cc_receive_address()
 
-    # Bind the socket with the address
-    sock.bind(cc_address)
-    logging.info("A new socket has been initiated: {}".format(sock))
+    # Initialize sender address
+    cc_sender_address = get_cc_send_address(company_num)
+
+    # Bind the sockets with the addresses
+    listen_sock.bind(cc_receiver_address)
+    logging.info("A new socket has been initiated: {}".format(listen_sock))
+
+    send_sock.bind(cc_sender_address)
+    logging.info("A new socket has been initiated: {}".format(listen_sock))
 
     # Update CC
     set_company_commander(company_num, location)
-
 
     # start listen() func on background
     listen_thread = threading.Thread(target=listen)
