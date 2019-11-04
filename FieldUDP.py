@@ -3,6 +3,8 @@ import logging
 import threading
 import time
 import pickle
+
+import Utility
 from Entities import Packet, Soldier, BTW, AliveMessage
 from Utility import Company, Sender, Receiver, MessageType, Case, Location, get_cc_address, get_line, \
                     sender_receiver_switch_case, options_switch_case, get_field_sock, get_field_address
@@ -126,6 +128,7 @@ def receive_handler(rec_packet, address):
 
 # send_handler(send_packet) - Sending the packet that it gets
 def send_handler(send_packet):
+    cc_address = get_cc_address(send_packet.get_company_num())
     try:
         byte_packet = pickle.dumps(send_packet)
         sock.sendto(byte_packet, cc_address)
@@ -150,12 +153,6 @@ report_thread = threading.Thread(target=report_alive)
 listen_thread.start()
 report_thread.start()
 
-cc_address = get_cc_address(1)
-
-if cc_address == 0:
-    print("ERROR: INVALID Company Number")
-    logging.error("INVALID Company Number")
-    sys.exit()
 
 # sending all the FieldObjects on the company1 list
 for field_object in company1:
@@ -168,3 +165,4 @@ for field_object in company1:
 
     send_handler(packet)
     time.sleep(0.100)
+

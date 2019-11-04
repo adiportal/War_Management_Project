@@ -37,12 +37,12 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     soldiers = []  # company1 list from the 3 lists of the company commander
     picked_soldier = []
 
-    c1 = CompanyCommander(1, (7.5, 3.5), 100)  # Initialize the company commander entity
+    company_commander = CompanyCommanderUDP.company_commander  # Initialize the company commander entity
 
     def __init__(self):
         QtWidgets.QMainWindow.__init__(self)
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
-        self.setWindowTitle("Company Commander " + str(self.c1.company_number))
+        self.setWindowTitle("Company Commander " + str(self.company_commander.company_number))
         self.main_widget = QtWidgets.QWidget(self)
 
         vbox = QtWidgets.QVBoxLayout(self.main_widget)
@@ -148,8 +148,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             MyMplCanvas.ax.plot([xp], [yp], color=c, marker=m, markersize=5, label=l, picker=10)
 
         # Plot the company commander location
-        MyMplCanvas.ax.plot(self.c1.x, self.c1.y, color="black", marker='o', markersize=7, label=self.c1.__str__(),
-                            picker=10, markeredgecolor=self.get_color(self.c1.company_number), markeredgewidth=1.5)
+        MyMplCanvas.ax.plot(self.company_commander.x, self.company_commander.y, color="black", marker='o', markersize=7, label=self.company_commander.__str__(),
+                            picker=10, markeredgecolor=self.get_color(self.company_commander.company_number), markeredgewidth=1.5)
 
     @staticmethod
     def get_color(company_num):
@@ -170,7 +170,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         ind = event.ind
 
-        if self.c1.company_number == self.get_company_num(x_data, y_data):
+        if self.company_commander.company_number == self.get_company_num(x_data, y_data):
 
             for soldier in self.soldiers:
                 if soldier.x == x_data and soldier.y == y_data:
@@ -219,7 +219,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                     self.tooltip.set_y(line.get_ydata())
 
                     # check if the current company commander is the cc of the picked field object
-                    if self.c1.company_number == self.get_company_num(line.get_xdata(), line.get_ydata()):
+                    if self.company_commander.company_number == self.get_company_num(line.get_xdata(), line.get_ydata()):
                         self.tooltip.set_visible(True)
                         self.tooltip_coords = line.get_xdata(), line.get_ydata()
                         self.tooltip_text = line.get_label()

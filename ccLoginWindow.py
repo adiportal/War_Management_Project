@@ -5,12 +5,11 @@
 # Created by: PyQt5 UI code generator 5.13.1
 #
 # WARNING! All changes made in this file will be lost!
-import time
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMessageBox
 import GUI
-from Utility import is_open
+from Utility import is_open, get_cc_address
 
 
 class Ui_CompanyCommanderLogin(object):
@@ -103,10 +102,8 @@ class Ui_CompanyCommanderLogin(object):
         else:
             correct_y_location = True
 
-        ##########
-        if not is_open("ip", "port"):
+        if is_open(get_cc_address(int(company_num_input))):
             self.message_box("The user is already open!")
-        ##########
 
 
         # If all conditions correct, the login window will be closed and the GUI will be open

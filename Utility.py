@@ -44,46 +44,39 @@ def get_field_address():
     return IP, port
 
 
-def init_cc_address():
-    IP = ''
-    port = 5004
-    count = 0
-
-    while not is_open(IP, port) and count != 3:
-        port += 1
-        count += 1
-
-    if count == 3:
-        return Case.error
-
-    return IP, port
-
-
 def get_cc_address(company_num):
     IP = '255.255.255.255'
+
     if int(company_num) == Company.company1.value:
         port = 5004
-
-        if not is_open(IP, port):
-            return IP, port
-        else:
-            return Case.error.value
+        return IP, port
 
     elif int(company_num) == Company.company2.value:
         port = 5005
-
-        if not is_open(IP, port):
-            return IP, port
-        else:
-            return Case.error.value
+        return IP, port
 
     elif int(company_num) == Company.company3.value:
         port = 5006
+        return IP, port
 
-        if not is_open(IP, port):
-            return IP, port
-        else:
-            return Case.error.value
+    else:
+        return Case.error.value
+
+
+def init_cc_address(company_num):
+    IP = ''
+
+    if int(company_num) == Company.company1.value:
+        port = 5004
+        return IP, port
+
+    elif int(company_num) == Company.company2.value:
+        port = 5005
+        return IP, port
+
+    elif int(company_num) == Company.company3.value:
+        port = 5006
+        return IP, port
 
     else:
         return Case.error.value
@@ -154,15 +147,19 @@ def options_switch_case(packet):
         return 0
 
 
-# is_open(IP, port) - return a boolean variable that tells if address (IP, port) is in use
-def is_open(IP, port):
+# is_open(IP, port) - return a boolean variable that tells if address (IP, port) is in use. True = already open
+#                                                                                           False = free to use
+def is_open(address):
+    IP = address[0]
+    port = address[1]
+
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
     try:
         sock.bind((IP, port))
-        result = True
-    except:
         result = False
+    except:
+        result = True
     sock.close()
     return result
 

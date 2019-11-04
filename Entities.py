@@ -99,6 +99,14 @@ class CompanyCommander:
         self.ammo = ammo
         self.HP = 100
 
+    # Setters
+    def set_location(self, location):
+        self.x = location[0]
+        self.y = location[1]
+
+    def set_company(self, company_num):
+        self.company_number = company_num
+
 
 # Packet
 class Packet:

@@ -2,7 +2,8 @@ import logging
 import pickle
 import threading
 from Utility import Company, MessageType, Case, sender_receiver_switch_case, options_switch_case, get_cc_sock, \
-                    get_field_address, init_cc_address, contain
+    get_field_address, contain, init_cc_address
+from Entities import CompanyCommander
 
 
 # Initialize Companies
@@ -12,6 +13,9 @@ company3 = []
 
 # Initialize Socket
 sock = get_cc_sock()
+
+# Initiate CC
+company_commander = CompanyCommander(1, (0, 0), 0)
 
 
 # listen() - Listening to incoming packets on background, while receiving a packet, it goes to receive_handler() func
@@ -123,6 +127,11 @@ def send_handler(packet):
         logging.error("The packet '{}' didn't reached to Field {}".format(packet, get_field_address()))
 
 
+def set_company_commander(company_num, location):
+    company_commander.set_company(company_num)
+    company_commander.set_location(location)
+
+
 # get_company(company_num) - get the company number and returns the list of FieldObject of this company number
 def get_company(company_num):
     if company_num == Company.company1.value:
@@ -139,11 +148,15 @@ def main(company_num, location):
     logging.basicConfig(filename='CompanyCommanderLog.log', level=logging.DEBUG, format='%(asctime)s : %(levelname)s : '
                                                                                         'CC : %(message)s')
     # Initialize Server Address
-    cc_address = init_cc_address()
+    cc_address = init_cc_address(company_num)
 
     # Bind the socket with the address
     sock.bind(cc_address)
     logging.info("A new socket has been initiated: {}".format(sock))
+
+    # Update CC
+    set_company_commander(company_num, location)
+
 
     # start listen() func on background
     listen_thread = threading.Thread(target=listen)
