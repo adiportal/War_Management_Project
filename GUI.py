@@ -45,7 +45,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def __init__(self):
         QtWidgets.QMainWindow.__init__(self)
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
-        self.setWindowTitle("Company Commander " + str(CompanyCommanderUDP.company_commander.company_number))
+        self.setWindowTitle("Company Commander " + ApplicationWindow.company_commander.company_number)
         self.main_widget = QtWidgets.QWidget(self)
 
         vbox = QtWidgets.QVBoxLayout(self.main_widget)
