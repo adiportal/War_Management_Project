@@ -168,5 +168,5 @@ def main(company_num, location):
     set_company_commander(company_num, location)
 
     # start listen() func on background
-    listen_thread = threading.Thread(target=listen)
+    listen_thread = threading.Thread(target=listen, daemon=True)
     listen_thread.start()

@@ -7,7 +7,7 @@ import CompanyCommanderUDP
 from CompanyCommanderUDP import send_handler
 matplotlib.use('Qt5Agg')
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication, QMessageBox
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from matplotlib.animation import FuncAnimation
@@ -22,7 +22,6 @@ class MyMplCanvas(FigureCanvas):
     ax.get_xaxis().set_visible(False)
     ax.get_yaxis().set_visible(False)
 
-
     def __init__(self, parent=None):
 
         FigureCanvas.__init__(self, MyMplCanvas.fig)
@@ -34,8 +33,6 @@ class MyMplCanvas(FigureCanvas):
 
 
 # The whole window of the application with all the elements
-
-
 class ApplicationWindow(QtWidgets.QMainWindow):
     soldiers = []  # company1 list from the 3 lists of the company commander
     picked_soldier = []
@@ -54,7 +51,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         vbox.addWidget(self.canvas)
 
-        self.setLayout(vbox)
+        #self.setLayout(vbox)
 
         self.main_widget.setFocus()
         self.setCentralWidget(self.main_widget)
@@ -71,6 +68,15 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         # Starting the hover event (on hovering a marker an informative label shows up)
         self.canvas.mpl_connect("motion_notify_event", self.on_hover)
+
+    def closeEvent(self, event):
+        reply = QMessageBox.question(QMessageBox(self), 'Window Close', 'Are you sure you want to close the window?',
+                                     QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+
+        if reply == QMessageBox.Yes:
+            print("exit")
+        else:
+            event.ignore()
 
     # function for a thread, updates the soldiers list
     def update_field(self):
@@ -257,3 +263,6 @@ def main(company_num, location):
 
     cc_thread.start()
     gui_thread1.start()
+
+
+
