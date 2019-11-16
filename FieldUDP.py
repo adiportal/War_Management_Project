@@ -23,10 +23,10 @@ company3 = []
 # Initialize Soldiers and BTWs
 # Company 1
 s1 = Soldier(1, (2, 4), 25)
-s2 = Soldier(1, (2, 5), 25)
+s2 = Soldier(1, (13, 8), 25)
 s3 = Soldier(1, (7, 3), 25)
 s4 = Soldier(1, (9, 1), 25)
-s5 = Soldier(1, (1, 4), 25)
+s5 = Soldier(1, (12, 7), 25)
 
 btw1 = BTW(1, (2, 9), 50)
 
@@ -35,10 +35,10 @@ btw1 = BTW(1, (2, 9), 50)
 s6 = Soldier(2, (3.56, 2), 25)
 s7 = Soldier(2, (6.6787, 0.677), 25)
 s8 = Soldier(2, (1.7878, 6.2), 25)
-s9 = Soldier(2, (7.456, 9.88), 25)
-s10 = Soldier(2, (0.41, 6.667), 25)
+s9 = Soldier(2, (9.456, 7.88), 25)
+s10 = Soldier(2, (10.41, 5.667), 25)
 
-btw2 = BTW(2, (7, 1), 50)
+btw2 = BTW(2, (12, 4), 50)
 
 # Company 3
 s11 = Soldier(3, (5.387, 5.888), 25)

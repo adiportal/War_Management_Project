@@ -3,6 +3,7 @@ import threading
 import time
 import numpy as np
 import matplotlib
+import matplotlib.pyplot as plt
 import CompanyCommanderUDP
 from CompanyCommanderUDP import send_handler
 matplotlib.use('Qt5Agg')
@@ -22,9 +23,7 @@ class MyMplCanvas(FigureCanvas):
     ax.get_xaxis().set_visible(False)
     ax.get_yaxis().set_visible(False)
 
-
     def __init__(self, parent=None):
-
         FigureCanvas.__init__(self, MyMplCanvas.fig)
         self.setParent(parent)
         FigureCanvas.setSizePolicy(self,
@@ -34,8 +33,6 @@ class MyMplCanvas(FigureCanvas):
 
 
 # The whole window of the application with all the elements
-
-
 class ApplicationWindow(QtWidgets.QMainWindow):
     soldiers = []  # company1 list from the 3 lists of the company commander
     picked_soldier = []
@@ -82,20 +79,23 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     # function for the FuncAnimation option, clears and create the plot again
     def animate(self, i):
         self.canvas.ax.clear()
+        img = plt.imread("MAP.png")
+        self.canvas.ax.imshow(img)
+        self.canvas.ax.imshow(img, extent=[0, 15, 0, 10])
         # Starting the properties of the marker's labels
         self.tooltip = self.canvas.ax.annotate(self.tooltip_text, self.tooltip_coords,
                                                xytext=self.set_xy_text(self.tooltip_coords),
                                                textcoords="offset points",
                                                ha=self.set_ha_value(self.set_xy_text(self.tooltip_coords)),
                                                va=self.set_va_value(self.set_xy_text(self.tooltip_coords)),
-                                               size=6, bbox=dict(facecolor='yellow', boxstyle="round", alpha=0.8),
+                                               size=6, bbox=dict(facecolor='wheat', boxstyle="round", alpha=0.8),
                                                arrowprops=dict(shrink=15, facecolor='black', width=3, headlength=8))
         self.tooltip.set_visible(self.tooltip_visible)  # Set the visibility of the label according to its current mode
         self.create_plot()
 
     def set_xy_text(self, coords):  # function to help set the position of the text in the label according to the
                                     # loccation of the marker in the plot
-        self.canvas.ax.set_xlim(0, 10)
+        self.canvas.ax.set_xlim(0, 14)
         self.canvas.ax.set_ylim(0, 10)
         x_lim = self.canvas.ax.get_xlim()
         y_lim = self.canvas.ax.get_ylim()
@@ -136,24 +136,28 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         color = []
         marker = []
         labels = []
+        sizes = []
+
         for s in self.soldiers:
             x.append(s.x)
             y.append(s.y)
             if s.company_number == 1:
                 color.append('blue')
             elif s.company_number == 2:
-                color.append('red')
+                color.append('orange')
             else:
                 color.append('green')
             if type(s) == Soldier:
                 marker.append('o')
+                sizes.append(4)
             else:
                 marker.append('*')
+                sizes.append(8)
             labels.append(s.__str__())
 
-        for xp, yp, c, m, l in zip(x, y, color, marker, labels):  # zip connects together all the elements in the lists
+        for xp, yp, c, m, l, s in zip(x, y, color, marker, labels, sizes):  # zip connects together all the elements in the lists
                                                                   # that located on the same indexes
-            MyMplCanvas.ax.plot([xp], [yp], color=c, marker=m, markersize=5, label=l, picker=10)
+            MyMplCanvas.ax.plot([xp], [yp], color=c, marker=m, markersize=s, label=l, picker=10)
 
         # Plot the company commander location
         MyMplCanvas.ax.plot(self.company_commander.x, self.company_commander.y, color="black", marker='o', markersize=7, label=self.company_commander.__str__(),
@@ -164,7 +168,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         if company_num == 1:
             return "blue"
         elif company_num == 2:
-            return "red"
+            return "orange"
         else:
             return "green"
 

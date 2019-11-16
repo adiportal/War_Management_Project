@@ -94,13 +94,13 @@ class Ui_CompanyCommanderLogin(object):
         else:
             correct_company_num = True
 
-        if x_location_input == '':
-            self.message_box("Please fill your x location!")
+        if x_location_input == '' or "e" in x_location_input.lower():
+            self.message_box("Please fill your x location correctly!")
         else:
             correct_x_location = True
 
-        if y_location_input == '':
-            self.message_box("Please fill your y location!")
+        if y_location_input == '' or "e" in y_location_input.lower():
+            self.message_box("Please fill your y location correctly!")
         else:
             correct_y_location = True
 
