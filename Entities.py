@@ -108,6 +108,47 @@ class CompanyCommander:
         self.company_number = company_num
 
 
+# Enemy
+class Enemy:
+    # Attributes
+    ID = 1
+
+    # Constructor
+    def __init__(self, location, ammo):
+        self.ID = Enemy.ID
+        Enemy.ID += 1
+        self.x = location[0]
+        self.y = location[1]
+        self.ammo = ammo
+
+
+# EnemySoldier
+class EnemySoldier(Enemy):
+    def __init__(self, location, ammo):
+        super().__init__(location, ammo)
+        self.HP = 100
+        self.speed = 1
+
+    # Setters
+    def set_location(self, location):
+        self.x = location[0]
+        self.y = location[1]
+
+
+# Launcher
+class Launcher(Enemy):
+    def __init__(self, location, ammo):
+        super().__init__(location, ammo)
+        self.HP = 150
+
+
+# LookoutPoint
+class LookoutPoint(Enemy):
+    def __init__(self, location, ammo, soldier):
+        super().__init__(location, ammo)
+        self.soldier = soldier
+
+
 # Packet
 class Packet:
     # Attributes
