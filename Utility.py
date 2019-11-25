@@ -261,6 +261,12 @@ class ObjectType(enum.Enum):
     btw = 2
 
 
+class EnemyType(enum.Enum):
+    soldier = 1
+    launcher = 2
+    lookout_point = 3
+
+
 class FullMessageIndexes(enum.Enum):    # sender.company_num.receiver.message_type.message
     sender = 0
     company_num = 1

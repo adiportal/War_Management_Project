@@ -1,4 +1,5 @@
 import Utility
+from Utility import EnemyType
 
 
 # FieldObject
@@ -121,6 +122,25 @@ class Enemy:
         self.y = location[1]
         self.ammo = ammo
 
+    # Getters
+    def get_id(self):
+        return self.ID
+
+    def get_location(self):
+        return self.x, self.y
+
+    def get_str_location(self):
+        return str(self.x) + ", " + str(self.y)
+
+    def get_ammo(self):
+        return self.ammo
+
+    def get_x(self):
+        return self.x
+
+    def get_y(self):
+        return self.y
+
 
 # EnemySoldier
 class EnemySoldier(Enemy):
@@ -134,6 +154,10 @@ class EnemySoldier(Enemy):
         self.x = location[0]
         self.y = location[1]
 
+    # Getters
+    def get_type(self):
+        return EnemyType.soldier.value
+
 
 # Launcher
 class Launcher(Enemy):
@@ -141,12 +165,18 @@ class Launcher(Enemy):
         super().__init__(location, ammo)
         self.HP = 150
 
+    def get_type(self):
+        return EnemyType.launcher.value
+
 
 # LookoutPoint
 class LookoutPoint(Enemy):
     def __init__(self, location, ammo, soldier):
         super().__init__(location, ammo)
         self.soldier = soldier
+
+    def get_type(self):
+        return EnemyType.lookout_point.value
 
 
 # Packet

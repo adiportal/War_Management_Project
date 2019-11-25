@@ -5,9 +5,10 @@ import time
 import pickle
 
 import Utility
-from Entities import Packet, Soldier, BTW, AliveMessage
+from Entities import Packet, Soldier, BTW, AliveMessage, EnemySoldier
 from Utility import Company, Sender, Receiver, MessageType, Case, Location, get_line, get_cc_address, \
-                    sender_receiver_switch_case, options_switch_case, get_field_sock, get_field_address
+                    sender_receiver_switch_case, options_switch_case, get_field_sock, get_field_address, \
+                    EnemyType
 
 
 # Initialize the Logger
@@ -54,6 +55,13 @@ company1 = [s1, s2, s3, s4, s5, btw1]
 company2 = [s6, s7, s8, s9, s10, btw2]
 company3 = [s11, s12, s13, s14, s15, btw3]
 
+forces = [company1 + company2 + company3]
+
+# Enemies
+es1 = EnemySoldier((2, 1), 100)
+
+enemies = [es1]
+
 
 # listen() - Listening to incoming packets on background, while receiving a packet, it goes to receive_handler() func
 #            to handle the message.
@@ -69,6 +77,21 @@ def listen():
         rec_packet = pickle.loads(rec_packet)
         if rec_packet:
             receive_handler(rec_packet, rec_address)
+
+
+# check_for_enemies()
+def check_for_enemies():
+    enemy_sight = 1
+    lookout_sight = 2
+
+    for objectField in forces:
+        for enemy in enemies:
+            if enemy.get_type() == EnemyType.soldier.value or enemy.get_type() == EnemyType.launcher.value:
+                if ((enemy.get_x() - objectField.get_x()) ** 2) + ((enemy.get_y() - objectField.get_y()) ** 2) < (enemy_sight ** 2):
+                    # send message
+            else:
+                if ((enemy.get_x() - objectField.get_x()) ** 2) + ((enemy.get_y() - objectField.get_y()) ** 2) < (lookout_sight ** 2):
+                    # send message
 
 
 # report_alive - A background function that reporting the status of the FieldObjects on the field status to their
