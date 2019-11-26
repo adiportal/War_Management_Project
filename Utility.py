@@ -155,22 +155,6 @@ def sender_receiver_switch_case(packet):
         return Case.error.value
 
 
-# option_switch_case(packet) - return the case according to the packet MessageType
-def options_switch_case(packet):
-
-    if packet.get_message_type() == MessageType.alive.value:
-        return 1
-
-    elif packet.get_message_type() == MessageType.move_order.value:
-        return 2
-
-    elif packet.get_message_type() == MessageType.engage_order.value:
-        return 3
-
-    else:   # Error
-        return 0
-
-
 # in_use(IP, port) - return a boolean variable that tells if address (IP, port) is in use. True = already open
 #                                                                                           False = free to use
 def in_use(address):
@@ -211,6 +195,16 @@ def contain(company, id):
     return -1
 
 
+def enemy_contain(enemies, id):
+    count = 0
+    for enemy in enemies:
+        if enemy.get_id() == id:
+            return count
+        else:
+            count += 1
+    return -1
+
+
 # get_line(start, end) - get a start and end points and return a list of lined steps
 def get_line(start, end):
     x1 = start[Location.X.value]
@@ -242,6 +236,7 @@ class Receiver(enum.Enum):
 
 
 class Company(enum.Enum):
+    not_relevant = 0
     company1 = 1
     company2 = 2
     company3 = 3
@@ -279,6 +274,7 @@ class MessageType(enum.Enum):
     alive = 1
     move_order = 2
     engage_order = 3
+    enemies_in_sight = 4
 
 
 class ObjectListIndex(enum.Enum):
@@ -302,6 +298,7 @@ class ReportMessageIndexes(enum.Enum):
     company_num = 0
     id = 1
     location = 2
+
 
 class MoveToMessageIndexes(enum.Enum):
     company_num = 0

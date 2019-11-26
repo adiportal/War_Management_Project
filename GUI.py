@@ -13,7 +13,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from matplotlib.animation import FuncAnimation
 from Entities import Soldier, CompanyCommander
-from Utility import create_move_to_message
+from Utility import create_move_to_message, EnemyType
 
 
 # Class for creating matplotlib canvas (where the plot is going to be located)
@@ -36,6 +36,7 @@ class MyMplCanvas(FigureCanvas):
 class ApplicationWindow(QtWidgets.QMainWindow):
     soldiers = []  # company1 list from the 3 lists of the company commander
     picked_soldier = []
+    enemies = []
 
     company_commander = CompanyCommanderUDP.company_commander  # Initialize the company commander entity
 
@@ -74,6 +75,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def update_field(self):
         while True:
             self.soldiers = CompanyCommanderUDP.company1 + CompanyCommanderUDP.company2 + CompanyCommanderUDP.company3
+            self.enemies = CompanyCommanderUDP.company_commander.get_enemies()
             time.sleep(2.0)
 
     # function for the FuncAnimation option, clears and create the plot again
@@ -158,6 +160,25 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         for xp, yp, c, m, l, s in zip(x, y, color, marker, labels, sizes):  # zip connects together all the elements in the lists
                                                                   # that located on the same indexes
             MyMplCanvas.ax.plot([xp], [yp], color=c, marker=m, markersize=s, label=l, picker=10)
+
+        x_enemy = []
+        y_enemy = []
+        marker_enemy = []
+        for e in self.enemies:
+            x_enemy.append(e.get_x())
+            y_enemy.append(e.get_y())
+
+            if e.get_type() == EnemyType.soldier.value:
+                marker_enemy.append("o")
+
+            elif e.get_type() == EnemyType.launcher:
+                marker_enemy.append("^")
+
+            else:
+                marker_enemy.append("s")
+
+            for x, y, m in zip(x_enemy, y_enemy, marker_enemy):
+                MyMplCanvas.ax.plot([x], [y], color="red", marker=m, markersize=4, markeredgecolor="black")
 
         # Plot the company commander location
         MyMplCanvas.ax.plot(self.company_commander.x, self.company_commander.y, color="black", marker='o', markersize=7, label=self.company_commander.__str__(),
