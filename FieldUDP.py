@@ -3,9 +3,10 @@ import logging
 import threading
 import time
 import pickle
-from Entities import Packet, Soldier, BTW, AliveMessage, EnemySoldier, EnemiesInSightMessage
+from Entities import Packet, Soldier, BTW, AliveMessage, EnemySoldier, LookoutPoint, EnemiesInSightMessage
 from Utility import Company, Sender, Receiver, MessageType, Case, Location, get_line, get_cc_address, \
-                    sender_receiver_switch_case, get_field_sock, get_field_address, EnemyType, enemy_contain
+                    get_field_sock, get_field_address, EnemyType, enemy_contain, marked_enemies_check, \
+                    sender_receiver_switch_case
 
 
 # Initialize the Logger
@@ -56,8 +57,10 @@ forces = company1 + company2 + company3
 
 # Enemies
 es1 = EnemySoldier((2, 1), 100)
+lop1 = LookoutPoint((2, 1), 100, es1)
 
-enemies = [es1]
+enemies = [lop1]
+marked_enemies = []
 
 
 # listen() - Listening to incoming packets on background, while receiving a packet, it goes to receive_handler() func
@@ -112,6 +115,13 @@ def report_alive():
                 if enemy_contain(updated_enemies, enemy.get_id()) == -1:
                     updated_enemies.append(enemy)
 
+                    if enemy.get_type() == EnemyType.launcher or enemy.get_type() == EnemyType.lookout_point:
+                        marked_enemy_index = enemy_contain(marked_enemies, enemy.get_id())
+                        if marked_enemy_index == -1:
+                            marked_enemies.append(enemy)
+                        else:
+                            marked_enemies[marked_enemy_index] = enemy
+
             time.sleep(0.100)
 
             send_handler(send_packet)
@@ -124,6 +134,13 @@ def report_alive():
             for enemy in field_object.get_in_sight():
                 if enemy_contain(updated_enemies, enemy.get_id()) == -1:
                     updated_enemies.append(enemy)
+
+                    if enemy.get_type() == EnemyType.launcher or enemy.get_type() == EnemyType.lookout_point:
+                        marked_enemy_index = enemy_contain(marked_enemies, enemy.get_id())
+                        if marked_enemy_index == -1:
+                            marked_enemies.append(enemy)
+                        else:
+                            marked_enemies[marked_enemy_index] = enemy
 
             time.sleep(0.100)
 
@@ -138,11 +155,21 @@ def report_alive():
                 if enemy_contain(updated_enemies, enemy.get_id()) == -1:
                     updated_enemies.append(enemy)
 
+                    if enemy.get_type() == EnemyType.launcher or enemy.get_type() == EnemyType.lookout_point:
+                        marked_enemy_index = enemy_contain(marked_enemies, enemy.get_id())
+                        if marked_enemy_index == -1:
+                            marked_enemies.append(enemy)
+                        else:
+                            marked_enemies[marked_enemy_index] = enemy
+
             time.sleep(0.100)
 
             send_handler(send_packet)
 
         time.sleep(0.100)
+
+        updated_enemies = marked_enemies_check(updated_enemies, marked_enemies)
+
         message = EnemiesInSightMessage(updated_enemies)
         send_packet = Packet(Sender.soldier.value, Company.not_relevant.value, Receiver.company_commander.value,
                              MessageType.enemies_in_sight.value, message)

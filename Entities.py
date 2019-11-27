@@ -23,8 +23,7 @@ class FieldObjects:
                "Location: ({}, {}) \n" \
                "Ammo: {} \n" \
                "HP: {} \n" \
-               "Enemies {}".format(self.__class__.__name__, self.ID, self.company_number, self.x, self.y, self.ammo,
-                                   self.HP, self.in_sight)
+
 
     # Getters
     def get_company_num(self):
