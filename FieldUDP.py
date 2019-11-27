@@ -3,11 +3,9 @@ import logging
 import threading
 import time
 import pickle
-
-import Utility
-from Entities import Packet, Soldier, BTW, AliveMessage
+from Entities import Packet, Soldier, BTW, AliveMessage, EnemySoldier, EnemiesInSightMessage
 from Utility import Company, Sender, Receiver, MessageType, Case, Location, get_line, get_cc_address, \
-                    sender_receiver_switch_case, options_switch_case, get_field_sock, get_field_address
+                    sender_receiver_switch_case, get_field_sock, get_field_address, EnemyType, enemy_contain
 
 
 # Initialize the Logger
@@ -22,11 +20,11 @@ company3 = []
 
 # Initialize Soldiers and BTWs
 # Company 1
-s1 = Soldier(1, (2, 4), 25)
-s2 = Soldier(1, (2, 5), 25)
+s1 = Soldier(1, (2, 1.5), 25)
+s2 = Soldier(1, (13, 8), 25)
 s3 = Soldier(1, (7, 3), 25)
 s4 = Soldier(1, (9, 1), 25)
-s5 = Soldier(1, (1, 4), 25)
+s5 = Soldier(1, (12, 7), 25)
 
 btw1 = BTW(1, (2, 9), 50)
 
@@ -35,10 +33,10 @@ btw1 = BTW(1, (2, 9), 50)
 s6 = Soldier(2, (3.56, 2), 25)
 s7 = Soldier(2, (6.6787, 0.677), 25)
 s8 = Soldier(2, (1.7878, 6.2), 25)
-s9 = Soldier(2, (7.456, 9.88), 25)
-s10 = Soldier(2, (0.41, 6.667), 25)
+s9 = Soldier(2, (9.456, 7.88), 25)
+s10 = Soldier(2, (10.41, 5.667), 25)
 
-btw2 = BTW(2, (7, 1), 50)
+btw2 = BTW(2, (12, 4), 50)
 
 # Company 3
 s11 = Soldier(3, (5.387, 5.888), 25)
@@ -53,6 +51,13 @@ btw3 = BTW(3, (6.872, 6.999), 50)
 company1 = [s1, s2, s3, s4, s5, btw1]
 company2 = [s6, s7, s8, s9, s10, btw2]
 company3 = [s11, s12, s13, s14, s15, btw3]
+
+forces = company1 + company2 + company3
+
+# Enemies
+es1 = EnemySoldier((2, 1), 100)
+
+enemies = [es1]
 
 
 # listen() - Listening to incoming packets on background, while receiving a packet, it goes to receive_handler() func
@@ -71,14 +76,42 @@ def listen():
             receive_handler(rec_packet, rec_address)
 
 
+# check_for_enemies() - check for every field_object that in the field (forces list) if there is enemy (enemies)
+#                       in sight (if there is enemy located in his radius). if there is,
+def check_for_enemies():
+    enemy_sight = 1
+    lookout_sight = 2
+
+    while True:
+        for field_object in forces:
+            enemies_in_sight = []
+
+            for enemy in enemies:
+                if enemy.get_type() == EnemyType.soldier.value or enemy.get_type() == EnemyType.launcher.value:
+                    if (((enemy.get_x() - field_object.get_x()) ** 2) + ((enemy.get_y() - field_object.get_y()) ** 2)) < (enemy_sight ** 2):
+                        enemies_in_sight.append(enemy)
+                else:
+                    if (((enemy.get_x() - field_object.get_x()) ** 2) + ((enemy.get_y() - field_object.get_y()) ** 2)) < (lookout_sight ** 2):
+                        enemies_in_sight.append(enemy)
+
+            field_object.enemies_in_sight(enemies_in_sight)
+
+
 # report_alive - A background function that reporting the status of the FieldObjects on the field status to their
 #                CompanyCommanders every 2 seconds by moving the packet it creates to the send_handler() func
 def report_alive():
     while True:
+        updated_enemies = []
+
         for field_object in company1:
             message = AliveMessage(field_object)
             send_packet = Packet(Sender.soldier.value, field_object.get_company_num(), Receiver.company_commander.value,
                                  MessageType.alive.value, message)
+
+            for enemy in field_object.get_in_sight():
+                if enemy_contain(updated_enemies, enemy.get_id()) == -1:
+                    updated_enemies.append(enemy)
+
             time.sleep(0.100)
 
             send_handler(send_packet)
@@ -87,6 +120,11 @@ def report_alive():
             message = AliveMessage(field_object)
             send_packet = Packet(Sender.soldier.value, field_object.get_company_num(), Receiver.company_commander.value,
                                  MessageType.alive.value, message)
+
+            for enemy in field_object.get_in_sight():
+                if enemy_contain(updated_enemies, enemy.get_id()) == -1:
+                    updated_enemies.append(enemy)
+
             time.sleep(0.100)
 
             send_handler(send_packet)
@@ -95,9 +133,21 @@ def report_alive():
             message = AliveMessage(field_object)
             send_packet = Packet(Sender.soldier.value, field_object.get_company_num(), Receiver.company_commander.value,
                                  MessageType.alive.value, message)
+
+            for enemy in field_object.get_in_sight():
+                if enemy_contain(updated_enemies, enemy.get_id()) == -1:
+                    updated_enemies.append(enemy)
+
             time.sleep(0.100)
 
             send_handler(send_packet)
+
+        time.sleep(0.100)
+        message = EnemiesInSightMessage(updated_enemies)
+        send_packet = Packet(Sender.soldier.value, Company.not_relevant.value, Receiver.company_commander.value,
+                             MessageType.enemies_in_sight.value, message)
+
+        send_handler(send_packet)
         time.sleep(2.0)
 
 
@@ -142,7 +192,7 @@ def receive_handler(rec_packet, address):
 
     # CompanyCommander >> Soldier
     if case == Case.cc_to_soldier.value:
-        opt_case = options_switch_case(rec_packet)
+        opt_case = rec_packet.get_message_type()
 
         # Move Order message
         if opt_case == MessageType.move_order.value:
@@ -208,12 +258,12 @@ sock.bind(get_field_address())
 # Initiate and Start listen and report_location threads
 listen_thread = threading.Thread(target=listen)
 report_thread = threading.Thread(target=report_alive)
+check_for_enemies_thread = threading.Thread(target=check_for_enemies)
 
 listen_thread.start()
 report_thread.start()
+check_for_enemies_thread.start()
 
-
-# sending all the FieldObjects
-# init_field()
+time.sleep(5)
 
 
