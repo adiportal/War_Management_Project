@@ -1,9 +1,8 @@
 import logging
 import pickle
 import threading
-from Utility import Company, MessageType, Case, sender_receiver_switch_case, options_switch_case, \
-    get_field_address, contain, init_cc_address, get_cc_listen_sock, get_cc_send_sock, get_cc_receive_address, \
-    get_cc_send_address
+from Utility import Company, MessageType, Case, sender_receiver_switch_case, get_field_address, contain, \
+                    get_cc_listen_sock, get_cc_send_sock, get_cc_receive_address, get_cc_send_address
 from Entities import CompanyCommander
 
 
@@ -42,7 +41,7 @@ def listen():
 #                                    according to the case
 def receive_handler(packet, address):
     sender_receiver_case = sender_receiver_switch_case(packet)
-    opt_case = options_switch_case(packet)
+    opt_case = packet.get_message_type()
     message = packet.get_message()
 
     # Soldier >> CompanyCommander
@@ -65,6 +64,9 @@ def receive_handler(packet, address):
                 logging.debug("New FieldObject was created: #{}".format(id))
                 logging.debug("New FieldObject #{} from company {} was appended to company list".format(id,
                                                                                                         company_num))
+        if opt_case == MessageType.enemies_in_sight.value:
+            updated_enemies = message.get_enemies()
+            company_commander.upldate_enemies(updated_enemies)
 
         # Report Location message
         # if opt_case == MessageType.alive.value:
@@ -168,5 +170,5 @@ def main(company_num, location):
     set_company_commander(company_num, location)
 
     # start listen() func on background
-    listen_thread = threading.Thread(target=listen, daemon=True)
+    listen_thread = threading.Thread(target=listen)
     listen_thread.start()
