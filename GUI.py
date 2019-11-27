@@ -3,16 +3,17 @@ import threading
 import time
 import numpy as np
 import matplotlib
+import matplotlib.pyplot as plt
 import CompanyCommanderUDP
 from CompanyCommanderUDP import send_handler
 matplotlib.use('Qt5Agg')
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtWidgets import QApplication, QMessageBox
+from PyQt5.QtWidgets import QApplication, QPushButton, QMessageBox
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from matplotlib.animation import FuncAnimation
 from Entities import Soldier, CompanyCommander
-from Utility import create_move_to_message
+from Utility import create_move_to_message, EnemyType
 
 
 # Class for creating matplotlib canvas (where the plot is going to be located)
@@ -23,7 +24,6 @@ class MyMplCanvas(FigureCanvas):
     ax.get_yaxis().set_visible(False)
 
     def __init__(self, parent=None):
-
         FigureCanvas.__init__(self, MyMplCanvas.fig)
         self.setParent(parent)
         FigureCanvas.setSizePolicy(self,
@@ -36,13 +36,14 @@ class MyMplCanvas(FigureCanvas):
 class ApplicationWindow(QtWidgets.QMainWindow):
     soldiers = []  # company1 list from the 3 lists of the company commander
     picked_soldier = []
+    enemies = []
 
     company_commander = CompanyCommanderUDP.company_commander  # Initialize the company commander entity
 
     def __init__(self):
         QtWidgets.QMainWindow.__init__(self)
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
-        self.setWindowTitle("Company Commander " + str(self.company_commander.company_number))
+
         self.main_widget = QtWidgets.QWidget(self)
 
         vbox = QtWidgets.QVBoxLayout(self.main_widget)
@@ -51,7 +52,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         vbox.addWidget(self.canvas)
 
-        #self.setLayout(vbox)
+        self.setLayout(vbox)
 
         self.main_widget.setFocus()
         self.setCentralWidget(self.main_widget)
@@ -68,39 +69,35 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         # Starting the hover event (on hovering a marker an informative label shows up)
         self.canvas.mpl_connect("motion_notify_event", self.on_hover)
-
-    def closeEvent(self, event):
-        reply = QMessageBox.question(QMessageBox(self), 'Window Close', 'Are you sure you want to close the window?',
-                                     QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-
-        if reply == QMessageBox.Yes:
-            print("exit")
-        else:
-            event.ignore()
+        self.setWindowTitle("Company Commander " + str(CompanyCommanderUDP.company_commander.company_number))
 
     # function for a thread, updates the soldiers list
     def update_field(self):
         while True:
             self.soldiers = CompanyCommanderUDP.company1 + CompanyCommanderUDP.company2 + CompanyCommanderUDP.company3
+            self.enemies = CompanyCommanderUDP.company_commander.get_enemies()
             time.sleep(2.0)
 
     # function for the FuncAnimation option, clears and create the plot again
     def animate(self, i):
         self.canvas.ax.clear()
+        img = plt.imread("MAP.png")
+        self.canvas.ax.imshow(img)
+        self.canvas.ax.imshow(img, extent=[0, 15, 0, 10])
         # Starting the properties of the marker's labels
         self.tooltip = self.canvas.ax.annotate(self.tooltip_text, self.tooltip_coords,
                                                xytext=self.set_xy_text(self.tooltip_coords),
                                                textcoords="offset points",
                                                ha=self.set_ha_value(self.set_xy_text(self.tooltip_coords)),
                                                va=self.set_va_value(self.set_xy_text(self.tooltip_coords)),
-                                               size=6, bbox=dict(facecolor='yellow', boxstyle="round", alpha=0.8),
+                                               size=6, bbox=dict(facecolor='wheat', boxstyle="round", alpha=0.8),
                                                arrowprops=dict(shrink=15, facecolor='black', width=3, headlength=8))
         self.tooltip.set_visible(self.tooltip_visible)  # Set the visibility of the label according to its current mode
         self.create_plot()
 
     def set_xy_text(self, coords):  # function to help set the position of the text in the label according to the
                                     # loccation of the marker in the plot
-        self.canvas.ax.set_xlim(0, 10)
+        self.canvas.ax.set_xlim(0, 14)
         self.canvas.ax.set_ylim(0, 10)
         x_lim = self.canvas.ax.get_xlim()
         y_lim = self.canvas.ax.get_ylim()
@@ -141,24 +138,47 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         color = []
         marker = []
         labels = []
+        sizes = []
+
         for s in self.soldiers:
             x.append(s.x)
             y.append(s.y)
             if s.company_number == 1:
                 color.append('blue')
             elif s.company_number == 2:
-                color.append('red')
+                color.append('orange')
             else:
                 color.append('green')
             if type(s) == Soldier:
                 marker.append('o')
+                sizes.append(4)
             else:
                 marker.append('*')
+                sizes.append(8)
             labels.append(s.__str__())
 
-        for xp, yp, c, m, l in zip(x, y, color, marker, labels):  # zip connects together all the elements in the lists
+        for xp, yp, c, m, l, s in zip(x, y, color, marker, labels, sizes):  # zip connects together all the elements in the lists
                                                                   # that located on the same indexes
-            MyMplCanvas.ax.plot([xp], [yp], color=c, marker=m, markersize=5, label=l, picker=10)
+            MyMplCanvas.ax.plot([xp], [yp], color=c, marker=m, markersize=s, label=l, picker=10)
+
+        x_enemy = []
+        y_enemy = []
+        marker_enemy = []
+        for e in self.enemies:
+            x_enemy.append(e.get_x())
+            y_enemy.append(e.get_y())
+
+            if e.get_type() == EnemyType.soldier.value:
+                marker_enemy.append("o")
+
+            elif e.get_type() == EnemyType.launcher:
+                marker_enemy.append("^")
+
+            else:
+                marker_enemy.append("s")
+
+            for x, y, m in zip(x_enemy, y_enemy, marker_enemy):
+                MyMplCanvas.ax.plot([x], [y], color="red", marker=m, markersize=4, markeredgecolor="black")
 
         # Plot the company commander location
         MyMplCanvas.ax.plot(self.company_commander.x, self.company_commander.y, color="black", marker='o', markersize=7, label=self.company_commander.__str__(),
@@ -169,7 +189,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         if company_num == 1:
             return "blue"
         elif company_num == 2:
-            return "red"
+            return "orange"
         else:
             return "green"
 
@@ -263,6 +283,4 @@ def main(company_num, location):
 
     cc_thread.start()
     gui_thread1.start()
-
-
 
