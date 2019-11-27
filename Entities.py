@@ -14,6 +14,7 @@ class FieldObjects:
         self.x = location[0]
         self.y = location[1]
         self.ammo = ammo
+        self.in_sight = []
 
     # toString
     def __str__(self):
@@ -21,8 +22,9 @@ class FieldObjects:
                "Company Number: {} \n" \
                "Location: ({}, {}) \n" \
                "Ammo: {} \n" \
-               "HP: {} \n".format(self.__class__.__name__, self.ID, self.company_number, self.x, self.y, self.ammo,
-                                  self.HP)
+               "HP: {} \n" \
+               "Enemies {}".format(self.__class__.__name__, self.ID, self.company_number, self.x, self.y, self.ammo,
+                                   self.HP, self.in_sight)
 
     # Getters
     def get_company_num(self):
@@ -46,10 +48,16 @@ class FieldObjects:
     def get_y(self):
         return self.y
 
+    def get_in_sight(self):
+        return self.in_sight
+
     # update_location(new_x, new_y) - update the FieldObject location
     def update_location(self, new_x, new_y):
         self.x = new_x
         self.y = new_y
+
+    def enemies_in_sight(self, enemies):
+        self.in_sight = enemies
 
 
 # Soldier
@@ -58,7 +66,7 @@ class Soldier(FieldObjects):
     def __init__(self, company_number, location, ammo):
         super().__init__(company_number, location, ammo)
         self.HP = 100
-        self.speed = 0.2
+        self.speed = 1
 
     # Getters
     def get_speed(self):
@@ -74,7 +82,7 @@ class BTW(FieldObjects):
     def __init__(self, company_number, location, ammo):
         super().__init__(company_number, location, ammo)
         self.HP = 1000
-        self.speed = 0.6
+        self.speed = 2
 
     # Getters
     def get_speed(self):
@@ -98,6 +106,11 @@ class CompanyCommander:
         self.y = location[1]
         self.ammo = ammo
         self.HP = 100
+        self.revealed_enemies = []
+
+    # Getters
+    def get_enemies(self):
+        return self.revealed_enemies
 
     # Setters
     def set_location(self, location):
@@ -106,6 +119,89 @@ class CompanyCommander:
 
     def set_company(self, company_num):
         self.company_number = company_num
+
+    def upldate_enemies(self, enemies):
+        self.revealed_enemies = enemies
+
+
+# Enemy
+class Enemy:
+    # Attributes
+    ID = 1
+
+    # Constructor
+    def __init__(self, location, ammo):
+        self.ID = Enemy.ID
+        Enemy.ID += 1
+        self.x = location[0]
+        self.y = location[1]
+        self.ammo = ammo
+
+    # Getters
+    def get_id(self):
+        return self.ID
+
+    def get_location(self):
+        return self.x, self.y
+
+    def get_str_location(self):
+        return str(self.x) + ", " + str(self.y)
+
+    def get_ammo(self):
+        return self.ammo
+
+    def get_x(self):
+        return self.x
+
+    def get_y(self):
+        return self.y
+
+
+# EnemySoldier
+class EnemySoldier(Enemy):
+    def __init__(self, location, ammo):
+        super().__init__(location, ammo)
+        self.HP = 100
+        self.speed = 1
+
+    # Setters
+    def set_location(self, location):
+        self.x = location[0]
+        self.y = location[1]
+
+    def update_location(self, new_x, new_y):
+        self.x = new_x
+        self.y = new_y
+
+    # Getters
+    @staticmethod
+    def get_type():
+        return Utility.EnemyType.soldier.value
+
+    def get_speed(self):
+        return self.speed
+
+
+# Launcher
+class Launcher(Enemy):
+    def __init__(self, location, ammo):
+        super().__init__(location, ammo)
+        self.HP = 150
+
+    @staticmethod
+    def get_type():
+        return Utility.EnemyType.launcher.value
+
+
+# LookoutPoint
+class LookoutPoint(Enemy):
+    def __init__(self, location, ammo, soldier):
+        super().__init__(location, ammo)
+        self.soldier = soldier
+
+    @staticmethod
+    def get_type():
+        return Utility.EnemyType.lookout_point.value
 
 
 # Packet
@@ -201,20 +297,23 @@ class AliveMessage:
         return "|| ID: {}, Company: {}, Location: ({}), HP: {}, Ammo: {} ||".format(self.field_object.get_id(),
                                                                                     self.field_object.get_company_num(),
                                                                                     self.field_object.get_location(),
-                                                                                    self.get_hp(),
+                                                                                    self.field_object.get_hp(),
                                                                                     self.field_object.get_ammo())
 
     # Getters
     def get_field_object(self):
         return self.field_object
 
-    # toString
-    def __str__(self):
-        return "|| ID: {}, Company: {}, Location: {}, HP: {}, Ammo: {} ||".format(self.field_object.get_id(),
-                                                                                  self.field_object.get_company_num(),
-                                                                                  self.field_object.get_location(),
-                                                                                  self.field_object.get_hp(),
-                                                                                  self.field_object.get_ammo())
+
+# EnemiesInSightMessage
+class EnemiesInSightMessage:
+    # Constructor
+    def __init__(self, enemies):
+        self.enemies = enemies
+
+    # Getters
+    def get_enemies(self):
+        return self.enemies
 
 
 # MoveOrderMessage
