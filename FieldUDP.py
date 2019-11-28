@@ -10,6 +10,10 @@ from Utility import Company, Sender, Receiver, MessageType, Case, Location, get_
                     sender_receiver_switch_case
 
 
+global STOP_FIELD_THREADS
+STOP_FIELD_THREADS = False
+
+
 # Initialize the Logger
 logging.basicConfig(filename='FieldLog.log', level=logging.DEBUG, format='%(asctime)s : %(levelname)s : '
                                                                          'Soldier : %(message)s')
@@ -78,6 +82,10 @@ def listen():
         rec_packet = pickle.loads(rec_packet)
         if rec_packet:
             receive_handler(rec_packet, rec_address)
+
+        if STOP_FIELD_THREADS:
+            logging.debug("Closing FieldUDP...")
+            break
 
 
 # check_for_enemies() - check for every field_object that in the field (forces list) if there is enemy (enemies)
@@ -200,17 +208,23 @@ def get_field_object(company_num, id):
 # move_to(field_object, new_x, new_y) - while FieldUDP gets a MoveOrderMessage, the receive_handler() triggers the
 #                                       move_to() func. it moves the FieldObject, step by step by it's own speed
 def move_to(field_object, new_x, new_y):
-    start = field_object.get_x(), field_object.get_y()
-    end = float(new_x), float(new_y)
-
-    steps = get_line(start, end)
-    for step in steps:
+    start_point = field_object.get_x(), field_object.get_y()
+    end_point = float(new_x), float(new_y)
+    while True:
+        steps = get_line(start_point, end_point)
+        for step in steps:
+            if end_point != field_object.get_move_to_location():
+                break
+            time.sleep(field_object.get_speed())
+            step_x = step[Location.X.value]
+            step_y = step[Location.Y.value]
+            field_object.update_location(step_x, step_y)
+        if end_point != field_object.get_move_to_location():
+            break
         time.sleep(field_object.get_speed())
-        step_x = step[Location.X.value]
-        step_y = step[Location.Y.value]
-        field_object.update_location(step_x, step_y)
-    time.sleep(field_object.get_speed())
-    field_object.update_location(new_x, new_y)
+        field_object.update_location(new_x, new_y)
+    if end_point == field_object.get_move_to_location():
+        field_object.set_move_to(None)
 
 
 # receive_handler(packet, address) - Receive the packet and the address that it came from, check the case and act
@@ -230,6 +244,8 @@ def receive_handler(rec_packet, address):
             new_y = location[Location.Y.value]
 
             field_object = get_field_object(message.get_company_num(), message.get_field_object_id())
+            print(location)
+            field_object.set_move_to(location)
 
             move_to_thread = threading.Thread(target=move_to, args=(field_object, new_x, new_y))
             move_to_thread.start()
@@ -258,30 +274,6 @@ def send_handler(send_packet):
     except:
         logging.error("The message '{}' didn't reached to CC".format(send_packet))
         print("The message '{}' did'nt reached to the Company Commander!!".format(send_packet))
-
-
-# def init_field():
-#     for field_object in company1:
-#         message = AliveMessage(field_object)
-#         packet = Packet(Sender.soldier.value,
-#                         field_object.get_company_num(),
-#                         Receiver.company_commander.value,
-#                         MessageType.alive.value,
-#                         message)
-#
-#         send_handler(packet)
-#         time.sleep(0.100)
-#
-#     for field_object in company2:
-#         message = AliveMessage(field_object)
-#         packet = Packet(Sender.soldier.value,
-#                         field_object.get_company_num(),
-#                         Receiver.company_commander.value,
-#                         MessageType.alive.value,
-#                         message)
-#
-#         send_handler(packet)
-#         time.sleep(0.100)
 
 
 # **Main**

@@ -5,7 +5,6 @@ from Utility import Company, MessageType, Case, sender_receiver_switch_case, get
                     get_cc_listen_sock, get_cc_send_sock, get_cc_receive_address, get_cc_send_address
 from Entities import CompanyCommander
 
-
 # Initialize Companies
 company1 = []
 company2 = []
@@ -69,10 +68,10 @@ def receive_handler(packet, address):
             company_commander.upldate_enemies(updated_enemies)
 
         if opt_case == MessageType.move_approval.value:
-            location = message.get_move_to_location()
             field_object = message.get_field_object()
             id = field_object.get_id()
-            logging.debug("FieldObject #{} start moving to ({})".format(id , location))
+            location = message.get_move_to_location()
+            logging.debug("FieldObject #{} start moving to ({})".format(id, location))
 
     # Error Case
     else:

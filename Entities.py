@@ -22,8 +22,8 @@ class FieldObjects:
                "Company Number: {} \n" \
                "Location: ({}, {}) \n" \
                "Ammo: {} \n" \
-               "HP: {} \n" \
-
+               "HP: {} \n".format(self.__class__.__name__, self.ID, self.company_number, self.x, self.y, self.ammo,
+                                  self.HP)
 
     # Getters
     def get_company_num(self):
@@ -66,6 +66,7 @@ class Soldier(FieldObjects):
         super().__init__(company_number, location, ammo)
         self.HP = 100
         self.speed = 1
+        self.move_to_location = None
 
     # Getters
     def get_speed(self):
@@ -73,6 +74,13 @@ class Soldier(FieldObjects):
 
     def get_hp(self):
         return self.HP
+
+    def get_move_to_location(self):
+        return self.move_to_location
+
+    # Setters
+    def set_move_to(self, location):
+        self.move_to_location = location
 
 
 # BTW
@@ -82,6 +90,7 @@ class BTW(FieldObjects):
         super().__init__(company_number, location, ammo)
         self.HP = 1000
         self.speed = 2
+        self.move_to_location = None
 
     # Getters
     def get_speed(self):
@@ -89,6 +98,13 @@ class BTW(FieldObjects):
 
     def get_hp(self):
         return self.HP
+
+    def get_move_to_location(self):
+        return self.move_to_location
+
+    # Setters
+    def set_move_to(self, location):
+        self.move_to_location = location
 
 
 # CompanyCommander
