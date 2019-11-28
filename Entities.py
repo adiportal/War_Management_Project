@@ -304,6 +304,21 @@ class AliveMessage:
         return self.field_object
 
 
+# MoveApprovalMessage
+class MoveApprovalMessage:
+    # Constructor
+    def __init__(self, field_object, location):
+        self.field_object = field_object
+        self.location = location
+
+    # Getters
+    def get_field_object(self):
+        return self.field_object
+
+    def get_move_to_location(self):
+        return self.location
+
+
 # EnemiesInSightMessage
 class EnemiesInSightMessage:
     # Constructor

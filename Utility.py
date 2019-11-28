@@ -280,6 +280,8 @@ class MessageType(enum.Enum):
     move_order = 2
     engage_order = 3
     enemies_in_sight = 4
+    move_approval = 5
+    engage_approval = 6
 
 
 class ObjectListIndex(enum.Enum):

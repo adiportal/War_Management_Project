@@ -68,54 +68,11 @@ def receive_handler(packet, address):
             updated_enemies = message.get_enemies()
             company_commander.upldate_enemies(updated_enemies)
 
-        # Report Location message
-        # if opt_case == MessageType.alive.value:
-        #     updated_object = message.get_field_object()
-        #
-        #     if int(updated_object.get_company_num()) == Company.company1.value:
-        #         updated = False
-        #         for object_field in company1:
-        #             if object_field.get_id() == int(updated_object.get_id()):
-        #                 object_field = updated_object
-        #                 logging.debug("FieldObject #" + str(object_field.get_id()) + " location was updated to: (" +
-        #                               object_field.get_str_location() + ")")
-        #                 updated = True
-        #                 break
-        #
-        #         if not updated:
-        #             logging.debug("Company 1 does not contain #" + str(updated_object.get_id()))
-        #
-        #     elif int(updated_object.get_company_num()) == Company.company2.value:
-        #         updated = False
-        #         for object_field in company2:
-        #             if object_field.get_id() == int(updated_object.get_id()):
-        #                 object_field = updated_object
-        #                 logging.debug("#" + str(object_field.get_id()) + " location was updated to: " +
-        #                               object_field.get_str_location())
-        #                 updated = True
-        #                 break
-        #
-        #         if not updated:
-        #             logging.debug("Company 2 does not contain #" + updated_object.get_id())
-        #
-        #     else:
-        #         updated = False
-        #         for object_field in company3:
-        #             if object_field.get_id() == updated_object.get_id():
-        #                 object_field = updated_object
-        #                 logging.debug("#" + str(object_field.get_id()) + " location was updated to: " +
-        #                               object_field.get_str_location())
-        #                 updated = True
-        #                 break
-        #
-        #         if not updated:
-        #             logging.debug("Company 3 does not contain #" + updated_object.get_id())
-        #
-        # # change the packet approval to True and send it back to sender
-        # packet.set_approval(True)
-        # byte_packet = pickle.dumps(packet)
-        # sock.sendto(byte_packet, get_field_address())
-        # logging.debug("Approval packet has been sent: {}".format(packet))
+        if opt_case == MessageType.move_approval.value:
+            location = message.get_move_to_location()
+            field_object = message.get_field_object()
+            id = field_object.get_id()
+            logging.debug("FieldObject #{} start moving to ({})".format(id , location))
 
     # Error Case
     else:

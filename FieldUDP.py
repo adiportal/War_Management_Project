@@ -3,7 +3,8 @@ import logging
 import threading
 import time
 import pickle
-from Entities import Packet, Soldier, BTW, AliveMessage, EnemySoldier, LookoutPoint, EnemiesInSightMessage
+from Entities import Packet, Soldier, BTW, AliveMessage, EnemySoldier, LookoutPoint, EnemiesInSightMessage, \
+                     MoveApprovalMessage
 from Utility import Company, Sender, Receiver, MessageType, Case, Location, get_line, get_cc_address, \
                     get_field_sock, get_field_address, EnemyType, enemy_contain, marked_enemies_check, \
                     sender_receiver_switch_case
@@ -232,6 +233,14 @@ def receive_handler(rec_packet, address):
 
             move_to_thread = threading.Thread(target=move_to, args=(field_object, new_x, new_y))
             move_to_thread.start()
+
+            # Create and send approval message
+            message = MoveApprovalMessage(field_object, location)
+            send_packet = Packet(Sender.soldier.value, field_object.get_company_num(), Receiver.company_commander.value,
+                                 MessageType.move_approval.value, message)
+            send_handler(send_packet)
+            logging.debug("Move approval message was sent from FieldObject #{} to CC #{}".format(field_object.get_id(),
+                                                                                        field_object.get_company_num()))
 
     # Error case
     else:
