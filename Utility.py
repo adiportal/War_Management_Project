@@ -24,6 +24,20 @@ def get_cc_listen_sock():
     return sock
 
 
+# get_bc_sock() - creating a new socket for bc and returns it
+def get_bc_listen_sock():
+    # Initialize socket
+    try:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+        logging.debug("Socket Successfully Created!")
+    except socket.error as err:
+        logging.error("Socket creation failed with error {}".format(err))
+
+    return sock
+
+
 def get_cc_send_sock():
     # Initialize socket
     try:
@@ -60,6 +74,7 @@ def get_cc_address():
     return '255.255.255.255', 5008
 
 
+# for CompanyCommanderUDP
 def get_cc_receive_address():
     return '', 5008
 
@@ -103,8 +118,8 @@ def init_cc_address(company_num):
 
 
 def get_bc_address():
-    IP = '127.0.0.1'
-    port = 5003
+    IP = ''
+    port = 5014
     return IP, port
 
 

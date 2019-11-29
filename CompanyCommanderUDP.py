@@ -5,6 +5,10 @@ from Utility import Company, MessageType, Case, sender_receiver_switch_case, get
                     get_cc_listen_sock, get_cc_send_sock, get_cc_receive_address, get_cc_send_address
 from Entities import CompanyCommander
 
+global STOP_CC_THREADS
+STOP_CC_THREADS = False
+
+
 # Initialize Companies
 company1 = []
 company2 = []
@@ -34,6 +38,10 @@ def listen():
         rec_packet = pickle.loads(rec_packet)
         if rec_packet:
             receive_handler(rec_packet, get_field_address())
+
+        if STOP_CC_THREADS:
+            logging.debug("Closing CompanyCommanderUDP...")
+            break
 
 
 # receive_handler(packet, address) - Receive the packet and the address that it came from, check the case and act
@@ -65,7 +73,7 @@ def receive_handler(packet, address):
                                                                                                         company_num))
         if opt_case == MessageType.enemies_in_sight.value:
             updated_enemies = message.get_enemies()
-            company_commander.upldate_enemies(updated_enemies)
+            company_commander.update_enemies(updated_enemies)
 
         if opt_case == MessageType.move_approval.value:
             field_object = message.get_field_object()

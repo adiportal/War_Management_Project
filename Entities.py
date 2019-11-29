@@ -135,7 +135,7 @@ class CompanyCommander:
     def set_company(self, company_num):
         self.company_number = company_num
 
-    def upldate_enemies(self, enemies):
+    def update_enemies(self, enemies):
         self.revealed_enemies = enemies
 
 

@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 import CompanyCommanderUDP
-from CompanyCommanderUDP import send_handler
+from CompanyCommanderUDP import send_handler, exit_cc
 matplotlib.use('Qt5Agg')
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QApplication, QPushButton, QMessageBox
