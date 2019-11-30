@@ -64,6 +64,10 @@ def receive_handler(packet, address):
             index = contain(get_company(company_num), id)
 
             if index >= 0:
+
+                if field_object.get_hp() <= 0:
+                    del get_company(company_num)[index]
+
                 get_company(company_num)[index] = field_object
                 logging.debug("FieldObject #{} was updated".format(id))
             else:

@@ -1,3 +1,4 @@
+import random
 import sys
 import logging
 import threading
@@ -62,9 +63,8 @@ forces = company1 + company2 + company3
 
 # Enemies
 es1 = EnemySoldier((2, 1), 100)
-lop1 = LookoutPoint((2, 1), 100, es1)
 
-enemies = [lop1]
+enemies = [es1]
 marked_enemies = []
 
 
@@ -99,6 +99,9 @@ def check_for_enemies():
             enemies_in_sight = []
 
             for enemy in enemies:
+                if STOP_FIELD_THREADS:
+                    break
+
                 if enemy.get_type() == EnemyType.soldier.value or enemy.get_type() == EnemyType.launcher.value:
                     if (((enemy.get_x() - field_object.get_x()) ** 2) + ((enemy.get_y() - field_object.get_y()) ** 2)) < (enemy_sight ** 2):
                         enemies_in_sight.append(enemy)
@@ -109,6 +112,42 @@ def check_for_enemies():
             field_object.enemies_in_sight(enemies_in_sight)
 
 
+def enemies_check_for_forces():
+    while True:
+        for enemy in enemies:
+            forces_in_sight = []
+            if enemy.get_type() == EnemyType.launcher.value:
+                continue
+
+            elif enemy.get_type() == EnemyType.lookout_point.value:
+                forces_sight = 2
+
+            else:
+                forces_sight = 1
+
+            for field_object in forces:
+                if STOP_FIELD_THREADS:
+                    break
+
+                if (((enemy.get_x() - field_object.get_x()) ** 2) +
+                   ((enemy.get_y() - field_object.get_y()) ** 2)) < (forces_sight ** 2):
+                    forces_in_sight.append(field_object)
+
+            enemy.forces_in_sight(forces_in_sight)
+
+
+def attack():
+    while True:
+        for enemy in enemies:
+            if len(enemy.get_in_sight()) == 0:
+                continue
+            else:
+                damage = random.randint(0, 20)
+                field_object = random.choice(enemy.get_in_sight())
+                field_object.fire(damage)
+                time.sleep(1)
+
+
 # report_alive - A background function that reporting the status of the FieldObjects on the field status to their
 #                CompanyCommanders every 2 seconds by moving the packet it creates to the send_handler() func
 def report_alive():
@@ -116,6 +155,10 @@ def report_alive():
         updated_enemies = []
 
         for field_object in company1:
+
+            if field_object.get_hp() <= 0:
+                company1.remove(field_object)
+
             message = AliveMessage(field_object)
             send_packet = Packet(Sender.soldier.value, field_object.get_company_num(), Receiver.company_commander.value,
                                  MessageType.alive.value, message)
@@ -136,6 +179,10 @@ def report_alive():
             send_handler(send_packet)
 
         for field_object in company2:
+
+            if field_object.get_hp() <= 0:
+                company2.remove(field_object)
+
             message = AliveMessage(field_object)
             send_packet = Packet(Sender.soldier.value, field_object.get_company_num(), Receiver.company_commander.value,
                                  MessageType.alive.value, message)
@@ -156,6 +203,10 @@ def report_alive():
             send_handler(send_packet)
 
         for field_object in company3:
+
+            if field_object.get_hp() <= 0:
+                company3.remove(field_object)
+
             message = AliveMessage(field_object)
             send_packet = Packet(Sender.soldier.value, field_object.get_company_num(), Receiver.company_commander.value,
                                  MessageType.alive.value, message)
@@ -287,11 +338,14 @@ sock.bind(get_field_address())
 listen_thread = threading.Thread(target=listen)
 report_thread = threading.Thread(target=report_alive)
 check_for_enemies_thread = threading.Thread(target=check_for_enemies)
+enemies_check_for_forces_thread = threading.Thread(target=enemies_check_for_forces)
+attack_thread = threading.Thread(target=attack)
 
 listen_thread.start()
 report_thread.start()
 check_for_enemies_thread.start()
+enemies_check_for_forces_thread.start()
+attack_thread.start()
 
-time.sleep(5)
 
 

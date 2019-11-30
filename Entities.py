@@ -58,6 +58,10 @@ class FieldObjects:
     def enemies_in_sight(self, enemies):
         self.in_sight = enemies
 
+    # Got Damage
+    def fire(self, damage):
+        self.HP -= damage
+
 
 # Soldier
 class Soldier(FieldObjects):
@@ -151,6 +155,7 @@ class Enemy:
         self.x = location[0]
         self.y = location[1]
         self.ammo = ammo
+        self.in_sight = []
 
     # Getters
     def get_id(self):
@@ -171,6 +176,12 @@ class Enemy:
     def get_y(self):
         return self.y
 
+    def get_in_sight(self):
+        return self.in_sight
+
+    def forces_in_sight(self, forces):
+        self.in_sight = forces
+
 
 # EnemySoldier
 class EnemySoldier(Enemy):
@@ -178,6 +189,8 @@ class EnemySoldier(Enemy):
         super().__init__(location, ammo)
         self.HP = 100
         self.speed = 1
+        # self.attack_thread = threading.Thread(target=self.attack)
+        # self.attack_thread.start()
 
     # Setters
     def set_location(self, location):
@@ -233,8 +246,6 @@ class Packet:
         self.receiver = receiver
         self.message_type = message_type
         self.message = message
-        self.approved = False
-        self.bc_approval = False
 
     # Getters
     def get_id(self):
@@ -254,20 +265,6 @@ class Packet:
 
     def get_message(self):
         return self.message
-
-    def is_approved(self):
-        return self.approved
-
-    def is_bc_approved(self):
-        return self.bc_approval
-
-    # set_approval(status) - change the packet approval to the boolean variable that it gets
-    def set_approval(self, status):
-        self.approved = status
-
-    # bc_approval(status) - change the packet approval to the boolean variable that it gets
-    def bc_approval(self, status):
-        self.bc_approval = status
 
     # toString
     def __str__(self):

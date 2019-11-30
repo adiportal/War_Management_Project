@@ -196,9 +196,6 @@ def marked_enemies_check(enemies, marked_enemies):
 # sender_receiver_case(packet) - get the packet and returns the case of sender-receiver
 def sender_receiver_switch_case(packet):
 
-    if packet.is_approved():
-        return Case.approval.value
-
     # sender = Soldier, receiver = CC
     if packet.get_sender() == Sender.soldier.value and \
        packet.get_receiver() == Receiver.company_commander.value:
@@ -206,14 +203,12 @@ def sender_receiver_switch_case(packet):
 
     # sender = Soldier, receiver = BC
     elif packet.get_sender() == Sender.soldier.value and \
-            packet.get_receiver() == Receiver.battalion_commander.value and \
-            not packet.is_bc_approved():
+            packet.get_receiver() == Receiver.battalion_commander.value:
         return Case.soldier_to_bc.value
 
     # sender = BC, receiver = CC -> Soldier
     elif packet.get_sender() == Sender.soldier.value and \
-            packet.get_receiver() == Receiver.battalion_commander.value and \
-            packet.is_bc_approved():
+            packet.get_receiver() == Receiver.battalion_commander.value:
         return Case.bc_to_cc_approval.value
 
     # sender = CC, receiver = soldier
