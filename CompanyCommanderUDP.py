@@ -5,9 +5,6 @@ from Utility import Company, MessageType, Case, sender_receiver_switch_case, get
                     get_cc_listen_sock, get_cc_send_sock, get_cc_receive_address, get_cc_send_address
 from Entities import CompanyCommander
 
-global STOP_CC_THREADS
-STOP_CC_THREADS = False
-
 
 # Initialize Companies
 company1 = []
@@ -24,10 +21,14 @@ send_sock = get_cc_send_sock()
 company_commander = CompanyCommander(1, (0, 0), 0)
 
 
+def get_company_commander():
+    return company_commander
+
+
 # listen() - Listening to incoming packets on background, while receiving a packet, it goes to receive_handler() func
 #            to handle the message.
 def listen():
-    print('Listening...\n')
+    print('Listening... \n')
     logging.debug("Listening...")
 
     while True:
@@ -39,8 +40,9 @@ def listen():
         if rec_packet:
             receive_handler(rec_packet, get_field_address())
 
-        if STOP_CC_THREADS:
+        if company_commander.is_stopped():
             logging.debug("Closing CompanyCommanderUDP...")
+            print("Closing CompanyCommanderUDP...")
             break
 
 
@@ -68,22 +70,30 @@ def receive_handler(packet, address):
                 if field_object.get_hp() <= 0:
                     del get_company(company_num)[index]
 
-                get_company(company_num)[index] = field_object
-                logging.debug("FieldObject #{} was updated".format(id))
+                else:
+                    get_company(company_num)[index] = field_object
+                    logging.debug("FieldObject #{} was updated".format(id))
             else:
                 get_company(company_num).append(field_object)
                 logging.debug("New FieldObject was created: #{}".format(id))
                 logging.debug("New FieldObject #{} from company {} was appended to company list".format(id,
                                                                                                         company_num))
-        if opt_case == MessageType.enemies_in_sight.value:
+        elif opt_case == MessageType.enemies_in_sight.value:
             updated_enemies = message.get_enemies()
             company_commander.update_enemies(updated_enemies)
 
-        if opt_case == MessageType.move_approval.value:
+        elif opt_case == MessageType.move_approval.value:
             field_object = message.get_field_object()
             id = field_object.get_id()
             location = message.get_move_to_location()
             logging.debug("FieldObject #{} start moving to ({})".format(id, location))
+
+        elif opt_case == MessageType.got_shot.value:
+            field_object = message.get_field_object()
+            id = field_object.get_id()
+
+            print("#{} Got Shot!!".format(id))
+            logging.debug("#{} Got Shot!!".format(id))
 
     # Error Case
     else:
@@ -140,3 +150,5 @@ def main(company_num, location):
     # start listen() func on background
     listen_thread = threading.Thread(target=listen)
     listen_thread.start()
+
+

@@ -1,11 +1,10 @@
 import random
-import sys
 import logging
 import threading
 import time
 import pickle
 from Entities import Packet, Soldier, BTW, AliveMessage, EnemySoldier, LookoutPoint, EnemiesInSightMessage, \
-                     MoveApprovalMessage
+    MoveApprovalMessage, GotShotMessage
 from Utility import Company, Sender, Receiver, MessageType, Case, Location, get_line, get_cc_address, \
                     get_field_sock, get_field_address, EnemyType, enemy_contain, marked_enemies_check, \
                     sender_receiver_switch_case
@@ -137,15 +136,30 @@ def enemies_check_for_forces():
 
 
 def attack():
+    time.sleep(5)
     while True:
         for enemy in enemies:
             if len(enemy.get_in_sight()) == 0:
+                enemy.not_shooting()
                 continue
             else:
-                damage = random.randint(0, 20)
+                damage = random.randint(-2, 10)
+                if damage < 0:
+                    damage = 0
+
                 field_object = random.choice(enemy.get_in_sight())
                 field_object.fire(damage)
+                enemy.shoot()
+
+                if not field_object.is_got_shot():
+                    field_object.got_shot_alert()
+                    message = GotShotMessage(field_object)
+                    packet = Packet(Sender.soldier.value, field_object.get_company_num(),
+                                    Receiver.company_commander.value, MessageType.got_shot.value, message)
+                    send_handler(packet)
+
                 time.sleep(1)
+            enemy.not_shooting()
 
 
 # report_alive - A background function that reporting the status of the FieldObjects on the field status to their
@@ -295,7 +309,6 @@ def receive_handler(rec_packet, address):
             new_y = location[Location.Y.value]
 
             field_object = get_field_object(message.get_company_num(), message.get_field_object_id())
-            print(location)
             field_object.set_move_to(location)
 
             move_to_thread = threading.Thread(target=move_to, args=(field_object, new_x, new_y))
@@ -346,6 +359,13 @@ report_thread.start()
 check_for_enemies_thread.start()
 enemies_check_for_forces_thread.start()
 attack_thread.start()
+
+time.sleep(5)
+
+es1.set_move_to((13, 8))
+
+move_to_thread = threading.Thread(target=move_to, args=(es1, 13, 8))
+move_to_thread.start()
 
 
 

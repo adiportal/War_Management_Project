@@ -1,3 +1,5 @@
+import time
+
 import Utility
 
 
@@ -15,6 +17,7 @@ class FieldObjects:
         self.y = location[1]
         self.ammo = ammo
         self.in_sight = []
+        self.got_shot = False
 
     # toString
     def __str__(self):
@@ -50,6 +53,9 @@ class FieldObjects:
     def get_in_sight(self):
         return self.in_sight
 
+    def is_got_shot(self):
+        return self.got_shot
+
     # update_location(new_x, new_y) - update the FieldObject location
     def update_location(self, new_x, new_y):
         self.x = new_x
@@ -61,6 +67,11 @@ class FieldObjects:
     # Got Damage
     def fire(self, damage):
         self.HP -= damage
+
+    def got_shot_alert(self):
+        self.got_shot = True
+        time.sleep(5)
+        self.got_shot = False
 
 
 # Soldier
@@ -126,10 +137,14 @@ class CompanyCommander:
         self.ammo = ammo
         self.HP = 100
         self.revealed_enemies = []
+        self.STOP_CC_THREADS = False
 
     # Getters
     def get_enemies(self):
         return self.revealed_enemies
+
+    def is_stopped(self):
+        return self.STOP_CC_THREADS
 
     # Setters
     def set_location(self, location):
@@ -141,6 +156,9 @@ class CompanyCommander:
 
     def update_enemies(self, enemies):
         self.revealed_enemies = enemies
+
+    def stop(self):
+        self.STOP_CC_THREADS = True
 
 
 # Enemy
@@ -189,8 +207,12 @@ class EnemySoldier(Enemy):
         super().__init__(location, ammo)
         self.HP = 100
         self.speed = 1
-        # self.attack_thread = threading.Thread(target=self.attack)
-        # self.attack_thread.start()
+        self.move_to_location = None
+        self.shooting = False
+
+    # Getters
+    def get_move_to_location(self):
+        return self.move_to_location
 
     # Setters
     def set_location(self, location):
@@ -200,6 +222,16 @@ class EnemySoldier(Enemy):
     def update_location(self, new_x, new_y):
         self.x = new_x
         self.y = new_y
+
+    def set_move_to(self, location):
+        self.move_to_location = location
+
+    def shoot(self):
+        self.shooting = True
+        self.ammo = self.ammo - 1
+
+    def not_shooting(self):
+        self.shooting = False
 
     # Getters
     @staticmethod
@@ -366,3 +398,13 @@ class MoveOrderMessage:
         return "|| Company: {}, ID: {}, MoveTo Location: ({}) ||".format(self.company_num,
                                                                          self.field_object_id,
                                                                          self.location)
+
+
+# GotShotMessage
+class GotShotMessage:
+    # Constructor
+    def __init__(self, field_object):
+        self.field_object = field_object
+
+    def get_field_object(self):
+        return self.field_object
