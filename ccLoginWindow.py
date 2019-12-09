@@ -7,8 +7,8 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QMessageBox
-import GUI
+from PyQt5.QtWidgets import QMessageBox, QSizePolicy
+import NewGui
 from Utility import in_use, init_cc_address, get_cc_send_address
 
 
@@ -94,13 +94,13 @@ class Ui_CompanyCommanderLogin(object):
         else:
             correct_company_num = True
 
-        if x_location_input == '' or "e" in x_location_input.lower():
-            self.message_box("Please fill your x location correctly!")
+        if x_location_input == '':
+            self.message_box("Please fill your x location!")
         else:
             correct_x_location = True
 
-        if y_location_input == '' or "e" in y_location_input.lower():
-            self.message_box("Please fill your y location correctly!")
+        if y_location_input == '':
+            self.message_box("Please fill your y location!")
         else:
             correct_y_location = True
 
@@ -113,7 +113,7 @@ class Ui_CompanyCommanderLogin(object):
         # If all conditions correct, the login window will be closed and the GUI will be open
         if correct_company_num is True and correct_x_location is True and correct_y_location is True and cc_open is True:
             location = (float(x_location_input), float(y_location_input))
-            GUI.main(int(company_num_input), location)
+            NewGui.main(int(company_num_input), location)
             CompanyCommanderLogin.close()
 
     @staticmethod

@@ -1,3 +1,5 @@
+import time
+
 import Utility
 
 
@@ -14,6 +16,10 @@ class FieldObjects:
         self.x = location[0]
         self.y = location[1]
         self.ammo = ammo
+        self.in_sight = []
+        self.got_shot = False
+        self.move_to_location = None
+        self.attacking_enemy = None
 
     # toString
     def __str__(self):
@@ -46,10 +52,44 @@ class FieldObjects:
     def get_y(self):
         return self.y
 
+    def get_in_sight(self):
+        return self.in_sight
+
+    def is_got_shot(self):
+        return self.got_shot
+
+    def get_move_to_location(self):
+        return self.move_to_location
+
+    def get_attacking_enemy(self):
+        return self.attacking_enemy
+
+    # Setters
+    def set_move_to(self, location):
+        self.move_to_location = location
+
+    def attack_enemy(self, enemy):
+        self.attacking_enemy = enemy
+
     # update_location(new_x, new_y) - update the FieldObject location
     def update_location(self, new_x, new_y):
         self.x = new_x
         self.y = new_y
+
+    def enemies_in_sight(self, enemies):
+        self.in_sight = enemies
+
+    # Got Damage
+    def got_damage(self, damage):
+        self.HP -= damage
+
+    def got_shot_alert(self):
+        self.got_shot = True
+        time.sleep(5)
+        self.got_shot = False
+
+    def shoot(self):
+        self.ammo = self.ammo - 1
 
 
 # Soldier
@@ -67,6 +107,10 @@ class Soldier(FieldObjects):
     def get_hp(self):
         return self.HP
 
+    @staticmethod
+    def get_type():
+        return Utility.ObjectType.soldier.value
+
 
 # BTW
 class BTW(FieldObjects):
@@ -83,6 +127,10 @@ class BTW(FieldObjects):
     def get_hp(self):
         return self.HP
 
+    @staticmethod
+    def get_type():
+        return Utility.ObjectType.btw.value
+
 
 # CompanyCommander
 class CompanyCommander:
@@ -98,6 +146,15 @@ class CompanyCommander:
         self.y = location[1]
         self.ammo = ammo
         self.HP = 100
+        self.revealed_enemies = []
+        self.STOP_CC_THREADS = False
+
+    # Getters
+    def get_enemies(self):
+        return self.revealed_enemies
+
+    def is_stopped(self):
+        return self.STOP_CC_THREADS
 
     # Setters
     def set_location(self, location):
@@ -106,6 +163,129 @@ class CompanyCommander:
 
     def set_company(self, company_num):
         self.company_number = company_num
+
+    def update_enemies(self, enemies):
+        self.revealed_enemies = enemies
+
+    def stop(self):
+        self.STOP_CC_THREADS = True
+
+
+# Enemy
+class Enemy:
+    # Attributes
+    ID = 1
+
+    # Constructor
+    def __init__(self, location, ammo):
+        self.ID = Enemy.ID
+        Enemy.ID += 1
+        self.x = location[0]
+        self.y = location[1]
+        self.ammo = ammo
+        self.in_sight = []
+
+    # Getters
+    def get_id(self):
+        return self.ID
+
+    def get_location(self):
+        return self.x, self.y
+
+    def get_str_location(self):
+        return str(self.x) + ", " + str(self.y)
+
+    def get_ammo(self):
+        return self.ammo
+
+    def get_x(self):
+        return self.x
+
+    def get_y(self):
+        return self.y
+
+    def get_in_sight(self):
+        return self.in_sight
+
+    def forces_in_sight(self, forces):
+        self.in_sight = forces
+
+
+# EnemySoldier
+class EnemySoldier(Enemy):
+    def __init__(self, location, ammo):
+        super().__init__(location, ammo)
+        self.HP = 100
+        self.speed = 1
+        self.move_to_location = None
+        self.shooting = False
+
+    # Getters
+    def get_move_to_location(self):
+        return self.move_to_location
+
+    def get_hp(self):
+        return self.HP
+
+    # Setters
+    def set_location(self, location):
+        self.x = location[0]
+        self.y = location[1]
+
+    def update_location(self, new_x, new_y):
+        self.x = new_x
+        self.y = new_y
+
+    def set_move_to(self, location):
+        self.move_to_location = location
+
+    def shoot(self):
+        self.shooting = True
+        self.ammo = self.ammo - 1
+
+    def not_shooting(self):
+        self.shooting = False
+
+    def got_damage(self, damage):
+        self.HP -= damage
+
+    # Getters
+    @staticmethod
+    def get_type():
+        return Utility.EnemyType.soldier.value
+
+    def get_speed(self):
+        return self.speed
+
+
+# Launcher
+class Launcher(Enemy):
+    def __init__(self, location, ammo):
+        super().__init__(location, ammo)
+        self.HP = 150
+
+    # Getters
+    @staticmethod
+    def get_type():
+        return Utility.EnemyType.launcher.value
+
+    def get_hp(self):
+        return self.hp
+
+
+# LookoutPoint
+class LookoutPoint(Enemy):
+    def __init__(self, location, ammo, soldier):
+        super().__init__(location, ammo)
+        self.soldier = soldier
+
+    # Getters
+    @staticmethod
+    def get_type():
+        return Utility.EnemyType.lookout_point.value
+
+    def get_soldier(self):
+        return self.soldier
 
 
 # Packet
@@ -122,8 +302,6 @@ class Packet:
         self.receiver = receiver
         self.message_type = message_type
         self.message = message
-        self.approved = False
-        self.bc_approval = False
 
     # Getters
     def get_id(self):
@@ -143,20 +321,6 @@ class Packet:
 
     def get_message(self):
         return self.message
-
-    def is_approved(self):
-        return self.approved
-
-    def is_bc_approved(self):
-        return self.bc_approval
-
-    # set_approval(status) - change the packet approval to the boolean variable that it gets
-    def set_approval(self, status):
-        self.approved = status
-
-    # bc_approval(status) - change the packet approval to the boolean variable that it gets
-    def bc_approval(self, status):
-        self.bc_approval = status
 
     # toString
     def __str__(self):
@@ -201,20 +365,38 @@ class AliveMessage:
         return "|| ID: {}, Company: {}, Location: ({}), HP: {}, Ammo: {} ||".format(self.field_object.get_id(),
                                                                                     self.field_object.get_company_num(),
                                                                                     self.field_object.get_location(),
-                                                                                    self.get_hp(),
+                                                                                    self.field_object.get_hp(),
                                                                                     self.field_object.get_ammo())
 
     # Getters
     def get_field_object(self):
         return self.field_object
 
-    # toString
-    def __str__(self):
-        return "|| ID: {}, Company: {}, Location: {}, HP: {}, Ammo: {} ||".format(self.field_object.get_id(),
-                                                                                  self.field_object.get_company_num(),
-                                                                                  self.field_object.get_location(),
-                                                                                  self.field_object.get_hp(),
-                                                                                  self.field_object.get_ammo())
+
+# MoveApprovalMessage
+class MoveApprovalMessage:
+    # Constructor
+    def __init__(self, field_object, location):
+        self.field_object = field_object
+        self.location = location
+
+    # Getters
+    def get_field_object(self):
+        return self.field_object
+
+    def get_move_to_location(self):
+        return self.location
+
+
+# EnemiesInSightMessage
+class EnemiesInSightMessage:
+    # Constructor
+    def __init__(self, enemies):
+        self.enemies = enemies
+
+    # Getters
+    def get_enemies(self):
+        return self.enemies
 
 
 # MoveOrderMessage
@@ -240,3 +422,47 @@ class MoveOrderMessage:
         return "|| Company: {}, ID: {}, MoveTo Location: ({}) ||".format(self.company_num,
                                                                          self.field_object_id,
                                                                          self.location)
+
+
+# EngageOrderMessage
+class EngageOrderMessage:
+    # Constructor
+    def __init__(self, field_object, enemy):
+        self.field_object = field_object
+        self.enemy = enemy
+
+    # Getters
+    def get_field_object(self):
+        return self.field_object
+
+    def get_enemy(self):
+        return self.enemy
+
+
+# EngageApprovalMessage
+class EngageApprovalMessage:
+    # Constructor
+    def __init__(self, company_num, field_object_id, enemy_id):
+        self.company_num = company_num
+        self.field_object_id = field_object_id
+        self.enemy_id = enemy_id
+
+    # Getters
+    def get_company_num(self):
+        return self.company_num
+
+    def get_field_object_id(self):
+        return self.field_object_id
+
+    def get_enemy_id(self):
+        return self.enemy_id
+
+
+# GotShotMessage
+class GotShotMessage:
+    # Constructor
+    def __init__(self, field_object):
+        self.field_object = field_object
+
+    def get_field_object(self):
+        return self.field_object
