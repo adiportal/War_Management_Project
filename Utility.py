@@ -24,6 +24,20 @@ def get_cc_listen_sock():
     return sock
 
 
+# get_bc_sock() - creating a new socket for bc and returns it
+def get_bc_listen_sock():
+    # Initialize socket
+    try:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+        logging.debug("Socket Successfully Created!")
+    except socket.error as err:
+        logging.error("Socket creation failed with error {}".format(err))
+
+    return sock
+
+
 def get_cc_send_sock():
     # Initialize socket
     try:
@@ -60,6 +74,7 @@ def get_cc_address():
     return '255.255.255.255', 5008
 
 
+# for CompanyCommanderUDP
 def get_cc_receive_address():
     return '', 5008
 
@@ -103,8 +118,8 @@ def init_cc_address(company_num):
 
 
 def get_bc_address():
-    IP = '127.0.0.1'
-    port = 5003
+    IP = ''
+    port = 5014
     return IP, port
 
 
@@ -115,42 +130,6 @@ def company_num_by_port(port):
         return 2
     elif port == 5006:
         return 3
-    else:
-        return Case.error.value
-
-
-# sender_receiver_case(packet) - get the packet and returns the case of sender-receiver
-def sender_receiver_switch_case(packet):
-
-    if packet.is_approved():
-        return Case.approval.value
-
-    # sender = Soldier, receiver = CC
-    if packet.get_sender() == Sender.soldier.value and \
-       packet.get_receiver() == Receiver.company_commander.value:
-        return Case.soldier_to_cc.value
-
-    # sender = Soldier, receiver = BC
-    elif packet.get_sender() == Sender.soldier.value and \
-            packet.get_receiver() == Receiver.battalion_commander.value and \
-            not packet.is_bc_approved():
-        return Case.soldier_to_bc.value
-
-    # sender = BC, receiver = CC -> Soldier
-    elif packet.get_sender() == Sender.soldier.value and \
-            packet.get_receiver() == Receiver.battalion_commander.value and \
-            packet.is_bc_approved():
-        return Case.bc_to_cc_approval.value
-
-    # sender = CC, receiver = soldier
-    elif packet.get_sender() == Sender.company_commander.value and \
-            packet.get_receiver() == Receiver.soldier.value:
-        return Case.cc_to_soldier.value
-
-    # sender = CC, receiver = soldier
-    elif int(msg_list[0]) == 2 and int(msg_list[2]) == 1:
-        return 4
-
     else:
         return Case.error.value
 
@@ -203,6 +182,42 @@ def enemy_contain(enemies, id):
         else:
             count += 1
     return -1
+
+
+def marked_enemies_check(enemies, marked_enemies):
+    enemies_list = enemies
+    for m_enemy in marked_enemies:
+        if m_enemy not in enemies:
+            enemies_list.append(m_enemy)
+
+    return enemies_list
+
+
+# sender_receiver_case(packet) - get the packet and returns the case of sender-receiver
+def sender_receiver_switch_case(packet):
+
+    # sender = Soldier, receiver = CC
+    if packet.get_sender() == Sender.soldier.value and \
+       packet.get_receiver() == Receiver.company_commander.value:
+        return Case.soldier_to_cc.value
+
+    # sender = Soldier, receiver = BC
+    elif packet.get_sender() == Sender.soldier.value and \
+            packet.get_receiver() == Receiver.battalion_commander.value:
+        return Case.soldier_to_bc.value
+
+    # sender = BC, receiver = CC -> Soldier
+    elif packet.get_sender() == Sender.soldier.value and \
+            packet.get_receiver() == Receiver.battalion_commander.value:
+        return Case.bc_to_cc_approval.value
+
+    # sender = CC, receiver = soldier
+    elif packet.get_sender() == Sender.company_commander.value and \
+            packet.get_receiver() == Receiver.soldier.value:
+        return Case.cc_to_soldier.value
+
+    else:
+        return Case.error.value
 
 
 # get_line(start, end) - get a start and end points and return a list of lined steps
@@ -275,6 +290,8 @@ class MessageType(enum.Enum):
     move_order = 2
     engage_order = 3
     enemies_in_sight = 4
+    move_approval = 5
+    engage_approval = 6
 
 
 class ObjectListIndex(enum.Enum):
@@ -304,3 +321,8 @@ class MoveToMessageIndexes(enum.Enum):
     company_num = 0
     field_object_id = 1
     location = 2
+
+
+class MovingTuple(enum.Enum):
+    on_move = 0
+    location = 1

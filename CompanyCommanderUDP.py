@@ -3,8 +3,7 @@ import pickle
 import threading
 from Utility import Company, MessageType, Case, sender_receiver_switch_case, get_field_address, contain, \
                     get_cc_listen_sock, get_cc_send_sock, get_cc_receive_address, get_cc_send_address
-from Entities import CompanyCommander
-
+from Entities import CompanyCommander, EngageOrderMessage
 
 # Initialize Companies
 company1 = []
@@ -21,10 +20,14 @@ send_sock = get_cc_send_sock()
 company_commander = CompanyCommander(1, (0, 0), 0)
 
 
+def get_company_commander():
+    return company_commander
+
+
 # listen() - Listening to incoming packets on background, while receiving a packet, it goes to receive_handler() func
 #            to handle the message.
 def listen():
-    print('Listening...\n')
+    print('Listening... \n')
     logging.debug("Listening...")
 
     while True:
@@ -35,6 +38,11 @@ def listen():
         rec_packet = pickle.loads(rec_packet)
         if rec_packet:
             receive_handler(rec_packet, get_field_address())
+
+        if company_commander.is_stopped():
+            logging.debug("Closing CompanyCommanderUDP...")
+            print("Closing CompanyCommanderUDP...")
+            break
 
 
 # receive_handler(packet, address) - Receive the packet and the address that it came from, check the case and act
@@ -57,65 +65,34 @@ def receive_handler(packet, address):
             index = contain(get_company(company_num), id)
 
             if index >= 0:
-                get_company(company_num)[index] = field_object
-                logging.debug("FieldObject #{} was updated".format(id))
+
+                if field_object.get_hp() <= 0:
+                    del get_company(company_num)[index]
+
+                else:
+                    get_company(company_num)[index] = field_object
+                    logging.debug("FieldObject #{} was updated".format(id))
             else:
                 get_company(company_num).append(field_object)
                 logging.debug("New FieldObject was created: #{}".format(id))
                 logging.debug("New FieldObject #{} from company {} was appended to company list".format(id,
                                                                                                         company_num))
-        if opt_case == MessageType.enemies_in_sight.value:
+        elif opt_case == MessageType.enemies_in_sight.value:
             updated_enemies = message.get_enemies()
-            company_commander.upldate_enemies(updated_enemies)
+            company_commander.update_enemies(updated_enemies)
 
-        # Report Location message
-        # if opt_case == MessageType.alive.value:
-        #     updated_object = message.get_field_object()
-        #
-        #     if int(updated_object.get_company_num()) == Company.company1.value:
-        #         updated = False
-        #         for object_field in company1:
-        #             if object_field.get_id() == int(updated_object.get_id()):
-        #                 object_field = updated_object
-        #                 logging.debug("FieldObject #" + str(object_field.get_id()) + " location was updated to: (" +
-        #                               object_field.get_str_location() + ")")
-        #                 updated = True
-        #                 break
-        #
-        #         if not updated:
-        #             logging.debug("Company 1 does not contain #" + str(updated_object.get_id()))
-        #
-        #     elif int(updated_object.get_company_num()) == Company.company2.value:
-        #         updated = False
-        #         for object_field in company2:
-        #             if object_field.get_id() == int(updated_object.get_id()):
-        #                 object_field = updated_object
-        #                 logging.debug("#" + str(object_field.get_id()) + " location was updated to: " +
-        #                               object_field.get_str_location())
-        #                 updated = True
-        #                 break
-        #
-        #         if not updated:
-        #             logging.debug("Company 2 does not contain #" + updated_object.get_id())
-        #
-        #     else:
-        #         updated = False
-        #         for object_field in company3:
-        #             if object_field.get_id() == updated_object.get_id():
-        #                 object_field = updated_object
-        #                 logging.debug("#" + str(object_field.get_id()) + " location was updated to: " +
-        #                               object_field.get_str_location())
-        #                 updated = True
-        #                 break
-        #
-        #         if not updated:
-        #             logging.debug("Company 3 does not contain #" + updated_object.get_id())
-        #
-        # # change the packet approval to True and send it back to sender
-        # packet.set_approval(True)
-        # byte_packet = pickle.dumps(packet)
-        # sock.sendto(byte_packet, get_field_address())
-        # logging.debug("Approval packet has been sent: {}".format(packet))
+        elif opt_case == MessageType.move_approval.value:
+            field_object = message.get_field_object()
+            id = field_object.get_id()
+            location = message.get_move_to_location()
+            logging.debug("FieldObject #{} start moving to ({})".format(id, location))
+
+        elif opt_case == MessageType.got_shot.value:
+            field_object = message.get_field_object()
+            id = field_object.get_id()
+
+            print("#{} Got Shot!!".format(id))
+            logging.debug("#{} Got Shot!!".format(id))
 
     # Error Case
     else:
