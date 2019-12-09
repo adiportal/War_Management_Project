@@ -293,4 +293,4 @@ def main(company_num, location):
     gui_thread1.start()
 
 
-main(3, (1, 2))
+main(1, (1, 2))

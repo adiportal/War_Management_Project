@@ -292,6 +292,7 @@ class MessageType(enum.Enum):
     enemies_in_sight = 4
     move_approval = 5
     engage_approval = 6
+    got_shot = 7
 
 
 class ObjectListIndex(enum.Enum):
