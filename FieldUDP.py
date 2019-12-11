@@ -3,8 +3,8 @@ import logging
 import threading
 import time
 import pickle
-from Entities import Packet, Soldier, BTW, AliveMessage, EnemySoldier, LookoutPoint, EnemiesInSightMessage, \
-                     MoveApprovalMessage, GotShotMessage
+from Entities import Packet, Soldier, BTW, AliveMessage, EnemySoldier, EnemiesInSightMessage, \
+                     MoveApprovalMessage, GotShotMessage, EngageApprovalMessage
 from Utility import Company, Sender, Receiver, MessageType, Case, Location, get_line, get_cc_address, \
                     get_field_sock, get_field_address, EnemyType, enemy_contain, marked_enemies_check, \
                     sender_receiver_switch_case, ObjectType
@@ -136,7 +136,11 @@ def enemies_check_for_forces():
 
 
 def forces_attack(field_object, enemy):
-    print("got engage order'")
+    print("got engage order")
+    if enemy.get_type() is EnemyType.lookout_point.value:
+        lookout_point = enemy
+    else:
+        lookout_point = None
 
     if enemy.get_type() == EnemyType.lookout_point.value:
         enemy = enemy.get_soldier()
@@ -169,6 +173,8 @@ def forces_attack(field_object, enemy):
                 if enemy.get_hp() <= 0:
                     field_object.attack_enemy(None)
                     enemies.remove(enemy)
+                    if lookout_point is not None:
+                        lookout_point.soldier_is_dead()
                     break
                 time.sleep(1)
 
@@ -397,12 +403,20 @@ def receive_handler(rec_packet, address):
             field_object = get_field_object(message.get_company_num(), message.get_field_object_id())
             enemy = get_enemy(enemy_id)
 
-            enemies_in_sight = field_object.get_in_sight()
-            if enemy in enemies_in_sight:
-                field_object.set_move_to(None)
-                forces_attack(field_object, enemy)
+            if field_object.get_ammo() > 0:
 
+                args = field_object, enemy
 
+                attack_thread = threading.Thread(target=forces_attack, args=args)
+                attack_thread.start()
+
+                message = EngageApprovalMessage(field_object.get_id(), enemy.get_id(), True)
+            else:
+                message = EngageApprovalMessage(field_object.get_id(), enemy.get_id(), False)
+
+            send_packet = Packet(Sender.soldier.value, field_object.get_company_num(), Receiver.company_commander.value,
+                                 MessageType.engage_approval.value, message)
+            send_handler(send_packet)
 
     # Error case
     else:
@@ -442,11 +456,6 @@ check_for_enemies_thread.start()
 enemies_check_for_forces_thread.start()
 enemy_attack_thread.start()
 
-time.sleep(5)
 
-args = s1, es1
-
-attack_thread = threading.Thread(target=forces_attack, args=args)
-attack_thread.start()
 
 

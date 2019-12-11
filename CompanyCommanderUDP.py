@@ -3,7 +3,7 @@ import pickle
 import threading
 from Utility import Company, MessageType, Case, sender_receiver_switch_case, get_field_address, contain, \
                     get_cc_listen_sock, get_cc_send_sock, get_cc_receive_address, get_cc_send_address
-from Entities import CompanyCommander, EngageOrderMessage
+from Entities import CompanyCommander
 
 # Initialize Companies
 company1 = []
@@ -86,6 +86,15 @@ def receive_handler(packet, address):
             id = field_object.get_id()
             location = message.get_move_to_location()
             logging.debug("FieldObject #{} start moving to ({})".format(id, location))
+
+        elif opt_case == MessageType.engage_approval.value:
+            field_object_id = message.get_field_object_id()
+            enemy_id = message.get_enemy_id()
+
+            if not message.can_exe():
+                print(f"{field_object_id} out of Ammo")
+            else:
+                print(f"{field_object_id} Engaging {enemy_id}")
 
         elif opt_case == MessageType.got_shot.value:
             field_object = message.get_field_object()

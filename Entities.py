@@ -97,7 +97,7 @@ class Soldier(FieldObjects):
     # Constructor
     def __init__(self, company_number, location, ammo):
         super().__init__(company_number, location, ammo)
-        self.HP = 100
+        self.HP = 400
         self.speed = 1
 
     # Getters
@@ -287,6 +287,15 @@ class LookoutPoint(Enemy):
     def get_soldier(self):
         return self.soldier
 
+    def soldier_is_dead(self):
+        self.soldier = None;
+
+    def is_empty(self):
+        if self.soldier is None:
+            return True
+        else:
+            return False
+
 
 # Packet
 class Packet:
@@ -442,20 +451,20 @@ class EngageOrderMessage:
 # EngageApprovalMessage
 class EngageApprovalMessage:
     # Constructor
-    def __init__(self, company_num, field_object_id, enemy_id):
-        self.company_num = company_num
+    def __init__(self, field_object_id, enemy_id, can_exe):
         self.field_object_id = field_object_id
         self.enemy_id = enemy_id
+        self.can_exe = can_exe
 
     # Getters
-    def get_company_num(self):
-        return self.company_num
-
     def get_field_object_id(self):
         return self.field_object_id
 
     def get_enemy_id(self):
         return self.enemy_id
+
+    def can_exe(self):
+        return self.can_exe()
 
 
 # GotShotMessage
