@@ -6,9 +6,8 @@ import pickle
 from Entities import Packet, Soldier, BTW, AliveMessage, EnemySoldier, LookoutPoint, EnemiesInSightMessage, \
                      MoveApprovalMessage, GotShotMessage
 from Utility import Company, Sender, Receiver, MessageType, Case, Location, get_line, get_cc_address, \
-                    get_field_sock, get_field_address, EnemyType, enemy_contain, marked_enemies_check, \
-                    sender_receiver_switch_case, ObjectType
-
+    get_field_sock, get_field_address, EnemyType, enemy_contain, marked_enemies_check, \
+    sender_receiver_switch_case, ObjectType, get_bc_receive_address, get_bc_address
 
 global STOP_FIELD_THREADS
 STOP_FIELD_THREADS = False
@@ -412,9 +411,12 @@ def receive_handler(rec_packet, address):
 # send_handler(send_packet) - Sending the packet that it gets
 def send_handler(send_packet):
     cc_address = get_cc_address()
+    bc_address = get_bc_address()
     try:
         byte_packet = pickle.dumps(send_packet)
         sock.sendto(byte_packet, cc_address)
+        time.sleep(0.100)
+        sock.sendto(byte_packet, bc_address)
 
     except:
         logging.error("The message '{}' didn't reached to CC".format(send_packet))
@@ -443,9 +445,9 @@ enemy_attack_thread.start()
 
 time.sleep(5)
 
-args = s1, es1
-
-attack_thread = threading.Thread(target=forces_attack, args=args)
-attack_thread.start()
+# args = s1, es1
+#
+# attack_thread = threading.Thread(target=forces_attack, args=args)
+# attack_thread.start()
 
 

@@ -74,6 +74,10 @@ def get_cc_address():
     return '255.255.255.255', 5008
 
 
+def get_bc_address():
+    return '255.255.255.255', 5014
+
+
 # for CompanyCommanderUDP
 def get_cc_receive_address():
     return '', 5008
@@ -117,7 +121,7 @@ def init_cc_address(company_num):
         return Case.error.value
 
 
-def get_bc_address():
+def get_bc_receive_address():
     IP = ''
     port = 5014
     return IP, port
@@ -216,6 +220,10 @@ def sender_receiver_switch_case(packet):
             packet.get_receiver() == Receiver.soldier.value:
         return Case.cc_to_soldier.value
 
+    elif packet.get_sender() == Sender.company_commander.value and \
+            packet.get_receiver() == Receiver.battalion_commander.value:
+        return Case.cc_to_bc.value
+
     else:
         return Case.error.value
 
@@ -259,10 +267,9 @@ class Company(enum.Enum):
 
 class Case(enum.Enum):
     soldier_to_cc = 1
-    soldier_to_bc = 2
-    bc_to_cc_approval = 3
-    cc_to_soldier = 4
-    approval = 5
+    cc_to_bc = 2
+    cc_to_soldier = 3
+    approval = 4
     error = 0
 
 

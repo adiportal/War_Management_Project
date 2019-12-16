@@ -1,12 +1,15 @@
 import sys
 import threading
 import time
+
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QCursor
 from PyQt5.QtWidgets import *
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.uic import loadUi
 from matplotlib.animation import FuncAnimation
 import matplotlib.pyplot as plt
-from Entities import Soldier
+from Entities import Soldier, BTW
 from matplotlib.backends.backend_qt5agg import (NavigationToolbar2QT as NavigationToolbar)
 import numpy as np
 import CompanyCommanderUDP
@@ -17,16 +20,17 @@ from Utility import create_move_to_message, EnemyType
 class MatplotlibWidget(QMainWindow):
     soldiers = []  # company1 list from the 3 lists of the company commander
     picked_soldier = []
+    picked_enemy = []
     enemies = []
-
     company_commander = CompanyCommanderUDP.company_commander  # Initialize the company commander entity
 
     def __init__(self):
         QMainWindow.__init__(self)
 
-        loadUi("company_commander1.ui", self)
+        loadUi("company_commander2.ui", self)
 
         self.move_pushButton.clicked.connect(self.move_button)
+        self.plainTextEdit.setReadOnly(True)
 
         self.setWindowTitle("Company Commander " + str(CompanyCommanderUDP.company_commander.company_number))
 
@@ -36,9 +40,6 @@ class MatplotlibWidget(QMainWindow):
 
         # Starting the animation using the animate function, update every 1000 miliseconds
         self.ani = FuncAnimation(self.MplWidget.canvas.figure, self.animate, interval=1000, blit=False)
-
-        # Starting the pick event (first you pick an existing point and after that a new location)
-        # self.MplWidget.canvas.mpl_connect('pick_event', self.on_pick)
 
         # Starting the hover event (on hovering a marker an informative label shows up)
         self.MplWidget.canvas.mpl_connect("motion_notify_event", self.on_hover)
@@ -57,7 +58,7 @@ class MatplotlibWidget(QMainWindow):
 
     def move_button(self):
         self.MplWidget.canvas.mpl_connect('pick_event', self.on_pick)
-        self.messages_label.setText("Please choose Soldier or BTW")
+        # self.plainTextEdit.setText("Please choose Soldier or BTW")
 
     # function for a thread, updates the soldiers list
     def update_field(self):
@@ -131,46 +132,117 @@ class MatplotlibWidget(QMainWindow):
         labels = []
         sizes = []
 
-        for s in self.soldiers:
-            x.append(s.x)
-            y.append(s.y)
-            if s.company_number == 1:
-                color.append('cyan')
-            elif s.company_number == 2:
-                color.append('orange')
-            else:
-                color.append('lime')
-            if type(s) == Soldier:
-                marker.append('o')
-                sizes.append(4)
-            else:
-                marker.append('*')
-                sizes.append(8)
-            labels.append(s.__str__())
+        if self.my_company_checkbox.isChecked() and (not self.soldiers_checkbox.isChecked() and
+                                                     not self.btws_checkbox.isChecked()):
+            self.soldiers_checkbox.setChecked(True)
+            self.btws_checkbox.setChecked(True)
 
+        if (self.my_company_checkbox.isChecked()) and not (self.soldiers_checkbox.isChecked() or
+                                                           self.btws_checkbox.isChecked()):
+            self.my_company_checkbox.setChecked(False)
+
+        if (not self.my_company_checkbox.isChecked()) and (self.soldiers_checkbox.isChecked()
+                                                           and self.btws_checkbox.isChecked()):
+            self.my_company_checkbox.setChecked(True)
+
+        for s in self.soldiers:
+            if self.my_company_checkbox.isChecked() or self.soldiers_checkbox.isChecked() or \
+                    self.btws_checkbox.isChecked():
+                if type(s) == Soldier and self.soldiers_checkbox.isChecked():
+                    if s.company_number == self.company_commander.company_number:
+                        x.append(s.x)
+                        y.append(s.y)
+                        if s.company_number == 1:
+                            color.append('cyan')
+                        elif s.company_number == 2:
+                            color.append('orange')
+                        else:
+                            color.append('lime')
+                        marker.append('o')
+                        sizes.append(4)
+                        labels.append(s.__str__())
+
+                elif type(s) == BTW and self.btws_checkbox.isChecked():
+                    if s.company_number == self.company_commander.company_number:
+                        x.append(s.x)
+                        y.append(s.y)
+                        if s.company_number == 1:
+                            color.append('cyan')
+                        elif s.company_number == 2:
+                            color.append('orange')
+                        else:
+                            color.append('lime')
+
+                        marker.append('*')
+                        sizes.append(8)
+                        labels.append(s.__str__())
+
+            if self.other_companies_checkbox.isChecked():
+                if s.company_number != self.company_commander.company_number:
+                    x.append(s.x)
+                    y.append(s.y)
+                    if s.company_number == 1 and self.company_commander.company_number != 1:
+                        color.append('cyan')
+                    elif s.company_number == 2 and self.company_commander.company_number != 2:
+                        color.append('orange')
+                    elif s.company_number == 3 and self.company_commander.company_number != 3:
+                        color.append('lime')
+                    if type(s) == Soldier:
+                        marker.append('o')
+                        sizes.append(4)
+                    else:
+                        marker.append('*')
+                        sizes.append(8)
+                    labels.append(s.__str__())
+            else:
+                continue
         for xp, yp, c, m, l, s in zip(x, y, color, marker, labels,
                                       sizes):  # zip connects together all the elements in the lists
             # that located on the same indexes
             self.MplWidget.canvas.axes.plot([xp], [yp], color=c, marker=m, markersize=s, label=l, picker=10)
 
+        if self.enemies_checkBox.isChecked() and \
+                not (self.enemies_soldiers_checkbox.isChecked() and self.launchers_checkbox.isChecked() and
+                     self.lookout_points_checkbox.isChecked()):
+            self.enemies_soldiers_checkbox.setChecked(True)
+            self.launchers_checkbox.setChecked(True)
+            self.lookout_points_checkbox.setChecked(True)
+
+        if (self.enemies_checkBox.isChecked()) and not (self.enemies_soldiers_checkbox.isChecked() or
+                                                        self.launchers_checkbox.isChecked() or
+                                                        self.lookout_points_checkbox.isChecked()):
+            self.enemies_checkBox.setChecked(False)
+
+        if (not self.enemies_checkBox.isChecked()) and (self.enemies_soldiers_checkbox.isChecked() and
+                                                        self.launchers_checkbox.isChecked() and
+                                                        self.lookout_points_checkbox.isChecked()):
+            self.enemies_checkBox.setChecked(True)
+
         x_enemy = []
         y_enemy = []
         marker_enemy = []
         for e in self.enemies:
-            x_enemy.append(e.get_x())
-            y_enemy.append(e.get_y())
 
-            if e.get_type() == EnemyType.soldier.value:
-                marker_enemy.append("o")
+            if(self.enemies_checkBox.isChecked() or self.enemies_soldiers_checkbox.isChecked()
+                    or self.launchers_checkbox.isChecked() or self.lookout_points_checkbox.isChecked()):
+                if e.get_type() == EnemyType.soldier.value and self.enemies_soldiers_checkbox.isChecked():
+                    x_enemy.append(e.get_x())
+                    y_enemy.append(e.get_y())
+                    marker_enemy.append("o")
 
-            elif e.get_type() == EnemyType.launcher:
-                marker_enemy.append("^")
+                elif e.get_type() == EnemyType.launcher.value and self.launchers_checkbox.isChecked():
+                    x_enemy.append(e.get_x())
+                    y_enemy.append(e.get_y())
+                    marker_enemy.append("^")
 
-            else:
-                marker_enemy.append("s")
+                elif e.get_type() == EnemyType.lookout_point.value and self.lookout_points_checkbox.isChecked():
+                    x_enemy.append(e.get_x())
+                    y_enemy.append(e.get_y())
+                    marker_enemy.append("s")
 
-            for x, y, m in zip(x_enemy, y_enemy, marker_enemy):
-                self.MplWidget.canvas.axes.plot([x], [y], color="red", marker=m, markersize=4, markeredgecolor="black")
+                for x, y, m in zip(x_enemy, y_enemy, marker_enemy):
+                    self.MplWidget.canvas.axes.plot([x], [y], color="red", marker=m, markersize=4,
+                                                    markeredgecolor="black")
 
         # Plot the company commander location
         self.MplWidget.canvas.axes.plot(self.company_commander.x, self.company_commander.y, color="black", marker='o',
@@ -190,6 +262,7 @@ class MatplotlibWidget(QMainWindow):
 
     # function for handling the pick event when picking a marker to move
     def on_pick(self, event):
+        # QApplication.setOverrideCursor(QCursor(Qt.PointingHandCursor))
         this_point = event.artist
 
         # x_data and y_data of the point that was picked by the user
@@ -202,7 +275,6 @@ class MatplotlibWidget(QMainWindow):
 
             for soldier in self.soldiers:
                 if soldier.x == x_data and soldier.y == y_data:
-                    index = soldier.ID - 1
                     self.picked_soldier.append(soldier)
                     break
 
@@ -210,6 +282,42 @@ class MatplotlibWidget(QMainWindow):
             self.MplWidget.canvas.mpl_connect('button_press_event', self.on_click)
             # turns off the on pick event (so only click on point to move is able)
             self.MplWidget.canvas.mpl_disconnect(self.MplWidget.canvas.mpl_connect('pick_event', self.on_pick))
+
+    def pick_soldier_for_engage(self, event):
+        this_point = event.artist
+
+        # x_data and y_data of the point that was picked by the user
+        x_data = this_point.get_xdata()
+        y_data = this_point.get_ydata()
+
+        ind = event.ind
+
+        if self.company_commander.company_number == self.get_company_num(x_data, y_data):
+
+            for soldier in self.soldiers:
+                if soldier.x == x_data and soldier.y == y_data:
+                    self.picked_soldier.append(soldier)
+                    break
+            self.MplWidget.canvas.mpl_connect('button_press_event', self.pick_enemy_for_engage)
+            self.MplWidget.canvas.mpl_disconnect(self.MplWidget.canvas.mpl_connect('pick_event',
+                                                                                   self.pick_soldier_for_engage))
+
+    def pick_enemy_for_engage(self, event):
+        this_point = event.artist
+
+        # x_data and y_data of the point that was picked by the user
+        x_data = this_point.get_xdata()
+        y_data = this_point.get_ydata()
+
+        ind = event.ind
+
+        for enemy in self.enemies:
+            if enemy.x == x_data and enemy.y == y_data:
+                self.picked_enemy.append(enemy)
+                break
+
+        self.MplWidget.canvas.mpl_disconnect(self.MplWidget.canvas.mpl_connect('pick_event',
+                                                                               self.pick_enemy_for_engage))
 
     # returns the soldier's company according to the location
     def get_company_num(self, x_data, y_data):
@@ -230,17 +338,13 @@ class MatplotlibWidget(QMainWindow):
             packet = create_move_to_message(soldier.get_company_num(), soldier.get_id(), (x_data, y_data))
             send_handler(packet)
 
-        self.MplWidget.canvas.mpl_connect('pick_event', self.on_pick)  # turns on again the pick event
+        # self.MplWidget.canvas.mpl_connect('pick_event', self.on_pick)  # turns on again the pick event
         # turns off the click event
         self.MplWidget.canvas.mpl_disconnect(
             self.MplWidget.canvas.mpl_connect('button_press_event', self.on_click))
 
-        self.messages_label.setText("")
-
-
     # function for handling the hover event for showing labels for markers
     def on_hover(self, event):
-
         if event.inaxes == self.MplWidget.canvas.axes:  # event.inaxes = the axes that the event occurs in
             # self.canves.ax = our axes
 
@@ -263,12 +367,6 @@ class MatplotlibWidget(QMainWindow):
         self.tooltip_visible = self.tooltip._visible
         # redraw the canvas to display or hide the label
         self.MplWidget.canvas.draw()
-
-    # def update_graph(self):
-    #
-    #     self.MplWidget.canvas.axes.plot([1], [2], color="red", marker='*', markersize=6)
-    #
-    #     self.MplWidget.canvas.draw()
 
 
 def company_commander_thread(company_num, location):

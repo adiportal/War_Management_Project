@@ -1,9 +1,11 @@
 import logging
 import pickle
 import threading
+import time
+
 from Utility import Company, MessageType, Case, sender_receiver_switch_case, get_field_address, contain, \
-                    get_cc_listen_sock, get_cc_send_sock, get_cc_receive_address, get_cc_send_address
-from Entities import CompanyCommander, EngageOrderMessage
+    get_cc_listen_sock, get_cc_send_sock, get_cc_receive_address, get_cc_send_address, Sender, Receiver
+from Entities import CompanyCommander, AliveMessage, Packet
 
 # Initialize Companies
 company1 = []
@@ -125,6 +127,17 @@ def get_company(company_num):
         return company3
 
 
+def report_alive():
+    time.sleep(5)
+    print("sending")
+    message = AliveMessage(company_commander)
+    send_packet = Packet(Sender.company_commander.value, company_commander.get_company_num(),
+                         Receiver.battalion_commander.value, MessageType.alive.value, message)
+
+    send_handler(send_packet)
+    print("sent")
+
+
 # Main
 def main(company_num, location):
     # Initialize the Logger
@@ -149,3 +162,4 @@ def main(company_num, location):
     # start listen() func on background
     listen_thread = threading.Thread(target=listen)
     listen_thread.start()
+    report_alive()
