@@ -1,11 +1,15 @@
 import logging
 import pickle
 import threading
+
+from Entities import BattalionCommander
 from Utility import Company, MessageType, Case, sender_receiver_switch_case, get_field_address, contain, \
     get_bc_listen_sock, get_cc_address, get_bc_address, get_bc_receive_address
 
 global STOP_BC_THREADS
 STOP_BC_THREADS = False
+
+battalion_commander = BattalionCommander()
 
 # Initialize Companies
 company1 = []
@@ -30,6 +34,7 @@ def listen():
 
         # decoding the message to String
         rec_packet = pickle.loads(rec_packet)
+        print(rec_packet)
         if rec_packet:
             receive_handler(rec_packet)
 
@@ -88,6 +93,12 @@ def receive_handler(packet):
             cc = message.get_field_object()
             company_commanders.append(cc)
             print("got message")
+
+    elif opt_case == MessageType.enemies_in_sight.value:
+        updated_enemies = message.get_enemies()
+        battalion_commander.update_enemies(updated_enemies)
+
+
     # Error Case
     else:
         logging.debug("Invalid Message:".format(packet))

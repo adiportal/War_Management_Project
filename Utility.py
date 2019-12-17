@@ -275,7 +275,7 @@ class Case(enum.Enum):
 
 class ObjectType(enum.Enum):
     soldier = 1
-    btw = 2
+    apc = 2
 
 
 class EnemyType(enum.Enum):

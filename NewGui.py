@@ -9,7 +9,7 @@ from PyQt5 import QtCore, QtWidgets
 from PyQt5.uic import loadUi
 from matplotlib.animation import FuncAnimation
 import matplotlib.pyplot as plt
-from Entities import Soldier, BTW
+from Entities import Soldier, APC
 from matplotlib.backends.backend_qt5agg import (NavigationToolbar2QT as NavigationToolbar)
 import numpy as np
 import CompanyCommanderUDP
@@ -58,7 +58,7 @@ class MatplotlibWidget(QMainWindow):
 
     def move_button(self):
         self.MplWidget.canvas.mpl_connect('pick_event', self.on_pick)
-        # self.plainTextEdit.setText("Please choose Soldier or BTW")
+        # self.plainTextEdit.setText("Please choose Soldier or APC")
 
     # function for a thread, updates the soldiers list
     def update_field(self):
@@ -133,21 +133,21 @@ class MatplotlibWidget(QMainWindow):
         sizes = []
 
         if self.my_company_checkbox.isChecked() and (not self.soldiers_checkbox.isChecked() and
-                                                     not self.btws_checkbox.isChecked()):
+                                                     not self.apcs_checkbox.isChecked()):
             self.soldiers_checkbox.setChecked(True)
-            self.btws_checkbox.setChecked(True)
+            self.apcs_checkbox.setChecked(True)
 
         if (self.my_company_checkbox.isChecked()) and not (self.soldiers_checkbox.isChecked() or
-                                                           self.btws_checkbox.isChecked()):
+                                                           self.apcs_checkbox.isChecked()):
             self.my_company_checkbox.setChecked(False)
 
         if (not self.my_company_checkbox.isChecked()) and (self.soldiers_checkbox.isChecked()
-                                                           and self.btws_checkbox.isChecked()):
+                                                           and self.apcs_checkbox.isChecked()):
             self.my_company_checkbox.setChecked(True)
 
         for s in self.soldiers:
             if self.my_company_checkbox.isChecked() or self.soldiers_checkbox.isChecked() or \
-                    self.btws_checkbox.isChecked():
+                    self.apcs_checkbox.isChecked():
                 if type(s) == Soldier and self.soldiers_checkbox.isChecked():
                     if s.company_number == self.company_commander.company_number:
                         x.append(s.x)
@@ -162,7 +162,7 @@ class MatplotlibWidget(QMainWindow):
                         sizes.append(4)
                         labels.append(s.__str__())
 
-                elif type(s) == BTW and self.btws_checkbox.isChecked():
+                elif type(s) == APC and self.apcs_checkbox.isChecked():
                     if s.company_number == self.company_commander.company_number:
                         x.append(s.x)
                         y.append(s.y)

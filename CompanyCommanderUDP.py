@@ -3,6 +3,7 @@ import pickle
 import threading
 import time
 
+import Utility
 from Utility import Company, MessageType, Case, sender_receiver_switch_case, get_field_address, contain, \
     get_cc_listen_sock, get_cc_send_sock, get_cc_receive_address, get_cc_send_address, Sender, Receiver
 from Entities import CompanyCommander, AliveMessage, Packet
@@ -105,8 +106,14 @@ def receive_handler(packet, address):
 #                        the GUI, it create a packet and the packet goes to send_handler() to handle the message
 def send_handler(packet):
     try:
+        if sender_receiver_switch_case(packet) == Case.cc_to_bc.value:
+            print("here")
+            address = Utility.get_bc_address()
+        else:
+            address = get_field_address()
+
         byte_packet = pickle.dumps(packet)
-        send_sock.sendto(byte_packet, get_field_address())
+        send_sock.sendto(byte_packet, address)
         logging.debug("A Packet has been sent: {}".format(packet))
     except:
         logging.error("The packet '{}' didn't reached to Field {}".format(packet, get_field_address()))

@@ -76,7 +76,7 @@
           <string>Soldiers</string>
          </property>
         </widget>
-        <widget class="QCheckBox" name="btws_checkbox">
+        <widget class="QCheckBox" name="apcs_checkbox">
          <property name="geometry">
           <rect>
            <x>20</x>
@@ -86,7 +86,7 @@
           </rect>
          </property>
          <property name="text">
-          <string>BTWs</string>
+          <string>APCs</string>
          </property>
         </widget>
         <widget class="QCheckBox" name="other_companies_checkbox">

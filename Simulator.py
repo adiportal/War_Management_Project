@@ -2,7 +2,7 @@ import random
 import threading
 import time
 
-from Entities import FieldUDP, Soldier, BTW, EnemySoldier, LookoutPoint, Launcher
+from Entities import FieldUDP, Soldier, APC, EnemySoldier, LookoutPoint, Launcher
 from Utility import EnemyType
 
 fieldUDP = FieldUDP()
@@ -29,24 +29,24 @@ def random_enemies_location():
     return x, y
 
 
-# Initialize Soldiers and BTWs
+# Initialize Soldiers and APCs
 # Company 1
 for i in range(5):
     fieldUDP.add_to_forces(Soldier(1, random_forces_location(), 100))
 
-fieldUDP.add_to_forces(BTW(1, random_forces_location(), 200))
+fieldUDP.add_to_forces(APC(1, random_forces_location(), 200))
 
 # Company 2
 for i in range(5):
     fieldUDP.add_to_forces(Soldier(2, random_forces_location(), 100))
 
-fieldUDP.add_to_forces(BTW(2, random_forces_location(), 200))
+fieldUDP.add_to_forces(APC(2, random_forces_location(), 200))
 
 # Company 3
 for i in range(5):
     fieldUDP.add_to_forces(Soldier(3, random_forces_location(), 100))
 
-fieldUDP.add_to_forces(BTW(3, random_forces_location(), 200))
+fieldUDP.add_to_forces(APC(3, random_forces_location(), 200))
 
 # Enemies
 # Enemy Soldiers

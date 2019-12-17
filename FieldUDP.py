@@ -3,7 +3,7 @@ import logging
 import threading
 import time
 import pickle
-from Entities import Packet, Soldier, BTW, AliveMessage, EnemySoldier, LookoutPoint, EnemiesInSightMessage, \
+from Entities import Packet, Soldier, APC, AliveMessage, EnemySoldier, LookoutPoint, EnemiesInSightMessage, \
                      MoveApprovalMessage, GotShotMessage
 from Utility import Company, Sender, Receiver, MessageType, Case, Location, get_line, get_cc_address, \
     get_field_sock, get_field_address, EnemyType, enemy_contain, marked_enemies_check, \
@@ -31,7 +31,7 @@ s3 = Soldier(1, (7, 3), 25)
 s4 = Soldier(1, (9, 1), 25)
 s5 = Soldier(1, (12, 7), 25)
 
-btw1 = BTW(1, (2, 9), 50)
+btw1 = APC(1, (2, 9), 50)
 
 
 # Company 2
@@ -41,7 +41,7 @@ s8 = Soldier(2, (1.7878, 6.2), 25)
 s9 = Soldier(2, (9.456, 7.88), 25)
 s10 = Soldier(2, (10.41, 5.667), 25)
 
-btw2 = BTW(2, (12, 4), 50)
+btw2 = APC(2, (12, 4), 50)
 
 # Company 3
 s11 = Soldier(3, (5.387, 5.888), 25)
@@ -50,7 +50,7 @@ s13 = Soldier(3, (3.7878, 7.777), 25)
 s14 = Soldier(3, (5.222, 1.56), 25)
 s15 = Soldier(3, (7.8, 3.6), 25)
 
-btw3 = BTW(3, (6.872, 6.999), 50)
+btw3 = APC(3, (6.872, 6.999), 50)
 
 # Adding FieldObjects to their companies
 company1 = [s1, s2, s3, s4, s5, btw1]

@@ -115,8 +115,8 @@ class Soldier(FieldObjects):
         return Utility.ObjectType.soldier.value
 
 
-# BTW
-class BTW(FieldObjects):
+# APC
+class APC(FieldObjects):
     # Constructor
     def __init__(self, company_number, location, ammo):
         super().__init__(company_number, location, ammo)
@@ -132,7 +132,16 @@ class BTW(FieldObjects):
 
     @staticmethod
     def get_type():
-        return Utility.ObjectType.btw.value
+        return Utility.ObjectType.apc.value
+
+
+# BattalionCommander
+class BattalionCommander:
+    def __init__(self):
+        self.enemies = []
+
+    def update_enemies(self, enemies):
+        self.enemies = enemies
 
 
 # CompanyCommander

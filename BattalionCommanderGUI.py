@@ -7,7 +7,7 @@ from PyQt5.uic import loadUi
 from matplotlib.animation import FuncAnimation
 import matplotlib.pyplot as plt
 import BattalionCommander
-from Entities import Soldier, BTW
+from Entities import Soldier, APC
 from matplotlib.backends.backend_qt5agg import (NavigationToolbar2QT as NavigationToolbar)
 import numpy as np
 from Utility import create_move_to_message, EnemyType
@@ -222,7 +222,7 @@ class MatplotlibWidget(QMainWindow):
                 sizes.append(4)
                 labels.append(s.__str__())
 
-            elif type(s) == BTW and apcs.isChecked():
+            elif type(s) == APC and apcs.isChecked():
                 x.append(s.x)
                 y.append(s.y)
                 color.append(c)
