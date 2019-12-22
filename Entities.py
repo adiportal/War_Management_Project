@@ -24,6 +24,13 @@ class FieldObjects:
         self.move_to_location = None
         self.attacking_enemy = None
 
+    def is_in_sight(self, enemy):
+        for e in self.in_sight:
+            if e.get_id() == enemy.get_id():
+                return True
+            else:
+                return False
+
     # toString
     def __str__(self):
         return "{} #{}: \n" \
@@ -139,9 +146,16 @@ class APC(FieldObjects):
 class BattalionCommander:
     def __init__(self):
         self.enemies = []
+        self.commanders = []
 
-    def update_enemies(self, enemies):
-        self.enemies = enemies
+    def update_enemies(self, enemies_list):
+        self.enemies = enemies_list
+
+    def get_enemies(self):
+        return self.enemies
+
+    def get_commanders(self):
+        return self.commanders
 
 
 # CompanyCommander
@@ -508,8 +522,7 @@ class GotShotMessage:
 class FieldUDP:
     # Constructor
     def __init__(self):
-        logging.basicConfig(filename='FieldLog.log', level=logging.DEBUG, format='%(asctime)s : %(levelname)s : '
-                                                                                 'Soldier : %(message)s')
+        self.logger = Utility.setup_logger('field', 'field.log')
 
         self.company1 = []
         self.company2 = []
@@ -540,7 +553,7 @@ class FieldUDP:
     # func to handle the message.
     def listen(self):
         print('Listening...')
-        logging.debug('Listening...')
+        self.logger.debug('Listening...')
 
         while True:
             # set max size of message
@@ -603,9 +616,17 @@ class FieldUDP:
 
                 enemy.forces_in_sight(forces_in_sight)
 
+    def get_enemy(self, enemy):
+        for e in self.enemies:
+            if e.get_id() == enemy.get_id():
+                return e
+        return None
+
     def forces_attack(self, field_object, enemy):
-        print("got engage order'")
+        print("got engage order")
         lookout_point_soldier = None
+        field_object = self.get_field_object(field_object.get_company_num(), field_object.get_id())
+        enemy = self.get_enemy(enemy)
 
         if enemy.get_type() == Utility.EnemyType.lookout_point.value:
             lookout_point_soldier = enemy.get_soldier()
@@ -619,31 +640,37 @@ class FieldUDP:
 
         field_object.attack_enemy(enemy)
 
-        while enemy.get_hp() > 0:
+        while True:
             if enemy is None:
                 break
 
             if enemy != field_object.get_attacking_enemy():
                 break
-
-            if enemy in field_object.get_in_sight():
+            if field_object.is_in_sight(enemy):
                 field_object.set_move_to(None)
                 while True:
                     if field_object.get_move_to_location() is not None or \
                             enemy is not field_object.get_attacking_enemy():
                         break
 
-                    field_object.shoot()
-                    enemy.got_damage(damage)
-                    print(enemy.get_hp())
-                    if enemy.get_hp() <= 0:
-                        if lookout_point is None:
+                    if lookout_point_soldier is None:
+                        field_object.shoot()
+                        enemy.got_damage(damage)
+                        print(enemy.get_hp())
+                        if enemy.get_hp() <= 0:
                             field_object.attack_enemy(None)
                             self.enemies.remove(enemy)
-                        else:
-                            lookout_point.set_soldier()
-                        break
-                    time.sleep(1)
+                            break
+                        time.sleep(1)
+                    else:
+                        field_object.shoot()
+                        lookout_point_soldier.got_damage(damage)
+                        print(lookout_point_soldier.get_hp())
+                        if lookout_point_soldier.get_hp() <= 0:
+                            field_object.attack_enemy(None)
+                            enemy.set_soldier()
+                            break
+                        time.sleep(1)
 
             else:
                 if field_object.get_move_to_location() is not None:
@@ -652,8 +679,8 @@ class FieldUDP:
                     location = enemy.get_location()
                     field_object.set_move_to(location)
 
-                    move_to_thread = threading.Thread(target=self.move_to, args=(field_object, location[Location.X.value],
-                                                                            location[Location.Y.value]))
+                    move_to_thread = threading.Thread(target=self.move_to, args=(field_object, location[Utility.Location.X.value],
+                                                                            location[Utility.Location.Y.value]))
                     move_to_thread.start()
 
                     while enemy not in field_object.get_in_sight():
@@ -666,6 +693,7 @@ class FieldUDP:
     def enemy_attack(self):
         while True:
             for enemy in self.enemies:
+                lookout_point_soldier = None
                 if enemy.get_type() is Utility.EnemyType.lookout_point.value:
                     if enemy.is_empty():
                         continue
@@ -676,8 +704,11 @@ class FieldUDP:
                 if enemy.get_type() is Utility.EnemyType.launcher.value:
                     continue
 
-                if len(enemy.get_in_sight()) == 0:
+                if (len(enemy.get_in_sight()) == 0 or enemy.get_ammo() <= 0) and lookout_point_soldier is None:
                     enemy.not_shooting()
+                    continue
+                elif (len(enemy.get_in_sight()) == 0 or enemy.get_ammo() <= 0) and lookout_point_soldier is not None:
+                    lookout_point_soldier.not_shooting()
                     continue
                 else:
                     damage = random.randint(-2, 10)
@@ -686,7 +717,10 @@ class FieldUDP:
 
                     field_object = random.choice(enemy.get_in_sight())
 
-                    enemy.shoot()
+                    if lookout_point_soldier is None:
+                        enemy.shoot()
+                    else:
+                        lookout_point_soldier.shoot()
                     field_object.got_damage(damage)
 
                     if not field_object.is_got_shot():
@@ -812,14 +846,6 @@ class FieldUDP:
         else:
             return -1
 
-    # get_enemy(id) - get the enemy from enemies list by the id
-    def get_enemy(self,id):
-        for enemy in self.enemies:
-            if enemy.get_id() == id:
-                return enemy
-
-        return -1
-
     # move_to(field_object, new_x, new_y) - while FieldUDP gets a MoveOrderMessage, the receive_handler() triggers the
     #                                       move_to() func. it moves the FieldObject, step by step by it's own speed
     def move_to(self, field_object, new_x, new_y):
@@ -872,26 +898,26 @@ class FieldUDP:
                                      Utility.Receiver.company_commander.value,
                                      Utility.MessageType.move_approval.value, message)
                 self.send_handler(send_packet)
-                logging.debug(
+                self.logger.debug(
                     "Move approval message was sent from FieldObject #{} to CC #{}".format(field_object.get_id(),
                                                                                            field_object.get_company_num()))
 
             # Engage Order Message
             if opt_case == Utility.MessageType.engage_order.value:
                 message = rec_packet.get_message()
-                enemy_id = message.get_enemy().get_id()
-                field_object = self.get_field_object(message.get_company_num(), message.get_field_object_id())
-                enemy = self.get_enemy(enemy_id)
+                field_object = message.get_field_object()
+                enemy = message.get_enemy()
 
-                enemies_in_sight = field_object.get_in_sight()
-                if enemy in enemies_in_sight:
-                    field_object.set_move_to(None)
-                    self.forces_attack(field_object, enemy)
+                args = field_object, enemy
+
+                forces_attack_thread = threading.Thread(target=self.forces_attack, args=args)
+                field_object.set_move_to(None)
+                forces_attack_thread.start()
 
         # Error case
         else:
             # print(str(address) + " >> " + rec_packet)
-            logging.error(str(address) + " >> " + str(rec_packet))
+            self.logger.error(str(address) + " >> " + str(rec_packet))
 
     # send_handler(send_packet) - Sending the packet that it gets
     def send_handler(self, send_packet):
@@ -904,7 +930,7 @@ class FieldUDP:
             self.sock.sendto(byte_packet, bc_address)
 
         except:
-            logging.error("The message '{}' didn't reached to CC".format(send_packet))
+            self.logger.error("The message '{}' didn't reached to CC".format(send_packet))
             print("The message '{}' did'nt reached to the Company Commander!!".format(send_packet))
 
     def add_to_forces(self, field_object):
@@ -927,8 +953,14 @@ class FieldUDP:
         new_x = location[Utility.Location.X.value]
         new_y = location[Utility.Location.Y.value]
 
-        enemy = self.get_enemy(enemy.get_id())
+        enemy = self.get_enemy(enemy)
         enemy.set_move_to(location)
 
         move_to_thread = threading.Thread(target=self.move_to, args=(enemy, new_x, new_y))
         move_to_thread.start()
+
+    def check_forces_attack(self, field_object, enemy):
+        args = field_object, enemy
+        forces_attack_thread = threading.Thread(target=self.forces_attack, args=args)
+        field_object.set_move_to(None)
+        forces_attack_thread.start()

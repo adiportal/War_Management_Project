@@ -1,20 +1,20 @@
 import sys
 import threading
 import time
-
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QCursor
+from PyQt5.QtGui import QCursor, QTextCursor
 from PyQt5.QtWidgets import *
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.uic import loadUi
 from matplotlib.animation import FuncAnimation
 import matplotlib.pyplot as plt
-from Entities import Soldier, APC
+import Entities
+from Entities import Soldier, APC, Packet
 from matplotlib.backends.backend_qt5agg import (NavigationToolbar2QT as NavigationToolbar)
 import numpy as np
 import CompanyCommanderUDP
 from CompanyCommanderUDP import send_handler
-from Utility import create_move_to_message, EnemyType
+from Utility import create_move_to_message, EnemyType, Sender, Receiver, MessageType
 
 
 class MatplotlibWidget(QMainWindow):
@@ -30,7 +30,9 @@ class MatplotlibWidget(QMainWindow):
         loadUi("company_commander2.ui", self)
 
         self.move_pushButton.clicked.connect(self.move_button)
-        self.plainTextEdit.setReadOnly(True)
+        self.engage_pushButton.clicked.connect(self.engage_button)
+        self.console.setReadOnly(True)
+        self.cursor = QTextCursor(self.console.document())
 
         self.setWindowTitle("Company Commander " + str(CompanyCommanderUDP.company_commander.company_number))
 
@@ -44,6 +46,10 @@ class MatplotlibWidget(QMainWindow):
         # Starting the hover event (on hovering a marker an informative label shows up)
         self.MplWidget.canvas.mpl_connect("motion_notify_event", self.on_hover)
 
+        self.my_company_checkbox.setChecked(True)
+        self.other_companies_checkbox.setChecked(True)
+        self.enemies_checkBox.setChecked(True)
+
     # def closeEvent(self, event):
     #     reply = QMessageBox.question(
     #         self, "Message",
@@ -55,8 +61,8 @@ class MatplotlibWidget(QMainWindow):
     #
     #     else:
     #         event.ignore()
-
     def move_button(self):
+        self.cursor.insertText("Please pick a soldier or an APC\n")
         self.MplWidget.canvas.mpl_connect('pick_event', self.on_pick)
         # self.plainTextEdit.setText("Please choose Soldier or APC")
 
@@ -65,6 +71,7 @@ class MatplotlibWidget(QMainWindow):
         while True:
             self.soldiers = CompanyCommanderUDP.company1 + CompanyCommanderUDP.company2 + CompanyCommanderUDP.company3
             self.enemies = CompanyCommanderUDP.company_commander.get_enemies()
+            print(self.enemies)
             time.sleep(2.0)
 
         # function for the FuncAnimation option, clears and create the plot again
@@ -223,7 +230,7 @@ class MatplotlibWidget(QMainWindow):
         marker_enemy = []
         for e in self.enemies:
 
-            if(self.enemies_checkBox.isChecked() or self.enemies_soldiers_checkbox.isChecked()
+            if (self.enemies_checkBox.isChecked() or self.enemies_soldiers_checkbox.isChecked()
                     or self.launchers_checkbox.isChecked() or self.lookout_points_checkbox.isChecked()):
                 if e.get_type() == EnemyType.soldier.value and self.enemies_soldiers_checkbox.isChecked():
                     x_enemy.append(e.get_x())
@@ -241,7 +248,7 @@ class MatplotlibWidget(QMainWindow):
                     marker_enemy.append("s")
 
                 for x, y, m in zip(x_enemy, y_enemy, marker_enemy):
-                    self.MplWidget.canvas.axes.plot([x], [y], color="red", marker=m, markersize=4,
+                    self.MplWidget.canvas.axes.plot([x], [y], color="red", marker=m, markersize=7,
                                                     markeredgecolor="black")
 
         # Plot the company commander location
@@ -279,11 +286,14 @@ class MatplotlibWidget(QMainWindow):
                     break
 
             # turns on the on click event
+            self.cursor.insertText("Please pick a point you want to move to\n")
             self.MplWidget.canvas.mpl_connect('button_press_event', self.on_click)
             # turns off the on pick event (so only click on point to move is able)
             self.MplWidget.canvas.mpl_disconnect(self.MplWidget.canvas.mpl_connect('pick_event', self.on_pick))
 
     def pick_soldier_for_engage(self, event):
+        if len(self.picked_soldier) > 0:
+            self.picked_soldier.pop(0)
         this_point = event.artist
 
         # x_data and y_data of the point that was picked by the user
@@ -293,21 +303,23 @@ class MatplotlibWidget(QMainWindow):
         ind = event.ind
 
         if self.company_commander.company_number == self.get_company_num(x_data, y_data):
-
             for soldier in self.soldiers:
                 if soldier.x == x_data and soldier.y == y_data:
                     self.picked_soldier.append(soldier)
                     break
-            self.MplWidget.canvas.mpl_connect('button_press_event', self.pick_enemy_for_engage)
-            self.MplWidget.canvas.mpl_disconnect(self.MplWidget.canvas.mpl_connect('pick_event',
-                                                                                   self.pick_soldier_for_engage))
+            self.MplWidget.canvas.mpl_disconnect(
+                    self.MplWidget.canvas.mpl_connect('pick_event', self.pick_soldier_for_engage))
+            self.MplWidget.canvas.mpl_connect('pick_event', self.pick_enemy_for_engage)
+            print("pick soldier completed")
 
     def pick_enemy_for_engage(self, event):
-        this_point = event.artist
+        if len(self.picked_enemy) > 0:
+            self.picked_enemy.pop(0)
+        point = event.artist
 
         # x_data and y_data of the point that was picked by the user
-        x_data = this_point.get_xdata()
-        y_data = this_point.get_ydata()
+        x_data = point.get_xdata()
+        y_data = point.get_ydata()
 
         ind = event.ind
 
@@ -315,9 +327,35 @@ class MatplotlibWidget(QMainWindow):
             if enemy.x == x_data and enemy.y == y_data:
                 self.picked_enemy.append(enemy)
                 break
-
         self.MplWidget.canvas.mpl_disconnect(self.MplWidget.canvas.mpl_connect('pick_event',
                                                                                self.pick_enemy_for_engage))
+        print("pick enemy completed")
+
+        if len(self.picked_enemy) > 0 and len(self.picked_soldier) > 0:
+            soldier = self.picked_soldier[0]
+            enemy = self.picked_enemy[0]
+
+            message = Entities.EngageOrderMessage(soldier, enemy)
+
+            packet = Packet(Sender.company_commander.value, self.company_commander.company_number,
+                            Receiver.soldier.value,
+                            MessageType.engage_order.value, message)
+            send_handler(packet)
+            print("message sent")
+
+    def engage(self):
+        soldier = self.picked_soldier[0]
+        enemy = self.picked_enemy[0]
+
+        message = Entities.EngageOrderMessage(soldier, enemy)
+
+        packet = Packet(Sender.company_commander.value, self.company_commander.company_number,  Receiver.soldier.value,
+                        MessageType.engage_order.value, message)
+        send_handler(packet)
+        print("message sent")
+
+    def engage_button(self):
+        self.MplWidget.canvas.mpl_connect('pick_event', self.pick_soldier_for_engage)
 
     # returns the soldier's company according to the location
     def get_company_num(self, x_data, y_data):

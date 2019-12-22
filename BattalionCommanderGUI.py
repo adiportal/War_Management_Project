@@ -35,6 +35,11 @@ class MatplotlibWidget(QMainWindow):
         # Starting the hover event (on hovering a marker an informative label shows up)
         self.MplWidget.canvas.mpl_connect("motion_notify_event", self.on_hover)
 
+        self.enemies_checkBox.setChecked(True)
+        self.company1_checkbox.setChecked(True)
+        self.company2_checkbox.setChecked(True)
+        self.company3_checkbox.setChecked(True)
+
     # def closeEvent(self, event):
     #     reply = QMessageBox.question(
     #         self, "Message",
@@ -51,8 +56,9 @@ class MatplotlibWidget(QMainWindow):
     def update_field(self):
         while True:
             self.soldiers = BattalionCommander.company1 + BattalionCommander.company2 + BattalionCommander.company3
-            self.enemies = BattalionCommander.enemies
-            self.company_commanders = BattalionCommander.company_commanders
+            self.company_commanders = BattalionCommander.battalion_commander.commanders
+            self.enemies = BattalionCommander.battalion_commander.enemies
+            # print("gui", len(self.company_commanders))
             time.sleep(2.0)
 
         # function for the FuncAnimation option, clears and create the plot again

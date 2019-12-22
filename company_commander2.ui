@@ -115,7 +115,7 @@
           <string>Move</string>
          </property>
         </widget>
-        <widget class="QPushButton" name="pushButton_2">
+        <widget class="QPushButton" name="engage_pushButton">
          <property name="geometry">
           <rect>
            <x>120</x>
@@ -128,7 +128,7 @@
           <string>Engage</string>
          </property>
         </widget>
-        <widget class="QPlainTextEdit" name="plainTextEdit">
+        <widget class="QPlainTextEdit" name="console">
          <property name="geometry">
           <rect>
            <x>220</x>

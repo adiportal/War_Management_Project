@@ -5,9 +5,7 @@ from pyproj import Geod
 import Entities
 
 
-# Initialize the Logger
-logging.basicConfig(filename='UtilityLog.log', level=logging.DEBUG,
-                    format='%(asctime)s : %(levelname)s : Utility : %(message)s')
+formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
 
 
 # get_cc_sock() - creating a new socket for cc and returns it
@@ -242,6 +240,18 @@ def get_line(start, end):
                        npts=100)
 
     return points
+
+
+def setup_logger(name, log_file, level=logging.INFO):
+
+    handler = logging.FileHandler(log_file)
+    handler.setFormatter(formatter)
+
+    logger = logging.getLogger(name)
+    logger.setLevel(level)
+    logger.addHandler(handler)
+
+    return logger
 
 
 # Enum Classes
