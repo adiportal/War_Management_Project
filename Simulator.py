@@ -8,10 +8,6 @@ fieldUDP = FieldUDP()
 
 enemies = []
 
-enemy = Launcher((2, 2))
-fieldUDP.add_to_enemies(enemy)
-enemies.append(enemy)
-
 
 def random_forces_location():
     x = random.uniform(0.5, 15)
@@ -53,42 +49,40 @@ fieldUDP.add_to_forces(APC(3, random_forces_location(), 200))
 
 # Enemies
 # Enemy Soldiers
-# for i in range(10):
-#     enemy = EnemySoldier(random_enemies_location(), 200)
-#     fieldUDP.add_to_enemies(enemy)
-#     enemies.append(enemy)
+for i in range(10):
+    enemy = EnemySoldier(random_enemies_location(), 200)
+    fieldUDP.add_to_enemies(enemy)
+    enemies.append(enemy)
 
 
 # Lookout Point
-# for i in range(2):
-#     location = random_enemies_location()
-#     enemy = LookoutPoint(location, EnemySoldier(location, 150))
-#     fieldUDP.add_to_enemies(enemy)
-#     enemies.append(enemy)
-#
-# for i in range(3):
-#     enemy = Launcher(random_enemies_location())
-#     fieldUDP.add_to_enemies(enemy)
-#     enemies.append(enemy)
-#
-#
-# def enemies_movement():
-#     while True:
-#         for e in enemies:
-#             time.sleep(10)
-#             if e.get_type() is EnemyType.launcher.value or e.get_type() is EnemyType.lookout_point.value:
-#                 continue
-#             else:
-#                 if e.get_move_to_location() is None:
-#                     fieldUDP.enemy_move_to(e, random_forces_location())
-#                 else:
-#                     continue
+for i in range(2):
+    location = random_enemies_location()
+    enemy = LookoutPoint(location, EnemySoldier(location, 150))
+    fieldUDP.add_to_enemies(enemy)
+    enemies.append(enemy)
+
+for i in range(3):
+    enemy = Launcher(random_enemies_location())
+    fieldUDP.add_to_enemies(enemy)
+    enemies.append(enemy)
 
 
+def enemies_movement():
+    while True:
+        for e in enemies:
+            time.sleep(10)
+            if e.get_type() is EnemyType.launcher.value or e.get_type() is EnemyType.lookout_point.value:
+                continue
+            else:
+                if e.get_move_to_location() is None:
+                    fieldUDP.enemy_move_to(e, random_forces_location())
+                else:
+                    continue
 
 
-# enemies_movement_thread = threading.Thread(target=enemies_movement)
-# enemies_movement_thread.start()
+enemies_movement_thread = threading.Thread(target=enemies_movement)
+enemies_movement_thread.start()
 
 
 

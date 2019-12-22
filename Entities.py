@@ -5,6 +5,7 @@ import threading
 import time
 import Utility
 
+logger = Utility.setup_logger('field', 'field.log')
 
 # FieldObject
 class FieldObjects:
@@ -520,10 +521,9 @@ class GotShotMessage:
 
 # FieldUDP
 class FieldUDP:
+
     # Constructor
     def __init__(self):
-        self.logger = Utility.setup_logger('field', 'field.log')
-
         self.company1 = []
         self.company2 = []
         self.company3 = []
@@ -553,7 +553,7 @@ class FieldUDP:
     # func to handle the message.
     def listen(self):
         print('Listening...')
-        self.logger.debug('Listening...')
+        logger.debug('Listening...')
 
         while True:
             # set max size of message
@@ -898,7 +898,7 @@ class FieldUDP:
                                      Utility.Receiver.company_commander.value,
                                      Utility.MessageType.move_approval.value, message)
                 self.send_handler(send_packet)
-                self.logger.debug(
+                logger.debug(
                     "Move approval message was sent from FieldObject #{} to CC #{}".format(field_object.get_id(),
                                                                                            field_object.get_company_num()))
 
@@ -917,7 +917,7 @@ class FieldUDP:
         # Error case
         else:
             # print(str(address) + " >> " + rec_packet)
-            self.logger.error(str(address) + " >> " + str(rec_packet))
+            logger.error(str(address) + " >> " + str(rec_packet))
 
     # send_handler(send_packet) - Sending the packet that it gets
     def send_handler(self, send_packet):
@@ -930,7 +930,7 @@ class FieldUDP:
             self.sock.sendto(byte_packet, bc_address)
 
         except:
-            self.logger.error("The message '{}' didn't reached to CC".format(send_packet))
+            logger.error("The message '{}' didn't reached to CC".format(send_packet))
             print("The message '{}' did'nt reached to the Company Commander!!".format(send_packet))
 
     def add_to_forces(self, field_object):
