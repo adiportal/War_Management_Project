@@ -9,6 +9,7 @@ from PyQt5.uic import loadUi
 from matplotlib.animation import FuncAnimation
 import matplotlib.pyplot as plt
 import Entities
+import Utility
 from Entities import Soldier, APC, Packet
 from matplotlib.backends.backend_qt5agg import (NavigationToolbar2QT as NavigationToolbar)
 import numpy as np
@@ -27,28 +28,37 @@ class MatplotlibWidget(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
 
-        loadUi("company_commander2.ui", self)
+        loadUi("company_commander3.ui", self)
 
         self.move_pushButton.clicked.connect(self.move_button)
         self.engage_pushButton.clicked.connect(self.engage_button)
         self.console.setReadOnly(True)
         self.cursor = QTextCursor(self.console.document())
+        self.cursor.movePosition(QTextCursor.End)
 
         self.setWindowTitle("Company Commander " + str(CompanyCommanderUDP.company_commander.company_number))
 
         self.tooltip_visible = False
         self.tooltip_coords = 0, 0
         self.tooltip_text = ''
+        self.my_company_checkbox = self.treeFilter.topLevelItem(0)
+        self.soldiers_checkbox = self.treeFilter.topLevelItem(0).child(0)
+        self.apcs_checkbox = self.treeFilter.topLevelItem(0).child(1)
+        self.other_companies_checkbox = self.treeFilter.topLevelItem(1)
+        self.enemies_checkbox = self.treeFilter.topLevelItem(2)
+        self.enemies_soldiers_checkbox = self.treeFilter.topLevelItem(2).child(0)
+        self.launchers_checkbox = self.treeFilter.topLevelItem(2).child(1)
+        self.lookout_points_checkbox = self.treeFilter.topLevelItem(2).child(2)
 
         # Starting the animation using the animate function, update every 1000 miliseconds
         self.ani = FuncAnimation(self.MplWidget.canvas.figure, self.animate, interval=1000, blit=False)
 
         # Starting the hover event (on hovering a marker an informative label shows up)
         self.MplWidget.canvas.mpl_connect("motion_notify_event", self.on_hover)
-
-        self.my_company_checkbox.setChecked(True)
-        self.other_companies_checkbox.setChecked(True)
-        self.enemies_checkBox.setChecked(True)
+        #
+        # self.my_company_checkbox.setChecked(True)
+        # self.other_companies_checkbox.setChecked(True)
+        # self.enemies_checkBox.setChecked(True)
 
     # def closeEvent(self, event):
     #     reply = QMessageBox.question(
@@ -61,6 +71,11 @@ class MatplotlibWidget(QMainWindow):
     #
     #     else:
     #         event.ignore()
+
+    # def check(self):
+    #     if self.other_companies_checkbox.checkState(0) == QtCore.Qt.Checked:
+    #         print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+
     def move_button(self):
         self.cursor.insertText("Please pick a soldier or an APC\n")
         self.MplWidget.canvas.mpl_connect('pick_event', self.on_pick)
@@ -71,7 +86,6 @@ class MatplotlibWidget(QMainWindow):
         while True:
             self.soldiers = CompanyCommanderUDP.company1 + CompanyCommanderUDP.company2 + CompanyCommanderUDP.company3
             self.enemies = CompanyCommanderUDP.company_commander.get_enemies()
-            print(self.enemies)
             time.sleep(2.0)
 
         # function for the FuncAnimation option, clears and create the plot again
@@ -128,6 +142,7 @@ class MatplotlibWidget(QMainWindow):
             return 'top'
 
     # function for plotting the field objects according to their type and company
+
     def create_plot(self):
         self.MplWidget.canvas.axes.get_yaxis().set_visible(False)
         self.MplWidget.canvas.axes.get_xaxis().set_visible(False)
@@ -139,23 +154,54 @@ class MatplotlibWidget(QMainWindow):
         labels = []
         sizes = []
 
-        if self.my_company_checkbox.isChecked() and (not self.soldiers_checkbox.isChecked() and
-                                                     not self.apcs_checkbox.isChecked()):
-            self.soldiers_checkbox.setChecked(True)
-            self.apcs_checkbox.setChecked(True)
+        # Conditions for checkboxes
 
-        if (self.my_company_checkbox.isChecked()) and not (self.soldiers_checkbox.isChecked() or
-                                                           self.apcs_checkbox.isChecked()):
-            self.my_company_checkbox.setChecked(False)
+        # My Company Part
+        # my company - checked, soldiers + apcs not
+        if self.my_company_checkbox.checkState(0) == QtCore.Qt.Checked and (
+                self.soldiers_checkbox.checkState(0) == QtCore.Qt.Unchecked and
+                self.apcs_checkbox.checkState(0) == QtCore.Qt.Unchecked):
+            self.soldiers_checkbox.setCheckState(0, QtCore.Qt.Checked)
+            self.apcs_checkbox.setCheckState(0, QtCore.Qt.Checked)
 
-        if (not self.my_company_checkbox.isChecked()) and (self.soldiers_checkbox.isChecked()
-                                                           and self.apcs_checkbox.isChecked()):
-            self.my_company_checkbox.setChecked(True)
+        # my company - unchecked, soldiers - checked, apcs - unchecked
+        if (self.my_company_checkbox.checkState(0) == QtCore.Qt.Unchecked or
+            self.my_company_checkbox.checkState(0) == QtCore.Qt.Checked) and (
+                self.soldiers_checkbox.checkState(0) == QtCore.Qt.Checked and
+                self.apcs_checkbox.checkState(0) == QtCore.Qt.Unchecked):
+            self.my_company_checkbox.setCheckState(0, QtCore.Qt.PartiallyChecked)
+
+        # my company - unchecked, soldiers - unchecked, apcs - checked
+        if (self.my_company_checkbox.checkState(0) == QtCore.Qt.Unchecked or
+            self.my_company_checkbox.checkState(0) == QtCore.Qt.Checked) and (
+                self.soldiers_checkbox.checkState(0) == QtCore.Qt.Unchecked and
+                self.apcs_checkbox.checkState(0) == QtCore.Qt.Checked):
+            self.my_company_checkbox.setCheckState(0, QtCore.Qt.PartiallyChecked)
+
+        # my company - unchecked, soldiers - checked, apcs - checked
+        if self.my_company_checkbox.checkState(0) == QtCore.Qt.Unchecked and (
+                self.soldiers_checkbox.checkState(0) == QtCore.Qt.Checked
+                and self.apcs_checkbox.checkState(0) == QtCore.Qt.Checked):
+            self.soldiers_checkbox.setCheckState(0, QtCore.Qt.Unchecked)
+            self.apcs_checkbox.setCheckState(0, QtCore.Qt.Unchecked)
+
+        # my company - partially checked, soldiers - checked, apcs - checked
+        if self.my_company_checkbox.checkState(0) == QtCore.Qt.PartiallyChecked and (
+                self.soldiers_checkbox.checkState(0) == QtCore.Qt.Checked and
+                self.apcs_checkbox.checkState(0) == QtCore.Qt.Checked):
+            self.my_company_checkbox.setCheckState(0, QtCore.Qt.Checked)
+
+        # my company - partially checked, soldiers - unchecked, apcs - unchecked
+        if self.my_company_checkbox.checkState(0) == QtCore.Qt.PartiallyChecked and (
+                self.soldiers_checkbox.checkState(0) == QtCore.Qt.Unchecked and
+                self.apcs_checkbox.checkState(0) == QtCore.Qt.Unchecked):
+            self.my_company_checkbox.setCheckState(0, QtCore.Qt.Unchecked)
 
         for s in self.soldiers:
-            if self.my_company_checkbox.isChecked() or self.soldiers_checkbox.isChecked() or \
-                    self.apcs_checkbox.isChecked():
-                if type(s) == Soldier and self.soldiers_checkbox.isChecked():
+            if self.my_company_checkbox.checkState(0) == QtCore.Qt.Checked or self.soldiers_checkbox.checkState(
+                    0) == QtCore.Qt.Checked or \
+                    self.apcs_checkbox.checkState(0) == QtCore.Qt.Checked:
+                if type(s) == Soldier and self.soldiers_checkbox.checkState(0) == QtCore.Qt.Checked:
                     if s.company_number == self.company_commander.company_number:
                         x.append(s.x)
                         y.append(s.y)
@@ -169,7 +215,7 @@ class MatplotlibWidget(QMainWindow):
                         sizes.append(4)
                         labels.append(s.__str__())
 
-                elif type(s) == APC and self.apcs_checkbox.isChecked():
+                elif type(s) == APC and self.apcs_checkbox.checkState(0) == QtCore.Qt.Checked:
                     if s.company_number == self.company_commander.company_number:
                         x.append(s.x)
                         y.append(s.y)
@@ -184,7 +230,7 @@ class MatplotlibWidget(QMainWindow):
                         sizes.append(8)
                         labels.append(s.__str__())
 
-            if self.other_companies_checkbox.isChecked():
+            if self.other_companies_checkbox.checkState(0) == QtCore.Qt.Checked:
                 if s.company_number != self.company_commander.company_number:
                     x.append(s.x)
                     y.append(s.y)
@@ -208,41 +254,64 @@ class MatplotlibWidget(QMainWindow):
             # that located on the same indexes
             self.MplWidget.canvas.axes.plot([xp], [yp], color=c, marker=m, markersize=s, label=l, picker=10)
 
-        if self.enemies_checkBox.isChecked() and \
-                not (self.enemies_soldiers_checkbox.isChecked() and self.launchers_checkbox.isChecked() and
-                     self.lookout_points_checkbox.isChecked()):
-            self.enemies_soldiers_checkbox.setChecked(True)
-            self.launchers_checkbox.setChecked(True)
-            self.lookout_points_checkbox.setChecked(True)
+        # Enemies Part
+        if self.enemies_checkbox.checkState(0) == QtCore.Qt.Checked and (
+                self.enemies_soldiers_checkbox.checkState(0) == QtCore.Qt.Unchecked and
+                self.launchers_checkbox.checkState(0) == QtCore.Qt.Unchecked and
+                self.lookout_points_checkbox.checkState(0) == QtCore.Qt.Unchecked):
+            self.enemies_soldiers_checkbox.setCheckState(0, QtCore.Qt.Checked)
+            self.launchers_checkbox.setCheckState(0, QtCore.Qt.Checked)
+            self.lookout_points_checkbox.setCheckState(0, QtCore.Qt.Checked)
 
-        if (self.enemies_checkBox.isChecked()) and not (self.enemies_soldiers_checkbox.isChecked() or
-                                                        self.launchers_checkbox.isChecked() or
-                                                        self.lookout_points_checkbox.isChecked()):
-            self.enemies_checkBox.setChecked(False)
+        if self.enemies_checkbox.checkState(0) == QtCore.Qt.Unchecked and (
+                self.enemies_soldiers_checkbox.checkState(0) == QtCore.Qt.Checked and
+                self.launchers_checkbox.checkState(0) == QtCore.Qt.Checked and
+                self.lookout_points_checkbox.checkState(0) == QtCore.Qt.Checked):
+            self.enemies_soldiers_checkbox.setCheckState(0, QtCore.Qt.Unchecked)
+            self.launchers_checkbox.setCheckState(0, QtCore.Qt.Unchecked)
+            self.lookout_points_checkbox.setCheckState(0, QtCore.Qt.Unchecked)
 
-        if (not self.enemies_checkBox.isChecked()) and (self.enemies_soldiers_checkbox.isChecked() and
-                                                        self.launchers_checkbox.isChecked() and
-                                                        self.lookout_points_checkbox.isChecked()):
-            self.enemies_checkBox.setChecked(True)
+        if (self.enemies_checkbox.checkState(0) == QtCore.Qt.Unchecked or
+            self.enemies_checkbox.checkState(0) == QtCore.Qt.Checked) and (
+                self.enemies_soldiers_checkbox.checkState(0) == QtCore.Qt.Checked or
+                self.launchers_checkbox.checkState(0) == QtCore.Qt.Checked or
+                self.lookout_points_checkbox.checkState(0) == QtCore.Qt.Checked):
+            self.enemies_checkbox.setCheckState(0, QtCore.Qt.PartiallyChecked)
+
+        if self.enemies_checkbox.checkState(0) == QtCore.Qt.PartiallyChecked and (
+                self.enemies_soldiers_checkbox.checkState(0) == QtCore.Qt.Checked and
+                self.launchers_checkbox.checkState(0) == QtCore.Qt.Checked and
+                self.lookout_points_checkbox.checkState(0) == QtCore.Qt.Checked):
+            self.enemies_checkbox.setCheckState(0, QtCore.Qt.Checked)
+
+        if self.enemies_checkbox.checkState(0) == QtCore.Qt.PartiallyChecked and (
+                self.enemies_soldiers_checkbox.checkState(0) == QtCore.Qt.Unchecked and
+                self.launchers_checkbox.checkState(0) == QtCore.Qt.Unchecked and
+                self.lookout_points_checkbox.checkState(0) == QtCore.Qt.Unchecked):
+            self.enemies_checkbox.setCheckState(0, QtCore.Qt.Unchecked)
 
         x_enemy = []
         y_enemy = []
         marker_enemy = []
         for e in self.enemies:
 
-            if (self.enemies_checkBox.isChecked() or self.enemies_soldiers_checkbox.isChecked()
-                    or self.launchers_checkbox.isChecked() or self.lookout_points_checkbox.isChecked()):
-                if e.get_type() == EnemyType.soldier.value and self.enemies_soldiers_checkbox.isChecked():
+            if (self.enemies_checkbox.checkState(0) == QtCore.Qt.Checked or self.enemies_soldiers_checkbox.checkState(
+                    0) == QtCore.Qt.Checked
+                    or self.launchers_checkbox.checkState(0) == QtCore.Qt.Checked or
+                    self.lookout_points_checkbox.checkState(0) == QtCore.Qt.Checked):
+                if e.get_type() == EnemyType.soldier.value and self.enemies_soldiers_checkbox.checkState(0) == QtCore.Qt.Checked:
                     x_enemy.append(e.get_x())
                     y_enemy.append(e.get_y())
                     marker_enemy.append("o")
 
-                elif e.get_type() == EnemyType.launcher.value and self.launchers_checkbox.isChecked():
+                elif e.get_type() == EnemyType.launcher.value and \
+                        self.launchers_checkbox.checkState(0) == QtCore.Qt.Checked:
                     x_enemy.append(e.get_x())
                     y_enemy.append(e.get_y())
                     marker_enemy.append("^")
 
-                elif e.get_type() == EnemyType.lookout_point.value and self.lookout_points_checkbox.isChecked():
+                elif e.get_type() == EnemyType.lookout_point.value and self.lookout_points_checkbox.checkState(
+                        0) == QtCore.Qt.Checked:
                     x_enemy.append(e.get_x())
                     y_enemy.append(e.get_y())
                     marker_enemy.append("s")
@@ -308,7 +377,7 @@ class MatplotlibWidget(QMainWindow):
                     self.picked_soldier.append(soldier)
                     break
             self.MplWidget.canvas.mpl_disconnect(
-                    self.MplWidget.canvas.mpl_connect('pick_event', self.pick_soldier_for_engage))
+                self.MplWidget.canvas.mpl_connect('pick_event', self.pick_soldier_for_engage))
             self.MplWidget.canvas.mpl_connect('pick_event', self.pick_enemy_for_engage)
             print("pick soldier completed")
 
@@ -349,7 +418,7 @@ class MatplotlibWidget(QMainWindow):
 
         message = Entities.EngageOrderMessage(soldier, enemy)
 
-        packet = Packet(Sender.company_commander.value, self.company_commander.company_number,  Receiver.soldier.value,
+        packet = Packet(Sender.company_commander.value, self.company_commander.company_number, Receiver.soldier.value,
                         MessageType.engage_order.value, message)
         send_handler(packet)
         print("message sent")
@@ -373,8 +442,8 @@ class MatplotlibWidget(QMainWindow):
             soldier = self.picked_soldier.pop(0)  # empty the list for the next field object
 
             # Send move message for the chosen field object with UDP
-            packet = create_move_to_message(soldier.get_company_num(), soldier.get_id(), (x_data, y_data))
-            send_handler(packet)
+            packet = Utility.create_move_to_message(soldier.get_company_num(), soldier.get_id(), (x_data, y_data))
+            CompanyCommanderUDP.send_handler(packet)
 
         # self.MplWidget.canvas.mpl_connect('pick_event', self.on_pick)  # turns on again the pick event
         # turns off the click event

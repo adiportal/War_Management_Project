@@ -47,6 +47,18 @@ def get_cc_send_sock():
     return sock
 
 
+def get_cc_to_bc_send_sock():
+    # Initialize socket
+    try:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+        logging.debug("Socket Successfully Created!")
+    except socket.error as err:
+        logging.error("Socket creation failed with error {}".format(err))
+
+    return sock
+
+
 # get_field_sock() - creating a new socket for field and returns it
 def get_field_sock():
     # Initialize socket
@@ -62,7 +74,7 @@ def get_field_sock():
 
 # Getters
 def get_field_address():
-    IP = '127.0.0.1'
+    IP = '10.0.0.2'
     port = 5007
     return IP, port
 
@@ -82,7 +94,7 @@ def get_cc_receive_address():
 
 
 def get_cc_send_address(company_num):
-    IP = '127.0.0.1'
+    IP = '10.0.0.1'
 
     if int(company_num) == Company.company1.value:
         port = 5011
@@ -94,6 +106,25 @@ def get_cc_send_address(company_num):
 
     elif int(company_num) == Company.company3.value:
         port = 5013
+        return IP, port
+
+    else:
+        return Case.error.value
+
+
+def get_cc_to_bc_send_address(company_num):
+    IP = '127.0.0.1'
+
+    if int(company_num) == Company.company1.value:
+        port = 5015
+        return IP, port
+
+    elif int(company_num) == Company.company2.value:
+        port = 5016
+        return IP, port
+
+    elif int(company_num) == Company.company3.value:
+        port = 5017
         return IP, port
 
     else:

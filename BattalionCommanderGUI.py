@@ -35,10 +35,22 @@ class MatplotlibWidget(QMainWindow):
         # Starting the hover event (on hovering a marker an informative label shows up)
         self.MplWidget.canvas.mpl_connect("motion_notify_event", self.on_hover)
 
-        self.enemies_checkBox.setChecked(True)
-        self.company1_checkbox.setChecked(True)
-        self.company2_checkbox.setChecked(True)
-        self.company3_checkbox.setChecked(True)
+        # self.company1 = self.treeWidget.topLevelItem(0)
+        # self.company1_commander = self.treeWidget.topLevelItem(0).child(0)
+        # self.company1_soldiers = self.treeWidget.topLevelItem(0).child(1)
+        # self.company1_apcs = self.treeWidget.topLevelItem(0).child(2)
+        # self.company2 = self.treeWidget.topLevelItem(1)
+        # self.company2_commander = self.treeWidget.topLevelItem(1).child(0)
+        # self.company2_soldiers = self.treeWidget.topLevelItem(1).child(1)
+        # self.company2_apcs = self.treeWidget.topLevelItem(1).child(2)
+        # self.company3 = self.treeWidget.topLevelItem(2)
+        # self.company3_commander = self.treeWidget.topLevelItem(2).child(0)
+        # self.company3_soldiers = self.treeWidget.topLevelItem(2).child(1)
+        # self.company3_apcs = self.treeWidget.topLevelItem(2).child(2)
+        self.enemies_checkbox = self.treeWidget.topLevelItem(3)
+        self.enemies_soldiers_checkbox = self.treeWidget.topLevelItem(3).child(0)
+        self.launchers_checkbox = self.treeWidget.topLevelItem(3).child(1)
+        self.lookout_points_checkbox = self.treeWidget.topLevelItem(3).child(2)
 
     # def closeEvent(self, event):
     #     reply = QMessageBox.question(
@@ -126,51 +138,76 @@ class MatplotlibWidget(QMainWindow):
         labels = []
         sizes = []
 
-        self.is_checked(self.company1_checkbox, self.soldiers1_checkbox, self.apcs1_checkbox, self.commander1_checkbox)
-        self.is_checked(self.company2_checkbox, self.soldiers2_checkbox, self.apcs2_checkbox, self.commander2_checkbox)
-        self.is_checked(self.company3_checkbox, self.soldiers3_checkbox, self.apcs3_checkbox, self.commander3_checkbox)
+        # self.is_checked(self.company1_checkbox, self.soldiers1_checkbox, self.apcs1_checkbox, self.commander1_checkbox)
+        # self.is_checked(self.company2_checkbox, self.soldiers2_checkbox, self.apcs2_checkbox, self.commander2_checkbox)
+        # self.is_checked(self.company3_checkbox, self.soldiers3_checkbox, self.apcs3_checkbox, self.commander3_checkbox)
 
-        for s in self.soldiers:
-            if s.company_number == 1:
-                self.create_plot_by_companies(x, y, color, marker, sizes, labels, s, self.company1_checkbox,
-                                              self.soldiers1_checkbox, self.apcs1_checkbox, 'cyan')
-            elif s.company_number == 2:
-                self.create_plot_by_companies(x, y, color, marker, sizes, labels, s, self.company2_checkbox,
-                                              self.soldiers2_checkbox, self.apcs2_checkbox, 'orange')
-            elif s.company_number == 3:
-                self.create_plot_by_companies(x, y, color, marker, sizes, labels, s, self.company3_checkbox,
-                                              self.soldiers3_checkbox, self.apcs3_checkbox, 'lime')
-            else:
-                continue
+        # for s in self.soldiers:
+        #     if s.company_number == 1:
+        #         self.create_plot_by_companies(x, y, color, marker, sizes, labels, s, self.company1_checkbox,
+        #                                       self.soldiers1_checkbox, self.apcs1_checkbox, 'cyan')
+        #     elif s.company_number == 2:
+        #         self.create_plot_by_companies(x, y, color, marker, sizes, labels, s, self.company2_checkbox,
+        #                                       self.soldiers2_checkbox, self.apcs2_checkbox, 'orange')
+        #     elif s.company_number == 3:
+        #         self.create_plot_by_companies(x, y, color, marker, sizes, labels, s, self.company3_checkbox,
+        #                                       self.soldiers3_checkbox, self.apcs3_checkbox, 'lime')
+        #     else:
+        #         continue
+        #
+        # for xp, yp, c, m, l, s in zip(x, y, color, marker, labels,
+        #                               sizes):  # zip connects together all the elements in the lists
+        #     # that located on the same indexes
+        #     self.MplWidget.canvas.axes.plot([xp], [yp], color=c, marker=m, markersize=s, label=l, picker=10)
 
-        for xp, yp, c, m, l, s in zip(x, y, color, marker, labels,
-                                      sizes):  # zip connects together all the elements in the lists
-            # that located on the same indexes
-            self.MplWidget.canvas.axes.plot([xp], [yp], color=c, marker=m, markersize=s, label=l, picker=10)
+        # Enemies Part
+        if self.enemies_checkbox.checkState(0) == QtCore.Qt.Checked and (
+                self.enemies_soldiers_checkbox.checkState(0) == QtCore.Qt.Unchecked and
+                self.launchers_checkbox.checkState(0) == QtCore.Qt.Unchecked and
+                self.lookout_points_checkbox.checkState(0) == QtCore.Qt.Unchecked):
+            self.enemies_soldiers_checkbox.setCheckState(0, QtCore.Qt.Checked)
+            self.launchers_checkbox.setCheckState(0, QtCore.Qt.Checked)
+            self.lookout_points_checkbox.setCheckState(0, QtCore.Qt.Checked)
 
-        if self.enemies_checkBox.isChecked() and \
-                not (self.enemies_soldiers_checkbox.isChecked() and self.launchers_checkbox.isChecked() and
-                     self.lookout_points_checkbox.isChecked()):
-            self.enemies_soldiers_checkbox.setChecked(True)
-            self.launchers_checkbox.setChecked(True)
-            self.lookout_points_checkbox.setChecked(True)
+        if self.enemies_checkbox.checkState(0) == QtCore.Qt.Unchecked and (
+                self.enemies_soldiers_checkbox.checkState(0) == QtCore.Qt.Checked and
+                self.launchers_checkbox.checkState(0) == QtCore.Qt.Checked and
+                self.lookout_points_checkbox.checkState(0) == QtCore.Qt.Checked):
+            self.enemies_soldiers_checkbox.setCheckState(0, QtCore.Qt.Unchecked)
+            self.launchers_checkbox.setCheckState(0, QtCore.Qt.Unchecked)
+            self.lookout_points_checkbox.setCheckState(0, QtCore.Qt.Unchecked)
 
-        if (self.enemies_checkBox.isChecked()) and not (self.enemies_soldiers_checkbox.isChecked() or
-                                                        self.launchers_checkbox.isChecked() or
-                                                        self.lookout_points_checkbox.isChecked()):
-            self.enemies_checkBox.setChecked(False)
+        if (self.enemies_checkbox.checkState(0) == QtCore.Qt.Unchecked or
+            self.enemies_checkbox.checkState(0) == QtCore.Qt.Checked) and (
+                self.enemies_soldiers_checkbox.checkState(0) == QtCore.Qt.Checked or
+                self.launchers_checkbox.checkState(0) == QtCore.Qt.Checked or
+                self.lookout_points_checkbox.checkState(0) == QtCore.Qt.Checked):
+            self.enemies_checkbox.setCheckState(0, QtCore.Qt.PartiallyChecked)
 
-        if (not self.enemies_checkBox.isChecked()) and (self.enemies_soldiers_checkbox.isChecked() and
-                                                        self.launchers_checkbox.isChecked() and
-                                                        self.lookout_points_checkbox.isChecked()):
-            self.enemies_checkBox.setChecked(True)
+        if self.enemies_checkbox.checkState(0) == QtCore.Qt.PartiallyChecked and (
+                self.enemies_soldiers_checkbox.checkState(0) == QtCore.Qt.Checked and
+                self.launchers_checkbox.checkState(0) == QtCore.Qt.Checked and
+                self.lookout_points_checkbox.checkState(0) == QtCore.Qt.Checked):
+            self.enemies_checkbox.setCheckState(0, QtCore.Qt.Checked)
+
+        if self.enemies_checkbox.checkState(0) == QtCore.Qt.PartiallyChecked and (
+                self.enemies_soldiers_checkbox.checkState(0) == QtCore.Qt.Unchecked and
+                self.launchers_checkbox.checkState(0) == QtCore.Qt.Unchecked and
+                self.lookout_points_checkbox.checkState(0) == QtCore.Qt.Unchecked):
+            self.enemies_checkbox.setCheckState(0, QtCore.Qt.Unchecked)
+
+        if self.enemies_checkbox.checkState(0) == QtCore.Qt.Checked and (
+                self.enemies_soldiers_checkbox.checkState(0) == QtCore.Qt.Unchecked and
+                self.launchers_checkbox.checkState(0) == QtCore.Qt.Checked and
+                self.lookout_points_checkbox.checkState(0) == QtCore.Qt.Checked):
+            self.enemies_soldiers_checkbox.setCheckState(0, QtCore.Qt.Checked)
 
         x_enemy = []
         y_enemy = []
         marker_enemy = []
         for e in self.enemies:
 
-            if (self.enemies_checkBox.isChecked() or self.enemies_soldiers_checkbox.isChecked()
+            if (self.enemies_checkbox.isChecked() or self.enemies_soldiers_checkbox.isChecked()
                     or self.launchers_checkbox.isChecked() or self.lookout_points_checkbox.isChecked()):
                 if e.get_type() == EnemyType.soldier.value and self.enemies_soldiers_checkbox.isChecked():
                     x_enemy.append(e.get_x())
