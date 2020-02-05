@@ -74,7 +74,7 @@ def get_field_sock():
 
 # Getters
 def get_field_address():
-    IP = '10.0.0.2'
+    IP = '127.0.0.1'
     port = 5007
     return IP, port
 
@@ -94,7 +94,7 @@ def get_cc_receive_address():
 
 
 def get_cc_send_address(company_num):
-    IP = '10.0.0.1'
+    IP = '127.0.0.1'
 
     if int(company_num) == Company.company1.value:
         port = 5011

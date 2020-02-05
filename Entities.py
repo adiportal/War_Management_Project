@@ -402,6 +402,7 @@ class FieldUDP:
                 forces_attack_thread = threading.Thread(target=self.forces_attack, args=args)
                 field_object.set_move_to(None)
                 forces_attack_thread.start()
+                print("engage message")
 
         # Error case
         else:

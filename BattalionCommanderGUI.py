@@ -35,18 +35,18 @@ class MatplotlibWidget(QMainWindow):
         # Starting the hover event (on hovering a marker an informative label shows up)
         self.MplWidget.canvas.mpl_connect("motion_notify_event", self.on_hover)
 
-        # self.company1 = self.treeWidget.topLevelItem(0)
-        # self.company1_commander = self.treeWidget.topLevelItem(0).child(0)
-        # self.company1_soldiers = self.treeWidget.topLevelItem(0).child(1)
-        # self.company1_apcs = self.treeWidget.topLevelItem(0).child(2)
-        # self.company2 = self.treeWidget.topLevelItem(1)
-        # self.company2_commander = self.treeWidget.topLevelItem(1).child(0)
-        # self.company2_soldiers = self.treeWidget.topLevelItem(1).child(1)
-        # self.company2_apcs = self.treeWidget.topLevelItem(1).child(2)
-        # self.company3 = self.treeWidget.topLevelItem(2)
-        # self.company3_commander = self.treeWidget.topLevelItem(2).child(0)
-        # self.company3_soldiers = self.treeWidget.topLevelItem(2).child(1)
-        # self.company3_apcs = self.treeWidget.topLevelItem(2).child(2)
+        self.company1 = self.treeWidget.topLevelItem(0)
+        self.company1_commander = self.treeWidget.topLevelItem(0).child(0)
+        self.company1_soldiers = self.treeWidget.topLevelItem(0).child(1)
+        self.company1_apcs = self.treeWidget.topLevelItem(0).child(2)
+        self.company2 = self.treeWidget.topLevelItem(1)
+        self.company2_commander = self.treeWidget.topLevelItem(1).child(0)
+        self.company2_soldiers = self.treeWidget.topLevelItem(1).child(1)
+        self.company2_apcs = self.treeWidget.topLevelItem(1).child(2)
+        self.company3 = self.treeWidget.topLevelItem(2)
+        self.company3_commander = self.treeWidget.topLevelItem(2).child(0)
+        self.company3_soldiers = self.treeWidget.topLevelItem(2).child(1)
+        self.company3_apcs = self.treeWidget.topLevelItem(2).child(2)
         self.enemies_checkbox = self.treeWidget.topLevelItem(3)
         self.enemies_soldiers_checkbox = self.treeWidget.topLevelItem(3).child(0)
         self.launchers_checkbox = self.treeWidget.topLevelItem(3).child(1)
@@ -138,27 +138,27 @@ class MatplotlibWidget(QMainWindow):
         labels = []
         sizes = []
 
-        # self.is_checked(self.company1_checkbox, self.soldiers1_checkbox, self.apcs1_checkbox, self.commander1_checkbox)
-        # self.is_checked(self.company2_checkbox, self.soldiers2_checkbox, self.apcs2_checkbox, self.commander2_checkbox)
-        # self.is_checked(self.company3_checkbox, self.soldiers3_checkbox, self.apcs3_checkbox, self.commander3_checkbox)
+        self.is_checked(self.company1, self.company1_soldiers, self.company1_apcs, self.company1_commander)
+        self.is_checked(self.company2, self.company2_soldiers, self.company2_apcs, self.company2_commander)
+        self.is_checked(self.company3, self.company3_soldiers, self.company3_apcs, self.company3_commander)
 
-        # for s in self.soldiers:
-        #     if s.company_number == 1:
-        #         self.create_plot_by_companies(x, y, color, marker, sizes, labels, s, self.company1_checkbox,
-        #                                       self.soldiers1_checkbox, self.apcs1_checkbox, 'cyan')
-        #     elif s.company_number == 2:
-        #         self.create_plot_by_companies(x, y, color, marker, sizes, labels, s, self.company2_checkbox,
-        #                                       self.soldiers2_checkbox, self.apcs2_checkbox, 'orange')
-        #     elif s.company_number == 3:
-        #         self.create_plot_by_companies(x, y, color, marker, sizes, labels, s, self.company3_checkbox,
-        #                                       self.soldiers3_checkbox, self.apcs3_checkbox, 'lime')
-        #     else:
-        #         continue
-        #
-        # for xp, yp, c, m, l, s in zip(x, y, color, marker, labels,
-        #                               sizes):  # zip connects together all the elements in the lists
-        #     # that located on the same indexes
-        #     self.MplWidget.canvas.axes.plot([xp], [yp], color=c, marker=m, markersize=s, label=l, picker=10)
+        for s in self.soldiers:
+            if s.company_number == 1:
+                self.create_plot_by_companies(x, y, color, marker, sizes, labels, s, self.company1,
+                                              self.company1_soldiers, self.company1_apcs, 'cyan')
+            elif s.company_number == 2:
+                self.create_plot_by_companies(x, y, color, marker, sizes, labels, s, self.company2,
+                                              self.company2_soldiers, self.company2_apcs, 'orange')
+            elif s.company_number == 3:
+                self.create_plot_by_companies(x, y, color, marker, sizes, labels, s, self.company3,
+                                              self.company3_soldiers, self.company3_apcs, 'lime')
+            else:
+                continue
+
+        for xp, yp, c, m, l, s in zip(x, y, color, marker, labels,
+                                      sizes):  # zip connects together all the elements in the lists
+            # that located on the same indexes
+            self.MplWidget.canvas.axes.plot([xp], [yp], color=c, marker=m, markersize=s, label=l, picker=10)
 
         # Enemies Part
         if self.enemies_checkbox.checkState(0) == QtCore.Qt.Checked and (
@@ -207,19 +207,24 @@ class MatplotlibWidget(QMainWindow):
         marker_enemy = []
         for e in self.enemies:
 
-            if (self.enemies_checkbox.isChecked() or self.enemies_soldiers_checkbox.isChecked()
-                    or self.launchers_checkbox.isChecked() or self.lookout_points_checkbox.isChecked()):
-                if e.get_type() == EnemyType.soldier.value and self.enemies_soldiers_checkbox.isChecked():
+            if (self.enemies_checkbox.checkState(0) == QtCore.Qt.Checked or
+                    self.enemies_soldiers_checkbox.checkState(0) == QtCore.Qt.Checked
+                    or self.launchers_checkbox.checkState(0) == QtCore.Qt.Checked or
+                    self.lookout_points_checkbox.checkState(0) == QtCore.Qt.Checked):
+                if e.get_type() == EnemyType.soldier.value and self.enemies_soldiers_checkbox.checkState(
+                        0) == QtCore.Qt.Checked:
                     x_enemy.append(e.get_x())
                     y_enemy.append(e.get_y())
                     marker_enemy.append("o")
 
-                elif e.get_type() == EnemyType.launcher.value and self.launchers_checkbox.isChecked():
+                elif e.get_type() == EnemyType.launcher.value and self.launchers_checkbox.checkState(
+                        0) == QtCore.Qt.Checked:
                     x_enemy.append(e.get_x())
                     y_enemy.append(e.get_y())
                     marker_enemy.append("^")
 
-                elif e.get_type() == EnemyType.lookout_point.value and self.lookout_points_checkbox.isChecked():
+                elif e.get_type() == EnemyType.lookout_point.value and self.lookout_points_checkbox.checkState(
+                        0) == QtCore.Qt.Checked:
                     x_enemy.append(e.get_x())
                     y_enemy.append(e.get_y())
                     marker_enemy.append("s")
@@ -227,37 +232,44 @@ class MatplotlibWidget(QMainWindow):
                 for x, y, m in zip(x_enemy, y_enemy, marker_enemy):
                     self.MplWidget.canvas.axes.plot([x], [y], color="red", marker=m, markersize=4,
                                                     markeredgecolor="black")
-        x_cc = []
-        y_cc = []
-        color_cc = []
+        # x_cc = []
+        # y_cc = []
+        # color_cc = []
 
-        for c in self.company_commanders:
-            if (self.company1_checkbox.isChecked() or self.commander1_checkBox.isChecked()) and c.company_number == 1:
-                x_cc.append(c.x)
-                y_cc.append(c.y)
-                color_cc.append('cyan')
-
-            elif (self.company2_checkbox.isChecked() or self.commander2_checkBox.isChecked()) and c.company_number == 2:
-                x_cc.append(c.x)
-                y_cc.append(c.y)
-                color_cc.append('orange')
-
-            elif (self.company3_checkbox.isChecked() or self.commander3_checkBox.isChecked()) and c.company_number == 3:
-                x_cc.append(c.x)
-                y_cc.append(c.y)
-                color_cc.append('lime')
-
-            else:
-                continue
-
-            for xcc, ycc, co in zip(x_cc, y_cc, color_cc):
-                self.MplWidget.canvas.axes.plot([xcc], [ycc], color="black",  marker='o', markersize=7, picker=10,
-                                                markeredgecolor=co, markeredgewidth=1.5)
+        # for c in self.company_commanders:
+        #     if (self.company1.checkState(0) == QtCore.Qt.Checked or
+        #         self.company1_commander.checkState(0) == QtCore.Qt.Checked) \
+        #             and c.company_number == 1:
+        #         x_cc.append(c.x)
+        #         y_cc.append(c.y)
+        #         color_cc.append('cyan')
+        #
+        #     elif (self.company2.checkState(0) == QtCore.Qt.Checked
+        #           or self.company2_commander.checkState(0) == QtCore.Qt.Checked) \
+        #             and c.company_number == 2:
+        #         x_cc.append(c.x)
+        #         y_cc.append(c.y)
+        #         color_cc.append('orange')
+        #
+        #     elif (self.company3.checkState(0) == QtCore.Qt.Checked
+        #           or self.company3_commander.checkState(0) == QtCore.Qt.Checked) and c.company_number == 3:
+        #         x_cc.append(c.x)
+        #         y_cc.append(c.y)
+        #         color_cc.append('lime')
+        #
+        #     else:
+        #         continue
+        #
+        #     for xcc, ycc, co in zip(x_cc, y_cc, color_cc):
+        #         self.MplWidget.canvas.axes.plot([xcc], [ycc], color="black", marker='o', markersize=7, picker=10,
+        #                                         markeredgecolor=co, markeredgewidth=1.5)
 
     @staticmethod
     def create_plot_by_companies(x, y, color, marker, sizes, labels, s, company, soldiers, apcs, c):
-        if company.isChecked() or soldiers.isChecked() or apcs.isChecked():
-            if type(s) == Soldier and soldiers.isChecked():
+        if company.checkState(0) == QtCore.Qt.Checked \
+                or soldiers.checkState(0) == QtCore.Qt.Checked \
+                or apcs.checkState(0) == QtCore.Qt.Checked:
+            if type(s) == Soldier and soldiers.checkState(0) == QtCore.Qt.Checked:
                 x.append(s.x)
                 y.append(s.y)
                 color.append(c)
@@ -265,7 +277,7 @@ class MatplotlibWidget(QMainWindow):
                 sizes.append(4)
                 labels.append(s.__str__())
 
-            elif type(s) == APC and apcs.isChecked():
+            elif type(s) == APC and apcs.checkState(0) == QtCore.Qt.Checked:
                 x.append(s.x)
                 y.append(s.y)
                 color.append(c)
@@ -275,19 +287,46 @@ class MatplotlibWidget(QMainWindow):
 
     @staticmethod
     def is_checked(company, soldiers, apcs, commander):
-        if company.isChecked() and not (soldiers.isChecked() and
-                                        apcs.isChecked() and commander.isChecked()):
-            soldiers.setChecked(True)
-            apcs.setChecked(True)
-            commander.setChecked(True)
+        if company.checkState(0) == QtCore.Qt.Checked and (
+                soldiers.checkState(0) == QtCore.Qt.Unchecked and
+                apcs.checkState(0) == QtCore.Qt.Unchecked and
+                commander.checkState(0) == QtCore.Qt.Unchecked):
+            soldiers.setCheckState(0, QtCore.Qt.Checked)
+            apcs.setCheckState(0, QtCore.Qt.Checked)
+            commander.setCheckState(0, QtCore.Qt.Checked)
 
-        if (company.isChecked()) and not (soldiers.isChecked() or
-                                          apcs.isChecked() or commander.isChecked()):
-            company.setChecked(False)
+        if company.checkState(0) == QtCore.Qt.Unchecked and (
+                soldiers.checkState(0) == QtCore.Qt.Checked and
+                apcs.checkState(0) == QtCore.Qt.Checked and
+                commander.checkState(0) == QtCore.Qt.Checked):
+            soldiers.setCheckState(0, QtCore.Qt.Unchecked)
+            apcs.setCheckState(0, QtCore.Qt.Unchecked)
+            commander.setCheckState(0, QtCore.Qt.Unchecked)
 
-        if (not company.isChecked()) and (soldiers.isChecked()
-                                          and apcs.isChecked() and commander.isChecked()):
-            company.setChecked(True)
+        if (company.checkState(0) == QtCore.Qt.Unchecked or
+            company.checkState(0) == QtCore.Qt.Checked) and (
+                soldiers.checkState(0) == QtCore.Qt.Checked or
+                apcs.checkState(0) == QtCore.Qt.Checked or
+                commander.checkState(0) == QtCore.Qt.Checked):
+            company.setCheckState(0, QtCore.Qt.PartiallyChecked)
+
+        if company.checkState(0) == QtCore.Qt.PartiallyChecked and (
+                soldiers.checkState(0) == QtCore.Qt.Checked and
+                apcs.checkState(0) == QtCore.Qt.Checked and
+                commander.checkState(0) == QtCore.Qt.Checked):
+            company.setCheckState(0, QtCore.Qt.Checked)
+
+        if company.checkState(0) == QtCore.Qt.PartiallyChecked and (
+                soldiers.checkState(0) == QtCore.Qt.Unchecked and
+                apcs.checkState(0) == QtCore.Qt.Unchecked and
+                commander.checkState(0) == QtCore.Qt.Unchecked):
+            company.setCheckState(0, QtCore.Qt.Unchecked)
+
+        if company.checkState(0) == QtCore.Qt.Checked and (
+                soldiers.checkState(0) == QtCore.Qt.Unchecked and
+                apcs.checkState(0) == QtCore.Qt.Checked and
+                commander.checkState(0) == QtCore.Qt.Checked):
+            company.setCheckState(0, QtCore.Qt.Checked)
 
     @staticmethod
     def get_color(company_num):
@@ -347,5 +386,6 @@ def main():
 
     bc_thread.start()
     gui_thread2.start()
+
 
 main()

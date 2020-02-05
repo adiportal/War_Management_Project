@@ -99,6 +99,7 @@ def receive_handler(packet, address):
             id = field_object.get_id()
             location = message.get_move_to_location()
             logger.debug("FieldObject #{} start moving to ({})".format(id, location))
+            print("FieldObject #{} start moving to ({})".format(id, location))
 
         elif opt_case == MessageType.got_shot.value:
             field_object = message.get_field_object()
