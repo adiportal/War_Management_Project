@@ -1,18 +1,25 @@
 import logging
 import pickle
 import threading
-from CompanyCommanderUDP import company_commander
-from Utility import Company, MessageType, Case, sender_receiver_switch_case, get_field_address, contain, \
-    get_bc_listen_sock, get_cc_address
 
+from Entities import BattalionCommander
+from Utility import Company, MessageType, Case, sender_receiver_switch_case, get_field_address, contain, \
+    get_bc_listen_sock, get_cc_address, get_bc_address, get_bc_receive_address, setup_logger
+
+# Initialize the Logger
+logger = setup_logger('battalion_commander', 'battalion_commander.log')
 
 global STOP_BC_THREADS
 STOP_BC_THREADS = False
+
+battalion_commander = BattalionCommander()
 
 # Initialize Companies
 company1 = []
 company2 = []
 company3 = []
+enemies = []
+company_commanders = []
 
 # Initialize Listen Socket
 listen_sock = get_bc_listen_sock()
@@ -22,7 +29,7 @@ listen_sock = get_bc_listen_sock()
 #            to handle the message.
 def listen():
     print('Listening...\n')
-    logging.debug("Listening...")
+    logger.debug("Listening...")
 
     while True:
         # set max size of message
@@ -30,26 +37,27 @@ def listen():
 
         # decoding the message to String
         rec_packet = pickle.loads(rec_packet)
+        # print(rec_packet)
         if rec_packet:
-            receive_handler(rec_packet, get_field_address())
+            receive_handler(rec_packet)
 
         if STOP_BC_THREADS:
-            logging.debug("Closing BattalionCommanderUDP...")
+            logger.debug("Closing BattalionCommanderUDP...")
             break
 
 
 # receive_handler(packet, address) - Receive the packet and the address that it came from, check the case and act
 #                                    according to the case
-def receive_handler(packet, address):
+def receive_handler(packet):
     sender_receiver_case = sender_receiver_switch_case(packet)
+    print(sender_receiver_case)
     opt_case = packet.get_message_type()
     message = packet.get_message()
 
     # Soldier >> CompanyCommander
     if sender_receiver_case == Case.soldier_to_cc.value:
 
-        logging.debug("Received message from Soldier {} >> {}".format(address, packet))
-
+        logger.debug("Received message from Soldier {}".format(packet))
         # New FieldObject message
         if opt_case == MessageType.alive.value:
             field_object = message.get_field_object()
@@ -58,31 +66,46 @@ def receive_handler(packet, address):
             index = contain(get_company(company_num), id)
 
             if index >= 0:
-                get_company(company_num)[index] = field_object
-                logging.debug("FieldObject #{} was updated".format(id))
+
+                if field_object.get_hp() <= 0:
+                    del get_company(company_num)[index]
+
+                else:
+                    get_company(company_num)[index] = field_object
+                    logger.debug("FieldObject #{} was updated".format(id))
             else:
                 get_company(company_num).append(field_object)
-                logging.debug("New FieldObject was created: #{}".format(id))
-                logging.debug("New FieldObject #{} from company {} was appended to company list".format(id,
+                logger.debug("New FieldObject was created: #{}".format(id))
+                logger.debug("New FieldObject #{} from company {} was appended to company list".format(id,
                                                                                                         company_num))
-        if opt_case == MessageType.enemies_in_sight.value:
-            updated_enemies = message.get_enemies()
-            company_commander.update_enemies(updated_enemies)
 
-        if opt_case == MessageType.move_approval.value:
+        elif opt_case == MessageType.move_approval.value:
             field_object = message.get_field_object()
             id = field_object.get_id()
             location = message.get_move_to_location()
-            logging.debug("FieldObject #{} start moving to ({})".format(id, location))
+            logger.debug("FieldObject #{} start moving to ({})".format(id, location))
+
+        elif opt_case == MessageType.got_shot.value:
+            field_object = message.get_field_object()
+            id = field_object.get_id()
+
+            print("#{} Got Shot!!".format(id))
+            logger.debug("#{} Got Shot!!".format(id))
+
+        elif opt_case == MessageType.enemies_in_sight.value:
+
+            updated_enemies = message.get_enemies()
+            battalion_commander.update_enemies(updated_enemies)
+
+    elif sender_receiver_case == Case.cc_to_bc.value:
+        # if opt_case == MessageType.alive.value:
+        cc = message.get_field_object()
+        battalion_commander.commanders.append(cc)
+        print(len(battalion_commander.commanders))
 
     # Error Case
     else:
-        logging.debug("Invalid Message:".format(packet))
-
-
-def set_company_commander(company_num, location):
-    company_commander.set_company(company_num)
-    company_commander.set_location(location)
+        logger.debug("Invalid Message:".format(packet))
 
 
 # get_company(company_num) - get the company number and returns the list of FieldObject of this company number
@@ -96,16 +119,13 @@ def get_company(company_num):
 
 
 # Main
-def main(company_num, location):
-    # Initialize the Logger
-    logging.basicConfig(filename='BattalionCommanderLog.log', level=logging.DEBUG, format='%(asctime)s : %(levelname)s : '
-                                                                                        'CC : %(message)s')
+def main():
     # Initialize receiver address
-    cc_receiver_address = get_cc_address()
+    bc_receiver_address = get_bc_receive_address()
 
     # Bind the sockets with the addresses
-    listen_sock.bind(cc_receiver_address)
-    logging.info("A new socket has been initiated: {}".format(listen_sock))
+    listen_sock.bind(bc_receiver_address)
+    logger.info("A new socket has been initiated: {}".format(listen_sock))
 
     # start listen() func on background
     listen_thread = threading.Thread(target=listen)

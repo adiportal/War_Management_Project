@@ -8,7 +8,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMessageBox, QSizePolicy
-import NewGui
+import CompanyCommanderGui
 from Utility import in_use, init_cc_address, get_cc_send_address
 
 
@@ -113,7 +113,7 @@ class Ui_CompanyCommanderLogin(object):
         # If all conditions correct, the login window will be closed and the GUI will be open
         if correct_company_num is True and correct_x_location is True and correct_y_location is True and cc_open is True:
             location = (float(x_location_input), float(y_location_input))
-            NewGui.main(int(company_num_input), location)
+            CompanyCommanderGui.main(int(company_num_input), location)
             CompanyCommanderLogin.close()
 
     @staticmethod

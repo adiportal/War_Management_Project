@@ -1,20 +1,36 @@
 import logging
 import pickle
 import threading
+import time
+
+import Utility
 from Utility import Company, MessageType, Case, sender_receiver_switch_case, get_field_address, contain, \
-                    get_cc_listen_sock, get_cc_send_sock, get_cc_receive_address, get_cc_send_address
-from Entities import CompanyCommander
+    get_cc_listen_sock, get_cc_send_sock, get_cc_receive_address, get_cc_send_address, Sender, Receiver, setup_logger, \
+    get_cc_to_bc_send_sock, get_bc_address, get_cc_to_bc_send_address
+from Entities import CompanyCommander, AliveMessage, Packet
+
+# Initialize the Logger
+# logging.basicConfig(filename='CompanyCommanderLog.log', level=logging.DEBUG, format='%(asctime)s : %(levelname)s : '
+#                                                                                     'CC : %(message)s')
+logger = setup_logger('company_commander', 'company_commander.log')
+
 
 # Initialize Companies
 company1 = []
 company2 = []
 company3 = []
 
+# Order Packets
+order_packets = []
+
 # Initialize Listen Socket
 listen_sock = get_cc_listen_sock()
 
-# Initialize Listen Socket
+# Initialize Send Socket
 send_sock = get_cc_send_sock()
+
+# Initialize cc to bc Send Socket
+cc_to_bc_sock = get_cc_to_bc_send_sock()
 
 # Initiate CC
 company_commander = CompanyCommander(1, (0, 0), 0)
@@ -28,7 +44,7 @@ def get_company_commander():
 #            to handle the message.
 def listen():
     print('Listening... \n')
-    logging.debug("Listening...")
+    logger.debug("Listening...")
 
     while True:
         # set max size of message
@@ -40,7 +56,7 @@ def listen():
             receive_handler(rec_packet, get_field_address())
 
         if company_commander.is_stopped():
-            logging.debug("Closing CompanyCommanderUDP...")
+            logger.debug("Closing CompanyCommanderUDP...")
             print("Closing CompanyCommanderUDP...")
             break
 
@@ -55,7 +71,7 @@ def receive_handler(packet, address):
     # Soldier >> CompanyCommander
     if sender_receiver_case == Case.soldier_to_cc.value:
 
-        logging.debug("Received message from Soldier {} >> {}".format(address, packet))
+        logger.debug("Received message from Soldier {} >> {}".format(address, packet))
 
         # New FieldObject message
         if opt_case == MessageType.alive.value:
@@ -71,52 +87,82 @@ def receive_handler(packet, address):
 
                 else:
                     get_company(company_num)[index] = field_object
-                    logging.debug("FieldObject #{} was updated".format(id))
+                    logger.debug("FieldObject #{} was updated".format(id))
             else:
                 get_company(company_num).append(field_object)
-                logging.debug("New FieldObject was created: #{}".format(id))
-                logging.debug("New FieldObject #{} from company {} was appended to company list".format(id,
+                logger.debug("New FieldObject was created: #{}".format(id))
+                logger.debug("New FieldObject #{} from company {} was appended to company list".format(id,
                                                                                                         company_num))
         elif opt_case == MessageType.enemies_in_sight.value:
             updated_enemies = message.get_enemies()
             company_commander.update_enemies(updated_enemies)
 
         elif opt_case == MessageType.move_approval.value:
+            for pac in order_packets:
+                if message.get_approval_packet_id() == pac.get_id():
+                    order_packets.remove(pac)
+                    break
+
             field_object = message.get_field_object()
             id = field_object.get_id()
             location = message.get_move_to_location()
-            logging.debug("FieldObject #{} start moving to ({})".format(id, location))
+            logger.debug("FieldObject #{} start moving to ({})".format(id, location))
 
         elif opt_case == MessageType.engage_approval.value:
-            field_object_id = message.get_field_object_id()
-            enemy_id = message.get_enemy_id()
+            for pac in order_packets:
+                if message.get_approval_packet_id() == pac.get_id():
+                    order_packets.remove(pac)
+                    break
 
-            if not message.can_exe():
-                print(f"{field_object_id} out of Ammo")
-            else:
-                print(f"{field_object_id} Engaging {enemy_id}")
+            field_object = message.get_field_object_id()
+            logger.debug(f"FieldObject #{field_object} Engaging Enemy")
 
         elif opt_case == MessageType.got_shot.value:
             field_object = message.get_field_object()
             id = field_object.get_id()
 
             print("#{} Got Shot!!".format(id))
-            logging.debug("#{} Got Shot!!".format(id))
+            logger.debug("#{} Got Shot!!".format(id))
 
     # Error Case
     else:
-        logging.debug("Invalid Message:".format(packet))
+        logger.debug("Invalid Message:".format(packet))
 
 
 # send_handler(packet) - if the CompanyCommander want to order on movement or engagement, after doing the action on
 #                        the GUI, it create a packet and the packet goes to send_handler() to handle the message
 def send_handler(packet):
     try:
+        if sender_receiver_switch_case(packet) == Case.cc_to_bc.value:
+            address = get_bc_address()
+            sock = cc_to_bc_sock
+        else:
+            address = get_field_address()
+            sock = send_sock
+
         byte_packet = pickle.dumps(packet)
-        send_sock.sendto(byte_packet, get_field_address())
-        logging.debug("A Packet has been sent: {}".format(packet))
+
+        if packet.get_message_type() == MessageType.move_order.value or \
+           packet.get_message_type() == MessageType.engage_order.value:
+            order_packets.append(packet)
+            count = 0
+
+            while packet in order_packets:
+                if count == 3:
+                    order_packets.remove(packet)
+                    logger.error("The packet '{}' didn't reached to Field {}".format(packet, get_field_address()))
+                    break
+                sock.sendto(byte_packet, address)
+                logger.debug("A Packet has been sent: {}".format(packet))
+                count += 1
+                time.sleep(3)
+
+        else:
+            sock.sendto(byte_packet, address)
+            logger.debug("A Packet has been sent: {}".format(packet))
+
     except:
-        logging.error("The packet '{}' didn't reached to Field {}".format(packet, get_field_address()))
+        logger.error("The packet '{}' didn't reached to Field {}".format(packet, get_field_address()))
 
 
 def set_company_commander(company_num, location):
@@ -134,27 +180,51 @@ def get_company(company_num):
         return company3
 
 
+def report_alive():
+    while True:
+        message = AliveMessage(company_commander)
+        send_packet = Packet(Sender.company_commander.value, company_commander.get_company_num(),
+                             Receiver.battalion_commander.value, MessageType.alive.value, message)
+
+        send_handler(send_packet)
+        time.sleep(2)
+
+
 # Main
 def main(company_num, location):
-    # Initialize the Logger
-    logging.basicConfig(filename='CompanyCommanderLog.log', level=logging.DEBUG, format='%(asctime)s : %(levelname)s : '
-                                                                                        'CC : %(message)s')
+    # # Initialize the Logger
+    # logging.basicConfig(filename='CompanyCommanderLog.log', level=logging.DEBUG, format='%(asctime)s :
+    # %(levelname)s : '
+    #                                                                                     'CC : %(message)s')
     # Initialize receiver address
     cc_receiver_address = get_cc_receive_address()
 
     # Initialize sender address
     cc_sender_address = get_cc_send_address(company_num)
 
+    # Initialize cc to bc send address
+    cc_to_bc_address = get_cc_to_bc_send_address(company_num)
+
     # Bind the sockets with the addresses
     listen_sock.bind(cc_receiver_address)
-    logging.info("A new socket has been initiated: {}".format(listen_sock))
+    logger.info("A new socket has been initiated: {}".format(listen_sock))
 
     send_sock.bind(cc_sender_address)
-    logging.info("A new socket has been initiated: {}".format(listen_sock))
+    logger.info("A new socket has been initiated: {}".format(send_sock))
+
+    cc_to_bc_sock.bind(cc_to_bc_address)
+    logger.info("A new socket has been initiated: {}".format(cc_to_bc_sock))
 
     # Update CC
     set_company_commander(company_num, location)
 
     # start listen() func on background
     listen_thread = threading.Thread(target=listen)
+    alive_thread = threading.Thread(target=report_alive)
+
     listen_thread.start()
+    alive_thread.start()
+
+    # time.sleep(10)
+    # packet = Utility.create_move_to_message(company1[0].get_company_num(), company1[0].get_id(), (5, 6))
+    # send_handler(packet)

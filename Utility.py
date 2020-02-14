@@ -5,9 +5,7 @@ from pyproj import Geod
 import Entities
 
 
-# Initialize the Logger
-logging.basicConfig(filename='UtilityLog.log', level=logging.DEBUG,
-                    format='%(asctime)s : %(levelname)s : Utility : %(message)s')
+formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
 
 
 # get_cc_sock() - creating a new socket for cc and returns it
@@ -49,6 +47,18 @@ def get_cc_send_sock():
     return sock
 
 
+def get_cc_to_bc_send_sock():
+    # Initialize socket
+    try:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+        logging.debug("Socket Successfully Created!")
+    except socket.error as err:
+        logging.error("Socket creation failed with error {}".format(err))
+
+    return sock
+
+
 # get_field_sock() - creating a new socket for field and returns it
 def get_field_sock():
     # Initialize socket
@@ -72,6 +82,10 @@ def get_field_address():
 # for FieldUDP
 def get_cc_address():
     return '255.255.255.255', 5008
+
+
+def get_bc_address():
+    return '255.255.255.255', 5014
 
 
 # for CompanyCommanderUDP
@@ -98,6 +112,25 @@ def get_cc_send_address(company_num):
         return Case.error.value
 
 
+def get_cc_to_bc_send_address(company_num):
+    IP = '127.0.0.1'
+
+    if int(company_num) == Company.company1.value:
+        port = 5015
+        return IP, port
+
+    elif int(company_num) == Company.company2.value:
+        port = 5016
+        return IP, port
+
+    elif int(company_num) == Company.company3.value:
+        port = 5017
+        return IP, port
+
+    else:
+        return Case.error.value
+
+
 def init_cc_address(company_num):
     IP = ''
 
@@ -117,7 +150,7 @@ def init_cc_address(company_num):
         return Case.error.value
 
 
-def get_bc_address():
+def get_bc_receive_address():
     IP = ''
     port = 5014
     return IP, port
@@ -216,6 +249,10 @@ def sender_receiver_switch_case(packet):
             packet.get_receiver() == Receiver.soldier.value:
         return Case.cc_to_soldier.value
 
+    elif packet.get_sender() == Sender.company_commander.value and \
+            packet.get_receiver() == Receiver.battalion_commander.value:
+        return Case.cc_to_bc.value
+
     else:
         return Case.error.value
 
@@ -234,6 +271,18 @@ def get_line(start, end):
                        npts=100)
 
     return points
+
+
+def setup_logger(name, log_file, level=logging.INFO):
+
+    handler = logging.FileHandler(log_file)
+    handler.setFormatter(formatter)
+
+    logger = logging.getLogger(name)
+    logger.setLevel(level)
+    logger.addHandler(handler)
+
+    return logger
 
 
 # Enum Classes
@@ -259,16 +308,15 @@ class Company(enum.Enum):
 
 class Case(enum.Enum):
     soldier_to_cc = 1
-    soldier_to_bc = 2
-    bc_to_cc_approval = 3
-    cc_to_soldier = 4
-    approval = 5
+    cc_to_bc = 2
+    cc_to_soldier = 3
+    approval = 4
     error = 0
 
 
 class ObjectType(enum.Enum):
     soldier = 1
-    btw = 2
+    apc = 2
 
 
 class EnemyType(enum.Enum):
