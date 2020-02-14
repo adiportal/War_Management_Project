@@ -382,11 +382,12 @@ class FieldUDP:
                 move_to_thread.start()
 
                 # Create and send approval message
-                message = MoveApprovalMessage(field_object, location)
+                message = MoveApprovalMessage(field_object, location, rec_packet.get_id())
                 send_packet = Packet(Utility.Sender.soldier.value, field_object.get_company_num(),
                                      Utility.Receiver.company_commander.value,
                                      Utility.MessageType.move_approval.value, message)
                 self.send_handler(send_packet)
+                print("**")
                 logger.debug(
                     "Move approval message was sent from FieldObject #{} to CC #{}".format(field_object.get_id(),
                                                                                            field_object.get_company_num()))
@@ -402,7 +403,17 @@ class FieldUDP:
                 forces_attack_thread = threading.Thread(target=self.forces_attack, args=args)
                 field_object.set_move_to(None)
                 forces_attack_thread.start()
-                print("engage message")
+
+                message = EngageApprovalMessage(field_object.get_company_num(), field_object.get_id(), enemy.get_id(),
+                                                rec_packet.get_id())
+                send_packet = Packet(Utility.Sender.soldier.value, field_object.get_company_num(),
+                                     Utility.Receiver.company_commander.value,
+                                     Utility.MessageType.engage_approval.value, message)
+
+                self.send_handler(send_packet)
+
+                logger.debug(f"Engage approval was sent from FieldObject #{field_object.get_id()} to CC #{field_object.get_company_num()}")
+
 
         # Error case
         else:
@@ -876,9 +887,13 @@ class AliveMessage:
 # MoveApprovalMessage
 class MoveApprovalMessage:
     # Constructor
-    def __init__(self, field_object, location):
+    def __init__(self, field_object, location, packet_id):
         self.field_object = field_object
         self.location = location
+        self.approval_packet_id = packet_id
+
+    def set_approval_packet_id(self, packet_id):
+        self.approval_packet_id = id
 
     # Getters
     def get_field_object(self):
@@ -886,6 +901,9 @@ class MoveApprovalMessage:
 
     def get_move_to_location(self):
         return self.location
+
+    def get_approval_packet_id(self):
+        return self.approval_packet_id
 
 
 # EnemiesInSightMessage
@@ -942,10 +960,14 @@ class EngageOrderMessage:
 # EngageApprovalMessage
 class EngageApprovalMessage:
     # Constructor
-    def __init__(self, company_num, field_object_id, enemy_id):
+    def __init__(self, company_num, field_object_id, enemy_id, packet_id):
         self.company_num = company_num
         self.field_object_id = field_object_id
         self.enemy_id = enemy_id
+        self.approval_packet_id = packet_id
+
+    def set_approval_packet_id(self, packet_id):
+        self.approval_packet_id = id
 
     # Getters
     def get_company_num(self):
@@ -957,6 +979,8 @@ class EngageApprovalMessage:
     def get_enemy_id(self):
         return self.enemy_id
 
+    def get_approval_packet_id(self):
+        return self.approval_packet_id
 
 # GotShotMessage
 class GotShotMessage:

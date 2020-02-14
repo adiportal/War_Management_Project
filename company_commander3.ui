@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>654</width>
-    <height>427</height>
+    <width>666</width>
+    <height>454</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -51,6 +51,9 @@
          </property>
         </widget>
         <widget class="QPushButton" name="move_pushButton">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="geometry">
           <rect>
            <x>20</x>
@@ -59,30 +62,45 @@
            <height>41</height>
           </rect>
          </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
          <property name="text">
           <string>Move</string>
          </property>
+         <property name="checkable">
+          <bool>false</bool>
+         </property>
         </widget>
         <widget class="QPushButton" name="engage_pushButton">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="geometry">
           <rect>
-           <x>130</x>
+           <x>120</x>
            <y>330</y>
            <width>71</width>
            <height>41</height>
           </rect>
          </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
          <property name="text">
           <string>Engage</string>
+         </property>
+         <property name="checkable">
+          <bool>false</bool>
          </property>
         </widget>
         <widget class="QPlainTextEdit" name="console">
          <property name="geometry">
           <rect>
-           <x>260</x>
+           <x>210</x>
            <y>330</y>
            <width>351</width>
-           <height>41</height>
+           <height>61</height>
           </rect>
          </property>
         </widget>
@@ -174,6 +192,25 @@
           </item>
          </item>
         </widget>
+        <widget class="QPushButton" name="cancelButton">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>580</x>
+           <y>330</y>
+           <width>56</width>
+           <height>41</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(255, 25, 36);</string>
+         </property>
+         <property name="text">
+          <string>Cancel</string>
+         </property>
+        </widget>
        </widget>
       </item>
      </layout>
@@ -185,7 +222,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>654</width>
+     <width>666</width>
      <height>18</height>
     </rect>
    </property>

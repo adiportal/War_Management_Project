@@ -20,6 +20,9 @@ company1 = []
 company2 = []
 company3 = []
 
+# Order Packets
+order_packets = []
+
 # Initialize Listen Socket
 listen_sock = get_cc_listen_sock()
 
@@ -95,11 +98,24 @@ def receive_handler(packet, address):
             company_commander.update_enemies(updated_enemies)
 
         elif opt_case == MessageType.move_approval.value:
+            for pac in order_packets:
+                if message.get_approval_packet_id() == pac.get_id():
+                    order_packets.remove(pac)
+                    break
+
             field_object = message.get_field_object()
             id = field_object.get_id()
             location = message.get_move_to_location()
             logger.debug("FieldObject #{} start moving to ({})".format(id, location))
-            print("FieldObject #{} start moving to ({})".format(id, location))
+
+        elif opt_case == MessageType.engage_approval.value:
+            for pac in order_packets:
+                if message.get_approval_packet_id() == pac.get_id():
+                    order_packets.remove(pac)
+                    break
+
+            field_object = message.get_field_object_id()
+            logger.debug(f"FieldObject #{field_object} Engaging Enemy")
 
         elif opt_case == MessageType.got_shot.value:
             field_object = message.get_field_object()
@@ -125,8 +141,26 @@ def send_handler(packet):
             sock = send_sock
 
         byte_packet = pickle.dumps(packet)
-        sock.sendto(byte_packet, address)
-        logger.debug("A Packet has been sent: {}".format(packet))
+
+        if packet.get_message_type() == MessageType.move_order.value or \
+           packet.get_message_type() == MessageType.engage_order.value:
+            order_packets.append(packet)
+            count = 0
+
+            while packet in order_packets:
+                if count == 3:
+                    order_packets.remove(packet)
+                    logger.error("The packet '{}' didn't reached to Field {}".format(packet, get_field_address()))
+                    break
+                sock.sendto(byte_packet, address)
+                logger.debug("A Packet has been sent: {}".format(packet))
+                count += 1
+                time.sleep(3)
+
+        else:
+            sock.sendto(byte_packet, address)
+            logger.debug("A Packet has been sent: {}".format(packet))
+
     except:
         logger.error("The packet '{}' didn't reached to Field {}".format(packet, get_field_address()))
 
