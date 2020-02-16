@@ -438,6 +438,14 @@ class MatplotlibWidget(QMainWindow):
         self.move_pushButton.setEnabled(False)
         self.engage_pushButton.setEnabled(False)
         self.cancelButton.setEnabled(False)
+        if self.move_pushButton.isDown():
+            self.MplWidget.canvas.mpl_disconnect(
+                self.MplWidget.canvas.mpl_connect('button_press_event', self.on_click))
+        elif self.engage_pushButton.isDown():
+            self.MplWidget.canvas.mpl_connect("pick_event", self.on_pick)
+            self.MplWidget.canvas.mpl_disconnect(self.MplWidget.canvas.mpl_connect('pick_event', self.on_pick_enemy))
+        else:
+            pass
 
     def engage_button(self):
         self.engage_pushButton.setDown(True)
@@ -524,7 +532,7 @@ class MatplotlibWidget(QMainWindow):
         x_data = this_point.get_xdata()
         y_data = this_point.get_ydata()
 
-        for enemy in self.soldiers:
+        for enemy in self.enemies:
             if enemy.x == x_data and enemy.y == y_data:
                 self.picked_enemy.append(enemy)
                 break
