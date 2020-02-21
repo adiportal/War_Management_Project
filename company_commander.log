@@ -11,3 +11,221 @@
 2020-02-16 18:23:07,306 INFO A new socket has been initiated: <socket.socket fd=488, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
 2020-02-16 18:23:07,306 INFO A new socket has been initiated: <socket.socket fd=960, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
 2020-02-16 18:23:07,306 INFO A new socket has been initiated: <socket.socket fd=1028, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 10:38:46,950 INFO A new socket has been initiated: <socket.socket fd=984, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 10:38:46,952 INFO A new socket has been initiated: <socket.socket fd=1000, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 10:38:46,952 INFO A new socket has been initiated: <socket.socket fd=828, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 10:39:31,654 ERROR The packet '[ #19. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Move Order, Message: || Company: 1, ID: 1, MoveTo Location: ((6.877567512963836, 10.530170381843895)) || ]' didn't reached to Field ('127.0.0.1', 5007)
+2020-02-19 10:42:36,148 INFO A new socket has been initiated: <socket.socket fd=784, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 10:42:36,149 INFO A new socket has been initiated: <socket.socket fd=848, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 10:42:36,149 INFO A new socket has been initiated: <socket.socket fd=864, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 10:43:14,131 ERROR The packet '[ #16. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Move Order, Message: || Company: 1, ID: 1, MoveTo Location: ((11.389655869082093, 9.991413563202912)) || ]' didn't reached to Field ('127.0.0.1', 5007)
+2020-02-19 10:43:56,048 ERROR The packet '[ #38. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Move Order, Message: || Company: 1, ID: 3, MoveTo Location: ((4.251128022089031, 7.971075493299213)) || ]' didn't reached to Field ('127.0.0.1', 5007)
+2020-02-19 10:51:07,064 INFO A new socket has been initiated: <socket.socket fd=936, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 10:51:07,065 INFO A new socket has been initiated: <socket.socket fd=944, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 10:51:07,065 INFO A new socket has been initiated: <socket.socket fd=768, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 10:51:35,001 ERROR The packet '[ #11. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Move Order, Message: || Company: 1, ID: 3, MoveTo Location: ((5.463330864031249, 10.934237995824635)) || ]' didn't reached to Field ('127.0.0.1', 5007)
+2020-02-19 10:53:47,412 INFO A new socket has been initiated: <socket.socket fd=772, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 10:53:47,413 INFO A new socket has been initiated: <socket.socket fd=908, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 10:53:47,414 INFO A new socket has been initiated: <socket.socket fd=964, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 10:54:32,804 ERROR The packet '[ #20. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Move Order, Message: || Company: 1, ID: 2, MoveTo Location: ((14.756885985588255, 10.462825779513775)) || ]' didn't reached to Field ('127.0.0.1', 5007)
+2020-02-19 11:01:45,616 INFO A new socket has been initiated: <socket.socket fd=872, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 11:01:45,616 INFO A new socket has been initiated: <socket.socket fd=1008, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 11:01:45,616 INFO A new socket has been initiated: <socket.socket fd=1012, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 11:02:24,240 ERROR The packet '[ #16. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Move Order, Message: || Company: 1, ID: 4, MoveTo Location: ((10.918243652771231, 11.809717826116238)) || ]' didn't reached to Field ('127.0.0.1', 5007)
+2020-02-19 11:02:33,355 ERROR The packet '[ #22. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Move Order, Message: || Company: 1, ID: 3, MoveTo Location: ((10.918243652771231, 11.809717826116238)) || ]' didn't reached to Field ('127.0.0.1', 5007)
+2020-02-19 11:03:03,011 ERROR The packet '[ #38. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Move Order, Message: || Company: 1, ID: 6, MoveTo Location: ((17.11394706714257, 2.785541113879723)) || ]' didn't reached to Field ('127.0.0.1', 5007)
+2020-02-19 11:04:53,180 INFO A new socket has been initiated: <socket.socket fd=980, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 11:04:53,181 INFO A new socket has been initiated: <socket.socket fd=976, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 11:04:53,181 INFO A new socket has been initiated: <socket.socket fd=988, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 11:06:39,595 INFO A new socket has been initiated: <socket.socket fd=900, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 11:06:39,596 INFO A new socket has been initiated: <socket.socket fd=904, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 11:06:39,597 INFO A new socket has been initiated: <socket.socket fd=672, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 11:08:39,321 INFO A new socket has been initiated: <socket.socket fd=812, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 11:08:39,322 INFO A new socket has been initiated: <socket.socket fd=728, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 11:08:39,322 INFO A new socket has been initiated: <socket.socket fd=964, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 11:10:58,575 INFO A new socket has been initiated: <socket.socket fd=928, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 11:10:58,576 INFO A new socket has been initiated: <socket.socket fd=964, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 11:10:58,576 INFO A new socket has been initiated: <socket.socket fd=976, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 11:11:32,369 ERROR The packet '[ #14. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Move Order, Message: || Company: 1, ID: 5, MoveTo Location: ((4.991918647720386, 9.722035153882416)) || ]' didn't reached to Field ('127.0.0.1', 5007)
+2020-02-19 11:12:15,358 ERROR The packet '[ #36. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Engage Order, Message: <Entities.EngageOrderMessage object at 0x00000120B0508348> ]' didn't reached to Field ('127.0.0.1', 5007)
+2020-02-19 11:22:15,772 INFO A new socket has been initiated: <socket.socket fd=992, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 11:22:15,772 INFO A new socket has been initiated: <socket.socket fd=856, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 11:22:15,773 INFO A new socket has been initiated: <socket.socket fd=860, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 11:22:54,754 ERROR The packet '[ #16. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Move Order, Message: || Company: 1, ID: 4, MoveTo Location: ((19.268974341706514, 6.758872651356994)) || ]' didn't reached to Field ('127.0.0.1', 5007)
+2020-02-19 11:23:03,877 ERROR The packet '[ #22. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Move Order, Message: || Company: 1, ID: 1, MoveTo Location: ((19.268974341706514, 6.758872651356994)) || ]' didn't reached to Field ('127.0.0.1', 5007)
+2020-02-19 11:23:58,679 ERROR The packet '[ #50. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Move Order, Message: || Company: 1, ID: 4, MoveTo Location: ((4.4531618290794, 11.338305609805374)) || ]' didn't reached to Field ('127.0.0.1', 5007)
+2020-02-19 11:25:33,630 INFO A new socket has been initiated: <socket.socket fd=844, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 11:25:33,630 INFO A new socket has been initiated: <socket.socket fd=984, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 11:25:33,630 INFO A new socket has been initiated: <socket.socket fd=980, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 11:26:00,547 INFO A new socket has been initiated: <socket.socket fd=828, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 11:26:00,548 INFO A new socket has been initiated: <socket.socket fd=948, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 11:26:00,548 INFO A new socket has been initiated: <socket.socket fd=900, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 11:31:35,720 INFO A new socket has been initiated: <socket.socket fd=828, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 11:31:35,721 INFO A new socket has been initiated: <socket.socket fd=896, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 11:31:35,721 INFO A new socket has been initiated: <socket.socket fd=576, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 11:32:45,875 ERROR The packet '[ #32. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Move Order, Message: || Company: 1, ID: 3, MoveTo Location: ((7.551013536265069, 11.472994814465622)) || ]' didn't reached to Field ('127.0.0.1', 5007)
+2020-02-19 11:35:27,008 INFO A new socket has been initiated: <socket.socket fd=856, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 11:35:27,009 INFO A new socket has been initiated: <socket.socket fd=896, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 11:35:27,009 INFO A new socket has been initiated: <socket.socket fd=888, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 11:38:56,691 INFO A new socket has been initiated: <socket.socket fd=924, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 11:38:56,692 INFO A new socket has been initiated: <socket.socket fd=912, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 11:38:56,692 INFO A new socket has been initiated: <socket.socket fd=920, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 11:40:34,050 INFO A new socket has been initiated: <socket.socket fd=1056, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 11:40:34,051 INFO A new socket has been initiated: <socket.socket fd=1012, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 11:40:34,051 INFO A new socket has been initiated: <socket.socket fd=1048, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 11:41:23,882 INFO A new socket has been initiated: <socket.socket fd=508, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 11:41:23,883 INFO A new socket has been initiated: <socket.socket fd=852, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 11:41:23,883 INFO A new socket has been initiated: <socket.socket fd=944, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 11:43:31,631 INFO A new socket has been initiated: <socket.socket fd=900, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 11:43:31,631 INFO A new socket has been initiated: <socket.socket fd=904, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 11:43:31,634 INFO A new socket has been initiated: <socket.socket fd=956, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 11:44:18,528 ERROR The packet '[ #20. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Move Order, Message: || Company: 1, ID: 1, MoveTo Location: ((8.83056098053741, 10.79954879116439)) || ]' didn't reached to Field ('127.0.0.1', 5007)
+2020-02-19 11:58:21,302 INFO A new socket has been initiated: <socket.socket fd=944, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 11:58:39,111 INFO A new socket has been initiated: <socket.socket fd=976, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 11:58:39,112 INFO A new socket has been initiated: <socket.socket fd=984, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 11:58:39,112 INFO A new socket has been initiated: <socket.socket fd=1016, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 12:08:52,417 INFO A new socket has been initiated: <socket.socket fd=924, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 12:08:52,418 INFO A new socket has been initiated: <socket.socket fd=988, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 12:08:52,418 INFO A new socket has been initiated: <socket.socket fd=992, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 12:10:05,402 INFO A new socket has been initiated: <socket.socket fd=544, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 12:10:05,403 INFO A new socket has been initiated: <socket.socket fd=912, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 12:10:05,404 INFO A new socket has been initiated: <socket.socket fd=856, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 12:12:10,500 INFO A new socket has been initiated: <socket.socket fd=840, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 12:12:10,502 INFO A new socket has been initiated: <socket.socket fd=532, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 12:12:10,503 INFO A new socket has been initiated: <socket.socket fd=940, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 12:12:57,709 ERROR The packet '[ #20. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Move Order, Message: || Company: 1, ID: 5, MoveTo Location: ((3.240958987137182, 9.587345949222172)) || ]' didn't reached to Field ('127.0.0.1', 5007)
+2020-02-19 12:13:31,747 ERROR The packet '[ #38. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Move Order, Message: || Company: 1, ID: 2, MoveTo Location: ((13.679372348306284, 10.866893393494511)) || ]' didn't reached to Field ('127.0.0.1', 5007)
+2020-02-19 12:15:37,839 INFO A new socket has been initiated: <socket.socket fd=812, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 12:15:37,839 INFO A new socket has been initiated: <socket.socket fd=816, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 12:15:37,840 INFO A new socket has been initiated: <socket.socket fd=988, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 12:17:27,428 INFO A new socket has been initiated: <socket.socket fd=904, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 12:17:27,429 INFO A new socket has been initiated: <socket.socket fd=908, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 12:17:27,430 INFO A new socket has been initiated: <socket.socket fd=860, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 12:21:48,633 INFO A new socket has been initiated: <socket.socket fd=984, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 12:21:48,633 INFO A new socket has been initiated: <socket.socket fd=472, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 12:21:48,634 INFO A new socket has been initiated: <socket.socket fd=852, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 12:22:24,201 ERROR The packet '[ #15. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Move Order, Message: || Company: 1, ID: 2, MoveTo Location: ((13.073270927335173, 8.509832311940198)) || ]' didn't reached to Field ('127.0.0.1', 5007)
+2020-02-19 12:22:56,290 ERROR The packet '[ #32. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Move Order, Message: || Company: 1, ID: 4, MoveTo Location: ((5.463330864031249, 11.540339416795746)) || ]' didn't reached to Field ('127.0.0.1', 5007)
+2020-02-19 12:23:34,410 ERROR The packet '[ #52. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Move Order, Message: || Company: 1, ID: 6, MoveTo Location: ((17.922082295104047, 10.058758165533035)) || ]' didn't reached to Field ('127.0.0.1', 5007)
+2020-02-19 12:26:01,269 INFO A new socket has been initiated: <socket.socket fd=804, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 12:26:01,270 INFO A new socket has been initiated: <socket.socket fd=900, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 12:26:01,271 INFO A new socket has been initiated: <socket.socket fd=856, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 12:26:36,898 ERROR The packet '[ #15. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Move Order, Message: || Company: 1, ID: 3, MoveTo Location: ((14.083439962287024, 11.67502862145599)) || ]' didn't reached to Field ('127.0.0.1', 5007)
+2020-02-19 12:28:22,649 INFO A new socket has been initiated: <socket.socket fd=956, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 12:28:22,650 INFO A new socket has been initiated: <socket.socket fd=968, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 12:28:22,650 INFO A new socket has been initiated: <socket.socket fd=848, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 12:30:06,744 ERROR The packet '[ #49. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Move Order, Message: || Company: 1, ID: 3, MoveTo Location: ((6.33881069432285, 11.27096100747525)) || ]' didn't reached to Field ('127.0.0.1', 5007)
+2020-02-19 12:37:51,343 INFO A new socket has been initiated: <socket.socket fd=824, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 12:37:51,343 INFO A new socket has been initiated: <socket.socket fd=780, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 12:37:51,344 INFO A new socket has been initiated: <socket.socket fd=792, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 12:38:27,634 ERROR The packet '[ #15. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Move Order, Message: || Company: 1, ID: 5, MoveTo Location: ((15.767055020540102, 10.462825779513775)) || ]' didn't reached to Field ('127.0.0.1', 5007)
+2020-02-19 12:53:30,423 INFO A new socket has been initiated: <socket.socket fd=996, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 12:53:30,424 INFO A new socket has been initiated: <socket.socket fd=1004, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 12:53:30,424 INFO A new socket has been initiated: <socket.socket fd=1008, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 12:54:16,714 ERROR The packet '[ #20. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Move Order, Message: || Company: 1, ID: 1, MoveTo Location: ((17.181291669472692, 10.530170381843895)) || ]' didn't reached to Field ('127.0.0.1', 5007)
+2020-02-19 12:56:20,896 INFO A new socket has been initiated: <socket.socket fd=1028, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 12:56:20,897 INFO A new socket has been initiated: <socket.socket fd=1048, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 12:56:20,897 INFO A new socket has been initiated: <socket.socket fd=1044, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 12:57:08,503 INFO A new socket has been initiated: <socket.socket fd=932, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 12:57:08,504 INFO A new socket has been initiated: <socket.socket fd=964, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 12:57:08,505 INFO A new socket has been initiated: <socket.socket fd=920, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 13:06:16,514 INFO A new socket has been initiated: <socket.socket fd=904, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 13:06:16,515 INFO A new socket has been initiated: <socket.socket fd=940, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 13:06:16,515 INFO A new socket has been initiated: <socket.socket fd=924, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 13:06:41,562 INFO A new socket has been initiated: <socket.socket fd=924, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 13:06:41,563 INFO A new socket has been initiated: <socket.socket fd=876, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 13:06:41,563 INFO A new socket has been initiated: <socket.socket fd=692, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 13:07:06,251 INFO A new socket has been initiated: <socket.socket fd=972, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 13:07:06,252 INFO A new socket has been initiated: <socket.socket fd=980, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 13:07:06,252 INFO A new socket has been initiated: <socket.socket fd=992, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 13:07:59,882 INFO A new socket has been initiated: <socket.socket fd=776, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 13:07:59,884 INFO A new socket has been initiated: <socket.socket fd=784, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 13:07:59,885 INFO A new socket has been initiated: <socket.socket fd=792, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 13:10:03,286 INFO A new socket has been initiated: <socket.socket fd=720, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 13:10:03,287 INFO A new socket has been initiated: <socket.socket fd=972, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 13:10:03,288 INFO A new socket has been initiated: <socket.socket fd=996, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 13:11:17,584 INFO A new socket has been initiated: <socket.socket fd=956, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 13:11:17,584 INFO A new socket has been initiated: <socket.socket fd=1000, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 13:11:17,585 INFO A new socket has been initiated: <socket.socket fd=1004, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 13:11:31,135 INFO A new socket has been initiated: <socket.socket fd=672, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 13:11:31,136 INFO A new socket has been initiated: <socket.socket fd=968, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 13:11:31,136 INFO A new socket has been initiated: <socket.socket fd=984, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 13:12:38,245 INFO A new socket has been initiated: <socket.socket fd=752, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 13:12:38,246 INFO A new socket has been initiated: <socket.socket fd=796, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 13:12:38,246 INFO A new socket has been initiated: <socket.socket fd=792, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 13:13:14,568 INFO A new socket has been initiated: <socket.socket fd=752, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 13:13:14,569 INFO A new socket has been initiated: <socket.socket fd=840, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 13:13:14,569 INFO A new socket has been initiated: <socket.socket fd=728, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 13:13:24,549 INFO A new socket has been initiated: <socket.socket fd=952, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 13:13:24,549 INFO A new socket has been initiated: <socket.socket fd=496, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 13:13:24,549 INFO A new socket has been initiated: <socket.socket fd=904, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 13:13:38,481 INFO A new socket has been initiated: <socket.socket fd=940, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 13:13:38,482 INFO A new socket has been initiated: <socket.socket fd=944, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 13:13:38,482 INFO A new socket has been initiated: <socket.socket fd=948, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 13:14:16,689 INFO A new socket has been initiated: <socket.socket fd=868, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 13:14:16,690 INFO A new socket has been initiated: <socket.socket fd=1044, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 13:14:16,690 INFO A new socket has been initiated: <socket.socket fd=1040, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 13:14:48,071 ERROR The packet '[ #13. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Move Order, Message: || Company: 1, ID: 1, MoveTo Location: ((7.483668933934945, 11.338305609805374)) || ]' didn't reached to Field ('127.0.0.1', 5007)
+2020-02-19 13:15:10,991 ERROR The packet '[ #25. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Move Order, Message: || Company: 1, ID: 3, MoveTo Location: ((20.00976496733787, 7.769041686308843)) || ]' didn't reached to Field ('127.0.0.1', 5007)
+2020-02-19 13:17:19,880 INFO A new socket has been initiated: <socket.socket fd=492, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 13:17:19,881 INFO A new socket has been initiated: <socket.socket fd=472, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 13:17:19,881 INFO A new socket has been initiated: <socket.socket fd=1060, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 13:18:54,309 INFO A new socket has been initiated: <socket.socket fd=876, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 13:18:54,310 INFO A new socket has been initiated: <socket.socket fd=920, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 13:18:54,310 INFO A new socket has been initiated: <socket.socket fd=960, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 13:26:03,174 INFO A new socket has been initiated: <socket.socket fd=1048, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-19 13:26:03,175 INFO A new socket has been initiated: <socket.socket fd=1052, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-19 13:26:03,175 INFO A new socket has been initiated: <socket.socket fd=1056, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-19 13:26:39,792 ERROR The packet '[ #15. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Move Order, Message: || Company: 1, ID: 4, MoveTo Location: ((15.969088827530474, 9.924068960872788)) || ]' didn't reached to Field ('127.0.0.1', 5007)
+2020-02-19 13:26:48,906 ERROR The packet '[ #21. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Move Order, Message: || Company: 1, ID: 2, MoveTo Location: ((15.969088827530474, 9.924068960872788)) || ]' didn't reached to Field ('127.0.0.1', 5007)
+2020-02-20 20:10:33,608 INFO A new socket has been initiated: <socket.socket fd=984, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-20 20:10:33,608 INFO A new socket has been initiated: <socket.socket fd=936, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-20 20:10:33,608 INFO A new socket has been initiated: <socket.socket fd=896, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-20 20:11:31,958 ERROR The packet '[ #26. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Move Order, Message: || Company: 1, ID: 1, MoveTo Location: ((18.258805306754663, 9.991413563202912)) || ]' didn't reached to Field ('127.0.0.1', 5007)
+2020-02-20 20:11:41,068 ERROR The packet '[ #32. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Move Order, Message: || Company: 1, ID: 5, MoveTo Location: ((18.258805306754663, 9.991413563202912)) || ]' didn't reached to Field ('127.0.0.1', 5007)
+2020-02-20 20:11:50,194 ERROR The packet '[ #37. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Move Order, Message: || Company: 1, ID: 3, MoveTo Location: ((18.258805306754663, 9.991413563202912)) || ]' didn't reached to Field ('127.0.0.1', 5007)
+2020-02-20 20:31:18,403 INFO A new socket has been initiated: <socket.socket fd=900, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-20 20:31:18,403 INFO A new socket has been initiated: <socket.socket fd=940, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-20 20:31:18,403 INFO A new socket has been initiated: <socket.socket fd=1020, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-20 20:31:56,561 ERROR The packet '[ #16. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Move Order, Message: || Company: 1, ID: 3, MoveTo Location: ((11.861068085392956, 10.462825779513775)) || ]' didn't reached to Field ('127.0.0.1', 5007)
+2020-02-20 20:32:26,235 ERROR The packet '[ #32. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Move Order, Message: || Company: 1, ID: 4, MoveTo Location: ((18.79756212539565, 7.09559566300761)) || ]' didn't reached to Field ('127.0.0.1', 5007)
+2020-02-20 20:34:38,920 INFO A new socket has been initiated: <socket.socket fd=1028, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-20 20:34:38,920 INFO A new socket has been initiated: <socket.socket fd=1044, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-20 20:34:38,920 INFO A new socket has been initiated: <socket.socket fd=1040, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-20 20:35:20,000 INFO A new socket has been initiated: <socket.socket fd=848, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-20 20:35:20,000 INFO A new socket has been initiated: <socket.socket fd=880, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-20 20:35:20,000 INFO A new socket has been initiated: <socket.socket fd=948, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-21 10:02:06,350 INFO A new socket has been initiated: <socket.socket fd=548, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-21 10:02:06,351 INFO A new socket has been initiated: <socket.socket fd=484, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-21 10:02:06,352 INFO A new socket has been initiated: <socket.socket fd=532, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-21 10:02:41,077 ERROR The packet '[ #14. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Move Order, Message: || Company: 1, ID: 4, MoveTo Location: ((15.565021213549734, 11.001582598154759)) || ]' didn't reached to Field ('127.0.0.1', 5007)
+2020-02-21 10:03:05,590 ERROR The packet '[ #27. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Move Order, Message: || Company: 1, ID: 3, MoveTo Location: ((17.450670078793184, 8.509832311940198)) || ]' didn't reached to Field ('127.0.0.1', 5007)
+2020-02-21 10:03:42,318 ERROR The packet '[ #47. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Move Order, Message: || Company: 1, ID: 3, MoveTo Location: ((20.27914337665836, 7.028251060677488)) || ]' didn't reached to Field ('127.0.0.1', 5007)
+2020-02-21 10:16:03,354 INFO A new socket has been initiated: <socket.socket fd=952, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-21 10:16:03,355 INFO A new socket has been initiated: <socket.socket fd=920, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-21 10:16:03,355 INFO A new socket has been initiated: <socket.socket fd=728, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-21 10:17:29,007 ERROR The packet '[ #40. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Move Order, Message: || Company: 1, ID: 3, MoveTo Location: ((9.504007003838643, 10.664859586504143)) || ]' didn't reached to Field ('127.0.0.1', 5007)
+2020-02-21 10:18:49,747 INFO A new socket has been initiated: <socket.socket fd=924, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-21 10:18:49,748 INFO A new socket has been initiated: <socket.socket fd=888, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-21 10:18:49,748 INFO A new socket has been initiated: <socket.socket fd=820, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-21 10:21:32,189 INFO A new socket has been initiated: <socket.socket fd=452, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-21 10:21:32,190 INFO A new socket has been initiated: <socket.socket fd=508, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-21 10:21:32,190 INFO A new socket has been initiated: <socket.socket fd=808, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-21 10:23:11,246 INFO A new socket has been initiated: <socket.socket fd=464, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-21 10:23:11,246 INFO A new socket has been initiated: <socket.socket fd=776, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-21 10:23:11,246 INFO A new socket has been initiated: <socket.socket fd=504, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-21 10:23:42,610 ERROR The packet '[ #13. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Move Order, Message: || Company: 1, ID: 3, MoveTo Location: ((17.248636271802816, 9.048589130581185)) || ]' didn't reached to Field ('127.0.0.1', 5007)
+2020-02-21 10:28:01,168 INFO A new socket has been initiated: <socket.socket fd=948, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-21 10:28:01,169 INFO A new socket has been initiated: <socket.socket fd=552, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-21 10:28:01,169 INFO A new socket has been initiated: <socket.socket fd=972, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-21 10:31:18,050 INFO A new socket has been initiated: <socket.socket fd=1080, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-21 10:31:18,051 INFO A new socket has been initiated: <socket.socket fd=1084, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-21 10:31:18,051 INFO A new socket has been initiated: <socket.socket fd=1088, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-21 10:31:57,073 INFO A new socket has been initiated: <socket.socket fd=928, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-21 10:31:57,074 INFO A new socket has been initiated: <socket.socket fd=980, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-21 10:31:57,074 INFO A new socket has been initiated: <socket.socket fd=992, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-21 10:41:45,530 INFO A new socket has been initiated: <socket.socket fd=972, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-02-21 10:41:45,531 INFO A new socket has been initiated: <socket.socket fd=944, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-02-21 10:41:45,531 INFO A new socket has been initiated: <socket.socket fd=976, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-02-21 10:42:40,559 ERROR The packet '[ #24. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Move Order, Message: || Company: 1, ID: 3, MoveTo Location: ((17.450670078793184, 6.422149639706379)) || ]' didn't reached to Field ('127.0.0.1', 5007)
+2020-02-21 10:43:09,405 ERROR The packet '[ #40. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Move Order, Message: || Company: 1, ID: 4, MoveTo Location: ((12.265135699373694, 5.411980604754529)) || ]' didn't reached to Field ('127.0.0.1', 5007)

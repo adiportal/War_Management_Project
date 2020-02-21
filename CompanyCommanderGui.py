@@ -1,21 +1,19 @@
 import sys
 import threading
 import time
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QCursor, QTextCursor
+from PyQt5.QtGui import QTextCursor, QColor
 from PyQt5.QtWidgets import *
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtCore
 from PyQt5.uic import loadUi
 from matplotlib.animation import FuncAnimation
 import matplotlib.pyplot as plt
 import Entities
 import Utility
 from Entities import Soldier, APC, Packet
-from matplotlib.backends.backend_qt5agg import (NavigationToolbar2QT as NavigationToolbar)
 import numpy as np
 import CompanyCommanderUDP
 from CompanyCommanderUDP import send_handler
-from Utility import create_move_to_message, EnemyType, Sender, Receiver, MessageType
+from Utility import EnemyType, Sender, Receiver, MessageType
 
 
 class MatplotlibWidget(QMainWindow):
@@ -24,6 +22,7 @@ class MatplotlibWidget(QMainWindow):
     picked_enemy = []
     enemies = []
     company_commander = CompanyCommanderUDP.company_commander  # Initialize the company commander entity
+    console_messages = CompanyCommanderUDP.console_messages
     soldier_was_picked = False
     enemy_was_picked = False
 
@@ -38,7 +37,6 @@ class MatplotlibWidget(QMainWindow):
         self.cancelButton.setToolTip("Cancel the chosen soldiers")
         self.console.setReadOnly(True)
         self.cursor = QTextCursor(self.console.document())
-        self.cursor.movePosition(QTextCursor.End)
 
         self.setWindowTitle("Company Commander " + str(CompanyCommanderUDP.company_commander.company_number))
 
@@ -86,9 +84,31 @@ class MatplotlibWidget(QMainWindow):
         while True:
             self.soldiers = CompanyCommanderUDP.company1 + CompanyCommanderUDP.company2 + CompanyCommanderUDP.company3
             self.enemies = CompanyCommanderUDP.company_commander.get_enemies()
+            self.console_messages_thread()
             time.sleep(2.0)
 
         # function for the FuncAnimation option, clears and create the plot again
+
+    def console_messages_thread(self):
+        # red_color = QColor(255, 0, 0)
+        # black_color = QColor(0, 0, 0)
+        if len(self.console_messages) > 0:
+            current = self.console_messages.pop()
+            if current[1] == Utility.MessageType.got_shot.value:
+                red_text = "<span style=\" font-size:8pt; font-weight:400; color:#ff0000;\" >"
+                red_text += (current[0])
+                red_text += "</span>"
+                self.cursor.movePosition(QTextCursor.Start, QTextCursor.MoveAnchor, 1)
+                self.console.setTextCursor(self.cursor)
+                self.console.insertHtml(red_text)
+
+            else:
+                black_text = "<span style=\" font-size:8pt; font-weight:400; color:#000000;\" >"
+                black_text += (current[0])
+                black_text += "</span>"
+                self.cursor.movePosition(QTextCursor.Start, QTextCursor.MoveAnchor, 1)
+                self.console.setTextCursor(self.cursor)
+                self.console.insertHtml(black_text)
 
     def animate(self, i):
         self.MplWidget.canvas.axes.clear()
@@ -207,7 +227,6 @@ class MatplotlibWidget(QMainWindow):
                         y.append(s.y)
                         if self.picked_soldier.__contains__(s):
                             color.append('yellow')
-                            print("yellow")
 
                         elif s.company_number == 1:
                             color.append('cyan')
@@ -568,7 +587,9 @@ def gui_thread():
     window = MatplotlibWidget()
     window.show()
     update_field_thread = threading.Thread(target=window.update_field)
+    # console_thread = threading.Thread(target=window.console_messages_thread)
     update_field_thread.start()
+    # console_thread.start()
     sys.exit(app.exec_())
 
 

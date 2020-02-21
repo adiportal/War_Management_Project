@@ -676,7 +676,7 @@ class CompanyCommander:
 # Enemy
 class Enemy:
     # Attributes
-    ID = 1
+    ID = 1000
 
     # Constructor
     def __init__(self, location, ammo):
@@ -718,7 +718,7 @@ class EnemySoldier(Enemy):
     def __init__(self, location, ammo):
         super().__init__(location, ammo)
         self.HP = 100
-        self.speed = 1
+        self.speed = 2
         self.move_to_location = None
         self.shooting = False
 

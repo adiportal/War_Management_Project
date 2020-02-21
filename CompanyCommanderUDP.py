@@ -1,4 +1,4 @@
-import logging
+from datetime import datetime
 import pickle
 import threading
 import time
@@ -22,6 +22,9 @@ company3 = []
 
 # Order Packets
 order_packets = []
+
+# Console Messages
+console_messages = []
 
 # Initialize Listen Socket
 listen_sock = get_cc_listen_sock()
@@ -101,6 +104,10 @@ def receive_handler(packet, address):
             for pac in order_packets:
                 if message.get_approval_packet_id() == pac.get_id():
                     order_packets.remove(pac)
+                    now = datetime.now()
+                    dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+                    console_messages.append((dt_string + " " + f"#{message.get_field_object().get_id()} started moving <br />",
+                                            Utility.MessageType.move_approval.value))
                     break
 
             field_object = message.get_field_object()
@@ -112,6 +119,11 @@ def receive_handler(packet, address):
             for pac in order_packets:
                 if message.get_approval_packet_id() == pac.get_id():
                     order_packets.remove(pac)
+                    now = datetime.now()
+                    dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+                    console_messages.append((dt_string + " " + f"#{message.get_field_object_id()} started engaging "
+                                                               f"target <br />",
+                                            Utility.MessageType.engage_approval.value))
                     break
 
             field_object = message.get_field_object_id()
@@ -123,6 +135,10 @@ def receive_handler(packet, address):
 
             print("#{} Got Shot!!".format(id))
             logger.debug("#{} Got Shot!!".format(id))
+            if field_object.get_company_num() == company_commander.get_company_num():
+                now = datetime.now()
+                dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+                console_messages.append((dt_string + " " + f"#{id} got shot <br />", Utility.MessageType.got_shot.value))
 
     # Error Case
     else:

@@ -94,16 +94,6 @@
           <bool>false</bool>
          </property>
         </widget>
-        <widget class="QPlainTextEdit" name="console">
-         <property name="geometry">
-          <rect>
-           <x>210</x>
-           <y>330</y>
-           <width>351</width>
-           <height>61</height>
-          </rect>
-         </property>
-        </widget>
         <widget class="QTreeWidget" name="treeFilter">
          <property name="geometry">
           <rect>
@@ -209,6 +199,16 @@
          </property>
          <property name="text">
           <string>Cancel</string>
+         </property>
+        </widget>
+        <widget class="QTextEdit" name="console">
+         <property name="geometry">
+          <rect>
+           <x>210</x>
+           <y>330</y>
+           <width>361</width>
+           <height>71</height>
+          </rect>
          </property>
         </widget>
        </widget>
