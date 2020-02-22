@@ -341,6 +341,7 @@ class MessageType(enum.Enum):
     move_approval = 5
     engage_approval = 6
     got_shot = 7
+    not_approved_message = 8
 
 
 class ObjectListIndex(enum.Enum):

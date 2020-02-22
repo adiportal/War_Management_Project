@@ -1,9 +1,9 @@
 import sys
 import threading
 import time
-from PyQt5.QtGui import QTextCursor, QColor
+from PyQt5.QtGui import QTextCursor
 from PyQt5.QtWidgets import *
-from PyQt5 import QtCore
+from PyQt5 import QtCore, QtWidgets
 from PyQt5.uic import loadUi
 from matplotlib.animation import FuncAnimation
 import matplotlib.pyplot as plt
@@ -14,6 +14,7 @@ import numpy as np
 import CompanyCommanderUDP
 from CompanyCommanderUDP import send_handler
 from Utility import EnemyType, Sender, Receiver, MessageType
+from map_key import Ui_MainWindow
 
 
 class MatplotlibWidget(QMainWindow):
@@ -34,12 +35,12 @@ class MatplotlibWidget(QMainWindow):
         self.move_pushButton.clicked.connect(self.move_button)
         self.engage_pushButton.clicked.connect(self.engage_button)
         self.cancelButton.clicked.connect(self.cancel_button)
+        self.map_key_button.clicked.connect(self.map_key_window)
         self.cancelButton.setToolTip("Cancel the chosen soldiers")
         self.console.setReadOnly(True)
         self.cursor = QTextCursor(self.console.document())
 
         self.setWindowTitle("Company Commander " + str(CompanyCommanderUDP.company_commander.company_number))
-
         self.tooltip_visible = False
         self.tooltip_coords = 0, 0
         self.tooltip_text = ''
@@ -59,21 +60,11 @@ class MatplotlibWidget(QMainWindow):
         self.MplWidget.canvas.mpl_connect("motion_notify_event", self.on_hover)
         self.MplWidget.canvas.mpl_connect("pick_event", self.on_pick)
 
-        # self.my_company_checkbox.setChecked(True)
-        # self.other_companies_checkbox.setChecked(True)
-        # self.enemies_checkBox.setChecked(True)
-
-    # def closeEvent(self, event):
-    #     reply = QMessageBox.question(
-    #         self, "Message",
-    #         "Are you sure you want to quit? Any unsaved work will be lost.",
-    #         QMessageBox.Close | QMessageBox.Cancel
-    #         )
-    #     if reply == QMessageBox.Close:
-    #         CompanyCommanderUDP.STOP_CC_THREADS = True
-    #
-    #     else:
-    #         event.ignore()
+    def map_key_window(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self.window)
+        self.window.show()
 
     def move_button(self):
         self.move_pushButton.setDown(True)
@@ -101,6 +92,14 @@ class MatplotlibWidget(QMainWindow):
                 self.cursor.movePosition(QTextCursor.Start, QTextCursor.MoveAnchor, 1)
                 self.console.setTextCursor(self.cursor)
                 self.console.insertHtml(red_text)
+
+            elif current[1] == Utility.MessageType.not_approved_message.value:
+                dark_red_text = "<span style=\" font-size:8pt; font-weight:500; color:#940913;\" >"
+                dark_red_text += (current[0])
+                dark_red_text += "</span>"
+                self.cursor.movePosition(QTextCursor.Start, QTextCursor.MoveAnchor, 1)
+                self.console.setTextCursor(self.cursor)
+                self.console.insertHtml(dark_red_text)
 
             else:
                 black_text = "<span style=\" font-size:8pt; font-weight:400; color:#000000;\" >"

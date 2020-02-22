@@ -14,7 +14,6 @@ from Entities import CompanyCommander, AliveMessage, Packet
 #                                                                                     'CC : %(message)s')
 logger = setup_logger('company_commander', 'company_commander.log')
 
-
 # Initialize Companies
 company1 = []
 company2 = []
@@ -95,7 +94,7 @@ def receive_handler(packet, address):
                 get_company(company_num).append(field_object)
                 logger.debug("New FieldObject was created: #{}".format(id))
                 logger.debug("New FieldObject #{} from company {} was appended to company list".format(id,
-                                                                                                        company_num))
+                                                                                                       company_num))
         elif opt_case == MessageType.enemies_in_sight.value:
             updated_enemies = message.get_enemies()
             company_commander.update_enemies(updated_enemies)
@@ -105,9 +104,10 @@ def receive_handler(packet, address):
                 if message.get_approval_packet_id() == pac.get_id():
                     order_packets.remove(pac)
                     now = datetime.now()
-                    dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
-                    console_messages.append((dt_string + " " + f"#{message.get_field_object().get_id()} started moving <br />",
-                                            Utility.MessageType.move_approval.value))
+                    dt_string = now.strftime("%H:%M:%S")
+                    console_messages.append(
+                        ("[ " + dt_string + " ]" + "  " + f"#{message.get_field_object().get_id()} started moving <br />",
+                         Utility.MessageType.move_approval.value))
                     break
 
             field_object = message.get_field_object()
@@ -120,10 +120,11 @@ def receive_handler(packet, address):
                 if message.get_approval_packet_id() == pac.get_id():
                     order_packets.remove(pac)
                     now = datetime.now()
-                    dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
-                    console_messages.append((dt_string + " " + f"#{message.get_field_object_id()} started engaging "
-                                                               f"target <br />",
-                                            Utility.MessageType.engage_approval.value))
+                    dt_string = now.strftime("%H:%M:%S")
+                    console_messages.append(
+                        ("[ " + dt_string + " ]" + "  " + f"#{message.get_field_object_id()} started engaging "
+                                                        f"target <br />",
+                         Utility.MessageType.engage_approval.value))
                     break
 
             field_object = message.get_field_object_id()
@@ -137,8 +138,9 @@ def receive_handler(packet, address):
             logger.debug("#{} Got Shot!!".format(id))
             if field_object.get_company_num() == company_commander.get_company_num():
                 now = datetime.now()
-                dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
-                console_messages.append((dt_string + " " + f"#{id} got shot <br />", Utility.MessageType.got_shot.value))
+                dt_string = now.strftime("%H:%M:%S")
+                console_messages.append(
+                    ("[ " + dt_string + " ]" + " " + f"#{id} got shot <br />", Utility.MessageType.got_shot.value))
 
     # Error Case
     else:
@@ -159,13 +161,30 @@ def send_handler(packet):
         byte_packet = pickle.dumps(packet)
 
         if packet.get_message_type() == MessageType.move_order.value or \
-           packet.get_message_type() == MessageType.engage_order.value:
+                packet.get_message_type() == MessageType.engage_order.value:
+
+            message_type = None
+            field_object_id = None
+            message = packet.get_message()
+
+            if packet.get_message_type() == MessageType.move_order.value:
+                message_type = "Move Order"
+                field_object_id = message.get_field_object_id()
+            else:
+                message_type = "Engage Order"
+                field_object_id = message.get_field_object().get_id()
+
             order_packets.append(packet)
             count = 0
 
             while packet in order_packets:
                 if count == 3:
                     order_packets.remove(packet)
+                    now = datetime.now()
+                    dt_string = now.strftime("%H:%M:%S")
+                    console_messages.append(
+                        ("[ " + dt_string + " ]" + "  " + f"Soldier #{field_object_id} didn't approved the {message_type} <br />",
+                         Utility.MessageType.not_approved_message.value))
                     logger.error("The packet '{}' didn't reached to Field {}".format(packet, get_field_address()))
                     break
                 sock.sendto(byte_packet, address)

@@ -194,6 +194,9 @@
            <height>41</height>
           </rect>
          </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
          <property name="styleSheet">
           <string notr="true">background-color: rgb(255, 25, 36);</string>
          </property>
@@ -211,6 +214,42 @@
           </rect>
          </property>
         </widget>
+        <widget class="QPushButton" name="map_key_button">
+         <property name="geometry">
+          <rect>
+           <x>630</x>
+           <y>10</y>
+           <width>31</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>18</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="toolTip">
+          <string>Click For Map Key</string>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(120, 161, 255);</string>
+         </property>
+         <property name="text">
+          <string>?</string>
+         </property>
+        </widget>
+        <zorder>treeFilter</zorder>
+        <zorder>MplWidget</zorder>
+        <zorder>move_pushButton</zorder>
+        <zorder>engage_pushButton</zorder>
+        <zorder>cancelButton</zorder>
+        <zorder>console</zorder>
+        <zorder>map_key_button</zorder>
        </widget>
       </item>
      </layout>

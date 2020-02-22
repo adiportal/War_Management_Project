@@ -3,6 +3,8 @@ import pickle
 import random
 import threading
 import time
+from concurrent.futures.thread import ThreadPoolExecutor
+
 import Utility
 
 logger = Utility.setup_logger('field', 'field.log')
@@ -26,17 +28,24 @@ class FieldUDP:
         self.sock.bind(Utility.get_field_address())
 
         # Initiate and Start listen and report_location threads
-        self.listen_thread = threading.Thread(target=self.listen)
-        self.report_thread = threading.Thread(target=self.report_alive)
-        self.check_for_enemies_thread = threading.Thread(target=self.check_for_enemies)
-        self.enemies_check_for_forces_thread = threading.Thread(target=self.enemies_check_for_forces)
-        self.enemy_attack_thread = threading.Thread(target=self.enemy_attack)
+        # self.listen_thread = threading.Thread(target=self.listen)
+        # self.report_thread = threading.Thread(target=self.report_alive)
+        # self.check_for_enemies_thread = threading.Thread(target=self.check_for_enemies)
+        # self.enemies_check_for_forces_thread = threading.Thread(target=self.enemies_check_for_forces)
+        # self.enemy_attack_thread = threading.Thread(target=self.enemy_attack)
+        #
+        # self.listen_thread.start()
+        # self.report_thread.start()
+        # self.check_for_enemies_thread.start()
+        # self.enemies_check_for_forces_thread.start()
+        # self.enemy_attack_thread.start()
 
-        self.listen_thread.start()
-        self.report_thread.start()
-        self.check_for_enemies_thread.start()
-        self.enemies_check_for_forces_thread.start()
-        self.enemy_attack_thread.start()
+        self.executor = ThreadPoolExecutor(max_workers=5)
+        self.listen_thread = self.executor.submit(self.listen)
+        self.report_thread = self.executor.submit(self.report_alive)
+        self.check_for_enemies_thread = self.executor.submit(self.check_for_enemies)
+        self.enemies_check_for_forces_thread = self.executor.submit(self.enemies_check_for_forces)
+        self.enemy_attack_thread = self.executor.submit(self.enemy_attack)
 
     # listen() - Listening to incoming packets on background, while receiving a packet, it goes to receive_handler()
     # func to handle the message.
@@ -52,10 +61,6 @@ class FieldUDP:
             rec_packet = pickle.loads(rec_packet)
             if rec_packet:
                 self.receive_handler(rec_packet, rec_address)
-
-            # if STOP_FIELD_THREADS:
-            #     logging.debug("Closing FieldUDP...")
-            #     break
 
     # check_for_enemies() - check for every field_object that in the field (forces list) if there is enemy (enemies)
     #                       in sight (if there is enemy located in his radius). if there is,
@@ -81,6 +86,7 @@ class FieldUDP:
                             enemies_in_sight.append(enemy)
 
                 field_object.enemies_in_sight(enemies_in_sight)
+                time.sleep(0.1)
 
     def enemies_check_for_forces(self):
         while True:
@@ -96,14 +102,13 @@ class FieldUDP:
                     forces_sight = 1
 
                 for field_object in self.forces:
-                    # if STOP_FIELD_THREADS:
-                    #     break
 
                     if (((enemy.get_x() - field_object.get_x()) ** 2) +
                         ((enemy.get_y() - field_object.get_y()) ** 2)) < (forces_sight ** 2):
                         forces_in_sight.append(field_object)
 
                 enemy.forces_in_sight(forces_in_sight)
+                time.sleep(0.1)
 
     def get_enemy(self, enemy):
         for e in self.enemies:
@@ -168,8 +173,9 @@ class FieldUDP:
                     location = enemy.get_location()
                     field_object.set_move_to(location)
 
-                    move_to_thread = threading.Thread(target=self.move_to, args=(field_object, location[Utility.Location.X.value],
-                                                                            location[Utility.Location.Y.value]))
+                    move_to_thread = threading.Thread(target=self.move_to,
+                                                      args=(field_object, location[Utility.Location.X.value],
+                                                            location[Utility.Location.Y.value]))
                     move_to_thread.start()
 
                     while enemy not in field_object.get_in_sight():
@@ -216,7 +222,8 @@ class FieldUDP:
                         field_object.got_shot_alert()
                         message = GotShotMessage(field_object)
                         packet = Packet(Utility.Sender.soldier.value, field_object.get_company_num(),
-                                        Utility.Receiver.company_commander.value, Utility.MessageType.got_shot.value, message)
+                                        Utility.Receiver.company_commander.value, Utility.MessageType.got_shot.value,
+                                        message)
                         self.send_handler(packet)
 
                     time.sleep(1)
@@ -412,7 +419,8 @@ class FieldUDP:
 
                 self.send_handler(send_packet)
 
-                logger.debug(f"Engage approval was sent from FieldObject #{field_object.get_id()} to CC #{field_object.get_company_num()}")
+                logger.debug(
+                    f"Engage approval was sent from FieldObject #{field_object.get_id()} to CC #{field_object.get_company_num()}")
 
 
         # Error case
@@ -982,6 +990,7 @@ class EngageApprovalMessage:
     def get_approval_packet_id(self):
         return self.approval_packet_id
 
+
 # GotShotMessage
 class GotShotMessage:
     # Constructor
@@ -990,5 +999,3 @@ class GotShotMessage:
 
     def get_field_object(self):
         return self.field_object
-
-

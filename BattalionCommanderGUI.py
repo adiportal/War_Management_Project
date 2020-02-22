@@ -8,9 +8,9 @@ from matplotlib.animation import FuncAnimation
 import matplotlib.pyplot as plt
 import BattalionCommander
 from Entities import Soldier, APC
-from matplotlib.backends.backend_qt5agg import (NavigationToolbar2QT as NavigationToolbar)
 import numpy as np
-from Utility import create_move_to_message, EnemyType
+from Utility import EnemyType
+from map_key import Ui_MainWindow
 
 
 class MatplotlibWidget(QMainWindow):
@@ -34,6 +34,7 @@ class MatplotlibWidget(QMainWindow):
 
         # Starting the hover event (on hovering a marker an informative label shows up)
         self.MplWidget.canvas.mpl_connect("motion_notify_event", self.on_hover)
+        self.map_key_button.clicked.connect(self.map_key_window)
 
         self.company1 = self.treeWidget.topLevelItem(0)
         self.company1_commander = self.treeWidget.topLevelItem(0).child(0)
@@ -63,6 +64,12 @@ class MatplotlibWidget(QMainWindow):
     #
     #     else:
     #         event.ignore()
+
+    def map_key_window(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self.window)
+        self.window.show()
 
     # function for a thread, updates the soldiers list
     def update_field(self):
