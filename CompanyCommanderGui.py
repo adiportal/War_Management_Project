@@ -513,19 +513,20 @@ def gui_thread():
     window = MatplotlibWidget()
     window.show()
     update_field_thread = threading.Thread(target=window.update_field)
-    # console_thread = threading.Thread(target=window.console_messages_thread)
     update_field_thread.start()
-    # console_thread.start()
     sys.exit(app.exec_())
 
 
-def main(company_num, location):
+def main(company_num1, location1):
     QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
-    cc_thread = threading.Thread(target=company_commander_thread, args=(company_num, location))
+    cc_thread = threading.Thread(target=company_commander_thread, args=(company_num1, location1))
     gui_thread1 = threading.Thread(target=gui_thread)
 
     cc_thread.start()
     gui_thread1.start()
 
 
-main(1, (1, 2))
+if __name__ == '__main__':
+    company_num = int(sys.argv[1])
+    location = (float(sys.argv[2]), float(sys.argv[3]))
+    main(company_num, location)
