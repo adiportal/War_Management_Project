@@ -6,8 +6,6 @@ from Utility import EnemyType
 
 fieldUDP = FieldUDP()
 
-enemies = []
-
 
 def random_forces_location():
     x = random.uniform(0.5, 15)
@@ -52,25 +50,23 @@ fieldUDP.add_to_forces(APC(3, random_forces_location(), 200))
 for i in range(10):
     enemy = EnemySoldier(random_enemies_location(), 200)
     fieldUDP.add_to_enemies(enemy)
-    enemies.append(enemy)
 
 
 # Lookout Point
 for i in range(2):
     location = random_enemies_location()
-    enemy = LookoutPoint(location, EnemySoldier(location, 150))
+    enemy = LookoutPoint(location)
     fieldUDP.add_to_enemies(enemy)
-    enemies.append(enemy)
+
 
 for i in range(3):
     enemy = Launcher(random_enemies_location())
     fieldUDP.add_to_enemies(enemy)
-    enemies.append(enemy)
 
 
 def enemies_movement():
     while True:
-        for e in enemies:
+        for e in fieldUDP.enemies:
             time.sleep(10)
             if e.get_type() is EnemyType.launcher.value or e.get_type() is EnemyType.lookout_point.value:
                 continue

@@ -117,20 +117,9 @@ class FieldUDP:
         return None
 
     def forces_attack(self, field_object, enemy):
-        print("got engage order")
-        lookout_point_soldier = None
+        print("got engage order" + str(field_object.get_id()) + "-->" + str(enemy.get_id()))
         field_object = self.get_field_object(field_object.get_company_num(), field_object.get_id())
         enemy = self.get_enemy(enemy)
-
-        if enemy.get_type() == Utility.EnemyType.lookout_point.value:
-            lookout_point_soldier = enemy.get_soldier()
-
-        if field_object.get_type() == Utility.ObjectType.soldier.value:
-            damage = random.randint(-2, 10)
-        else:
-            damage = random.randint(-3, 20)
-        if damage < 0:
-            damage = 0
 
         field_object.attack_enemy(enemy)
 
@@ -147,24 +136,22 @@ class FieldUDP:
                             enemy is not field_object.get_attacking_enemy():
                         break
 
-                    if lookout_point_soldier is None:
-                        field_object.shoot()
-                        enemy.got_damage(damage)
-                        print(enemy.get_hp())
-                        if enemy.get_hp() <= 0:
-                            field_object.attack_enemy(None)
-                            self.enemies.remove(enemy)
-                            break
-                        time.sleep(1)
+                    if field_object.get_type() == Utility.ObjectType.soldier.value:
+                        damage = random.randint(-2, 10)
                     else:
-                        field_object.shoot()
-                        lookout_point_soldier.got_damage(damage)
-                        print(lookout_point_soldier.get_hp())
-                        if lookout_point_soldier.get_hp() <= 0:
-                            field_object.attack_enemy(None)
-                            enemy.set_soldier()
-                            break
-                        time.sleep(1)
+                        damage = random.randint(-3, 20)
+                    if damage < 0:
+                        damage = 0
+                    if field_object.get_ammo() <= 0:
+                        break
+                    field_object.shoot()
+                    enemy.got_damage(damage)
+                    print(enemy.get_hp())
+                    if enemy.get_hp() <= 0:
+                        field_object.attack_enemy(None)
+                        self.enemies.remove(enemy)
+                        break
+                    time.sleep(1)
 
             else:
                 if field_object.get_move_to_location() is not None:
@@ -185,26 +172,22 @@ class FieldUDP:
                             break
                         time.sleep(0.5)
 
+    def get_enemy_location(self, id):
+        for enemy in self.enemies:
+            if enemy.get_id() == id:
+                return enemy.get_location()
+
     def enemy_attack(self):
         while True:
             for enemy in self.enemies:
-                lookout_point_soldier = None
-                if enemy.get_type() is Utility.EnemyType.lookout_point.value:
-                    if enemy.is_empty():
-                        continue
-                    else:
-                        lookout_point = enemy
-                        enemy = lookout_point.get_soldier()
 
-                if enemy.get_type() is Utility.EnemyType.launcher.value:
+                if enemy.get_type() is Utility.EnemyType.launcher.value or Utility.EnemyType.lookout_point.value:
                     continue
 
-                if (len(enemy.get_in_sight()) == 0 or enemy.get_ammo() <= 0) and lookout_point_soldier is None:
+                if len(enemy.get_in_sight()) == 0 or enemy.get_ammo() <= 0:
                     enemy.not_shooting()
                     continue
-                elif (len(enemy.get_in_sight()) == 0 or enemy.get_ammo() <= 0) and lookout_point_soldier is not None:
-                    lookout_point_soldier.not_shooting()
-                    continue
+
                 else:
                     damage = random.randint(-2, 10)
                     if damage < 0:
@@ -212,10 +195,7 @@ class FieldUDP:
 
                     field_object = random.choice(enemy.get_in_sight())
 
-                    if lookout_point_soldier is None:
-                        enemy.shoot()
-                    else:
-                        lookout_point_soldier.shoot()
+                    enemy.shoot()
                     field_object.got_damage(damage)
 
                     if not field_object.is_got_shot():
@@ -345,9 +325,15 @@ class FieldUDP:
     # move_to(field_object, new_x, new_y) - while FieldUDP gets a MoveOrderMessage, the receive_handler() triggers the
     #                                       move_to() func. it moves the FieldObject, step by step by it's own speed
     def move_to(self, field_object, new_x, new_y):
+        type = field_object.__class__.__name__
+        if type is Soldier or type is APC:
+            attacking_enemy = field_object.get_attacking_enemy()
         start_point = field_object.get_x(), field_object.get_y()
         end_point = float(new_x), float(new_y)
-        while True:
+        while field_object.get_move_to_location() == end_point:
+            if type is Soldier or type is APC:
+                if attacking_enemy != field_object.get_attacking_enemy():
+                    break
             if end_point == (field_object.get_x(), field_object.get_y()):
                 break
 
@@ -772,7 +758,7 @@ class EnemySoldier(Enemy):
 class Launcher(Enemy):
     def __init__(self, location):
         super().__init__(location, 0)
-        self.HP = 150
+        self.hp = 150
 
     # Getters
     @staticmethod
@@ -782,29 +768,26 @@ class Launcher(Enemy):
     def get_hp(self):
         return self.hp
 
+    def got_damage(self, damage):
+        self.hp -= damage
+
 
 # LookoutPoint
 class LookoutPoint(Enemy):
-    def __init__(self, location, soldier):
+    def __init__(self, location):
         super().__init__(location, 0)
-        self.soldier = soldier
+        self.hp = 150
 
     # Getters
     @staticmethod
     def get_type():
         return Utility.EnemyType.lookout_point.value
 
-    def get_soldier(self):
-        return self.soldier
+    def get_hp(self):
+        return self.hp
 
-    def is_empty(self):
-        if self.soldier is None:
-            return True
-        else:
-            return False
-
-    def set_soldier(self):
-        self.soldier = None
+    def got_damage(self, damage):
+        self.hp -= damage
 
 
 # Packet
