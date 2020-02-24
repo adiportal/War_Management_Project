@@ -529,4 +529,7 @@ def main(company_num1, location1):
 if __name__ == '__main__':
     company_num = int(sys.argv[1])
     location = (float(sys.argv[2]), float(sys.argv[3]))
-    main(company_num, location)
+    if company_num == (1 or 2 or 3):
+        main(company_num, location)
+    else:
+        print("You need to choose company number between 1-3")
