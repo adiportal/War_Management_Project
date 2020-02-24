@@ -13,7 +13,7 @@ from Entities import Soldier, APC, Packet
 import numpy as np
 import CompanyCommanderUDP
 from CompanyCommanderUDP import send_handler
-from Utility import EnemyType, Sender, Receiver, MessageType
+from Utility import EnemyType, Sender, Receiver, MessageType, in_use, init_cc_address, get_cc_send_address
 from map_key import Ui_MainWindow
 
 
@@ -530,6 +530,9 @@ if __name__ == '__main__':
     company_num = int(sys.argv[1])
     location = (float(sys.argv[2]), float(sys.argv[3]))
     if company_num == (1 or 2 or 3):
-        main(company_num, location)
+        if not in_use(get_cc_send_address(int(company_num))):
+            main(company_num, location)
+        else:
+            print("The user is already open!")
     else:
         print("You need to choose company number between 1-3")
