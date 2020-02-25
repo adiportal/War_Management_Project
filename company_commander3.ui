@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>666</width>
-    <height>454</height>
+    <width>808</width>
+    <height>510</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -39,8 +39,8 @@
           <rect>
            <x>140</x>
            <y>0</y>
-           <width>491</width>
-           <height>311</height>
+           <width>601</width>
+           <height>331</height>
           </rect>
          </property>
          <property name="sizePolicy">
@@ -57,9 +57,9 @@
          <property name="geometry">
           <rect>
            <x>20</x>
-           <y>330</y>
-           <width>71</width>
-           <height>41</height>
+           <y>340</y>
+           <width>81</width>
+           <height>51</height>
           </rect>
          </property>
          <property name="cursor">
@@ -78,10 +78,10 @@
          </property>
          <property name="geometry">
           <rect>
-           <x>120</x>
-           <y>330</y>
-           <width>71</width>
-           <height>41</height>
+           <x>150</x>
+           <y>340</y>
+           <width>81</width>
+           <height>51</height>
           </rect>
          </property>
          <property name="cursor">
@@ -188,10 +188,10 @@
          </property>
          <property name="geometry">
           <rect>
-           <x>580</x>
-           <y>330</y>
-           <width>56</width>
-           <height>41</height>
+           <x>670</x>
+           <y>340</y>
+           <width>71</width>
+           <height>51</height>
           </rect>
          </property>
          <property name="cursor">
@@ -207,17 +207,17 @@
         <widget class="QTextEdit" name="console">
          <property name="geometry">
           <rect>
-           <x>210</x>
-           <y>330</y>
-           <width>361</width>
-           <height>71</height>
+           <x>270</x>
+           <y>340</y>
+           <width>371</width>
+           <height>81</height>
           </rect>
          </property>
         </widget>
         <widget class="QPushButton" name="map_key_button">
          <property name="geometry">
           <rect>
-           <x>630</x>
+           <x>750</x>
            <y>10</y>
            <width>31</width>
            <height>31</height>
@@ -243,6 +243,22 @@
           <string>?</string>
          </property>
         </widget>
+        <widget class="QLabel" name="status">
+         <property name="geometry">
+          <rect>
+           <x>270</x>
+           <y>430</y>
+           <width>371</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(255, 255, 255);</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
         <zorder>treeFilter</zorder>
         <zorder>MplWidget</zorder>
         <zorder>move_pushButton</zorder>
@@ -250,6 +266,7 @@
         <zorder>cancelButton</zorder>
         <zorder>console</zorder>
         <zorder>map_key_button</zorder>
+        <zorder>status</zorder>
        </widget>
       </item>
      </layout>
@@ -261,7 +278,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>666</width>
+     <width>808</width>
      <height>18</height>
     </rect>
    </property>

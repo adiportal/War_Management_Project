@@ -43,9 +43,9 @@ class FieldUDP:
         self.executor = ThreadPoolExecutor(max_workers=5)
         self.listen_thread = self.executor.submit(self.listen)
         self.report_thread = self.executor.submit(self.report_alive)
-        self.check_for_enemies_thread = self.executor.submit(self.check_for_enemies)
-        self.enemies_check_for_forces_thread = self.executor.submit(self.enemies_check_for_forces)
-        self.enemy_attack_thread = self.executor.submit(self.enemy_attack)
+        # self.check_for_enemies_thread = self.executor.submit(self.check_for_enemies)
+        # self.enemies_check_for_forces_thread = self.executor.submit(self.enemies_check_for_forces)
+        # self.enemy_attack_thread = self.executor.submit(self.enemy_attack)
 
     # listen() - Listening to incoming packets on background, while receiving a packet, it goes to receive_handler()
     # func to handle the message.

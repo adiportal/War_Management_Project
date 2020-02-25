@@ -222,7 +222,7 @@ def report_alive():
                              Receiver.battalion_commander.value, MessageType.alive.value, message)
 
         send_handler(send_packet)
-        time.sleep(2)
+        time.sleep(10)
 
 
 # Main

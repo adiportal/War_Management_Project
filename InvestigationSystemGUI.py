@@ -21,9 +21,9 @@ class MatplotlibWidget(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
 
-        loadUi("battalion_commander.ui", self)
+        loadUi("timeslider.ui", self)
 
-        self.setWindowTitle("Battalion Commander")
+        self.setWindowTitle("Investigation System")
 
         self.tooltip_visible = False
         self.tooltip_coords = 0, 0
@@ -53,52 +53,32 @@ class MatplotlibWidget(QMainWindow):
         self.launchers_checkbox = self.treeWidget.topLevelItem(3).child(1)
         self.lookout_points_checkbox = self.treeWidget.topLevelItem(3).child(2)
 
-    # def closeEvent(self, event):
-    #     reply = QMessageBox.question(
-    #         self, "Message",
-    #         "Are you sure you want to quit? Any unsaved work will be lost.",
-    #         QMessageBox.Close | QMessageBox.Cancel
-    #         )
-    #     if reply == QMessageBox.Close:
-    #         CompanyCommanderUDP.STOP_CC_THREADS = True
-    #
-    #     else:
-    #         event.ignore()
-
     def map_key_window(self):
         self.window = QtWidgets.QMainWindow()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self.window)
         self.window.show()
 
-    # function for a thread, updates the soldiers list
-    def update_field(self):
-        while True:
-            self.soldiers = BattalionCommander.company1 + BattalionCommander.company2 + BattalionCommander.company3
-            self.company_commanders = BattalionCommander.battalion_commander.commanders
-            self.enemies = BattalionCommander.battalion_commander.enemies
-            # print("gui", len(self.company_commanders))
-            time.sleep(2.0)
 
         # function for the FuncAnimation option, clears and create the plot again
 
-    def animate(self, i):
-        self.MplWidget.canvas.axes.clear()
-        img = plt.imread("MAP.png")
-        self.MplWidget.canvas.axes.imshow(img)
-        self.MplWidget.canvas.axes.imshow(img, extent=[0, 25, 0, 15])
-        # Starting the properties of the marker's labels
-        self.tooltip = self.MplWidget.canvas.axes.annotate(self.tooltip_text, self.tooltip_coords,
-                                                           xytext=self.set_xy_text(self.tooltip_coords),
-                                                           textcoords="offset points",
-                                                           ha=self.set_ha_value(self.set_xy_text(self.tooltip_coords)),
-                                                           va=self.set_va_value(self.set_xy_text(self.tooltip_coords)),
-                                                           size=6,
-                                                           bbox=dict(facecolor='wheat', boxstyle="round", alpha=0.8),
-                                                           arrowprops=dict(shrink=15, facecolor='black', width=3,
-                                                                           headlength=8))
-        self.tooltip.set_visible(self.tooltip_visible)  # Set the visibility of the label according to its current mode
-        self.create_plot()
+    # def animate(self, i):
+    #     self.MplWidget.canvas.axes.clear()
+    #     img = plt.imread("MAP.png")
+    #     self.MplWidget.canvas.axes.imshow(img)
+    #     self.MplWidget.canvas.axes.imshow(img, extent=[0, 25, 0, 15])
+    #     # Starting the properties of the marker's labels
+    #     self.tooltip = self.MplWidget.canvas.axes.annotate(self.tooltip_text, self.tooltip_coords,
+    #                                                        xytext=self.set_xy_text(self.tooltip_coords),
+    #                                                        textcoords="offset points",
+    #                                                        ha=self.set_ha_value(self.set_xy_text(self.tooltip_coords)),
+    #                                                        va=self.set_va_value(self.set_xy_text(self.tooltip_coords)),
+    #                                                        size=6,
+    #                                                        bbox=dict(facecolor='wheat', boxstyle="round", alpha=0.8),
+    #                                                        arrowprops=dict(shrink=15, facecolor='black', width=3,
+    #                                                                        headlength=8))
+    #     self.tooltip.set_visible(self.tooltip_visible)  # Set the visibility of the label according to its current mode
+    #     self.create_plot()
 
     def set_xy_text(self, coords):  # function to help set the position of the text in the label according to the
         # location of the marker in the plot
@@ -373,26 +353,22 @@ class MatplotlibWidget(QMainWindow):
         self.MplWidget.canvas.draw()
 
 
-def battalion_commander_thread():
-    BattalionCommander.main()
+# def gui_thread():
+#     app = QApplication(sys.argv)
+#     window = MatplotlibWidget()
+#     window.show()
+#     update_field_thread = threading.Thread(target=window.update_field)
+#     update_field_thread.start()
+#     sys.exit(app.exec_())
 
 
-def gui_thread():
-    app = QApplication(sys.argv)
-    window = MatplotlibWidget()
-    window.show()
-    update_field_thread = threading.Thread(target=window.update_field)
-    update_field_thread.start()
-    sys.exit(app.exec_())
-
-
-def main():
-    QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
-    bc_thread = threading.Thread(target=battalion_commander_thread)
-    gui_thread2 = threading.Thread(target=gui_thread)
-
-    bc_thread.start()
-    gui_thread2.start()
-
-
-main()
+# def main():
+#     QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
+#     bc_thread = threading.Thread(target=battalion_commander_thread)
+#     gui_thread2 = threading.Thread(target=gui_thread)
+#
+#     bc_thread.start()
+#     gui_thread2.start()
+#
+#
+# main()

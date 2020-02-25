@@ -68,6 +68,7 @@ class MatplotlibWidget(QMainWindow):
         self.window.show()
 
     def move_button(self):
+        self.status.setText("Please click on a point you want to move to")
         self.move_pushButton.setDown(True)
         self.MplWidget.canvas.mpl_connect('button_press_event', self.on_click)
 
@@ -377,6 +378,7 @@ class MatplotlibWidget(QMainWindow):
             pass
 
     def engage_button(self):
+        self.status.setText("Please choose an enemy you want to attack")
         self.engage_pushButton.setDown(True)
         self.MplWidget.canvas.mpl_disconnect(self.MplWidget.canvas.mpl_connect('pick_event', self.on_pick))
         self.MplWidget.canvas.mpl_connect('pick_event', self.on_pick_enemy)
@@ -402,6 +404,7 @@ class MatplotlibWidget(QMainWindow):
     # # function for handling the click event for choosing a new location
     def on_click(self, event):
         # x and y values that was chosen
+        self.status.setText("")
         x_data = event.xdata
         y_data = event.ydata
         if len(self.picked_soldier) > 0:  # means that a field object actually was chosen
@@ -470,6 +473,7 @@ class MatplotlibWidget(QMainWindow):
         print(self.picked_soldier)
 
     def on_pick_enemy(self, event):
+        self.status.setText("")
         this_point = event.artist
 
         # x_data and y_data of the point that was picked by the user
