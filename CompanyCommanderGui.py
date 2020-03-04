@@ -31,7 +31,7 @@ class MatplotlibWidget(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
 
-        loadUi("company_commander3.ui", self)
+        loadUi("company_commander.ui", self)
 
         self.move_pushButton.clicked.connect(self.move_button)
         self.engage_pushButton.clicked.connect(self.engage_button)
