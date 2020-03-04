@@ -109,7 +109,7 @@ class MatplotlibWidget(QMainWindow):
     def animate(self, i):
         self.MplWidget.canvas.axes.clear()
         img = plt.imread("MAP.png")
-        self.MplWidget.canvas.axes.imshow(img)
+        # self.MplWidget.canvas.axes.imshow(img)
         self.MplWidget.canvas.axes.imshow(img, extent=[0, 25, 0, 15])
         # Starting the properties of the marker's labels
         self.tooltip = self.MplWidget.canvas.axes.annotate(self.tooltip_text, self.tooltip_coords,
@@ -368,6 +368,7 @@ class MatplotlibWidget(QMainWindow):
         self.move_pushButton.setEnabled(False)
         self.engage_pushButton.setEnabled(False)
         self.cancelButton.setEnabled(False)
+        self.status.setText("")
         if self.move_pushButton.isDown():
             self.MplWidget.canvas.mpl_disconnect(
                 self.MplWidget.canvas.mpl_connect('button_press_event', self.on_click))
@@ -454,6 +455,7 @@ class MatplotlibWidget(QMainWindow):
         self.MplWidget.canvas.draw()
 
     def on_pick(self, event):
+        self.status.setText("Please pick an order (Move / Engage)")
         this_point = event.artist
 
         # x_data and y_data of the point that was picked by the user
@@ -484,8 +486,6 @@ class MatplotlibWidget(QMainWindow):
             if enemy.x == x_data and enemy.y == y_data:
                 self.picked_enemy.append(enemy)
                 break
-        print(x_data, y_data)
-        print(self.picked_enemy.__str__())
 
         self.engage_pushButton.setDown(False)
 
@@ -495,7 +495,6 @@ class MatplotlibWidget(QMainWindow):
                             Receiver.soldier.value,
                             MessageType.engage_order.value, message)
             send_handler(packet)
-            print("message sent")
             time.sleep(0.1)
 
         self.picked_soldier.clear()

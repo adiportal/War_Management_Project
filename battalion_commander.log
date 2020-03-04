@@ -1,4 +1,0 @@
-2020-02-22 17:41:55,668 INFO A new socket has been initiated: <socket.socket fd=984, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5014)>
-2020-02-22 17:42:15,303 INFO A new socket has been initiated: <socket.socket fd=1016, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5014)>
-2020-02-22 17:42:38,675 INFO A new socket has been initiated: <socket.socket fd=780, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5014)>
-2020-02-22 17:44:49,382 INFO A new socket has been initiated: <socket.socket fd=564, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5014)>

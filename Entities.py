@@ -4,10 +4,11 @@ import random
 import threading
 import time
 from concurrent.futures.thread import ThreadPoolExecutor
-
+from datetime import datetime, timedelta
+import copy
 import Utility
 
-logger = Utility.setup_logger('field', 'field.log')
+# logger = Utility.setup_logger('field', 'field.log')
 
 
 # FieldUDP
@@ -24,28 +25,30 @@ class FieldUDP:
         self.enemies = []
         self.marked_enemies = []
 
+        date_time = datetime.now().strftime("%d-%m-%Y %H.%M.%S")
+
+        self.scenario = FieldScenario(f"Field_Scenario {date_time}", date_time)
+
         self.sock = Utility.get_field_sock()
         self.sock.bind(Utility.get_field_address())
 
-        # Initiate and Start listen and report_location threads
-        # self.listen_thread = threading.Thread(target=self.listen)
-        # self.report_thread = threading.Thread(target=self.report_alive)
-        # self.check_for_enemies_thread = threading.Thread(target=self.check_for_enemies)
-        # self.enemies_check_for_forces_thread = threading.Thread(target=self.enemies_check_for_forces)
-        # self.enemy_attack_thread = threading.Thread(target=self.enemy_attack)
-        #
-        # self.listen_thread.start()
-        # self.report_thread.start()
-        # self.check_for_enemies_thread.start()
-        # self.enemies_check_for_forces_thread.start()
-        # self.enemy_attack_thread.start()
-
-        self.executor = ThreadPoolExecutor(max_workers=5)
+        self.executor = ThreadPoolExecutor(max_workers=10)
         self.listen_thread = self.executor.submit(self.listen)
         self.report_thread = self.executor.submit(self.report_alive)
-        # self.check_for_enemies_thread = self.executor.submit(self.check_for_enemies)
-        # self.enemies_check_for_forces_thread = self.executor.submit(self.enemies_check_for_forces)
-        # self.enemy_attack_thread = self.executor.submit(self.enemy_attack)
+        self.check_for_enemies_thread = self.executor.submit(self.check_for_enemies)
+        self.enemies_check_for_forces_thread = self.executor.submit(self.enemies_check_for_forces)
+        self.enemy_attack_thread = self.executor.submit(self.enemy_attack)
+        self.save_frames_thread = self.executor.submit(self.save_frames)
+
+    def save_frames(self):
+        while True:
+            current = self.forces.copy()
+            frame = Frame(datetime.now().strftime("%H:%M:%S"), current)
+            try:
+                self.scenario.save_frame(frame)
+            except BaseException as exc:
+                logger.error(exc)
+            time.sleep(1)
 
     # listen() - Listening to incoming packets on background, while receiving a packet, it goes to receive_handler()
     # func to handle the message.
@@ -117,7 +120,6 @@ class FieldUDP:
         return None
 
     def forces_attack(self, field_object, enemy):
-        print("got engage order" + str(field_object.get_id()) + "-->" + str(enemy.get_id()))
         field_object = self.get_field_object(field_object.get_company_num(), field_object.get_id())
         enemy = self.get_enemy(enemy)
 
@@ -146,7 +148,6 @@ class FieldUDP:
                         break
                     field_object.shoot()
                     enemy.got_damage(damage)
-                    print(enemy.get_hp())
                     if enemy.get_hp() <= 0:
                         field_object.attack_enemy(None)
                         self.enemies.remove(enemy)
@@ -206,7 +207,10 @@ class FieldUDP:
                                         message)
                         self.send_handler(packet)
 
-                    time.sleep(1)
+                        save_message = Message(datetime.now().strftime("%H:%M:%S"), message)
+                        self.scenario.save_message(save_message)
+
+                time.sleep(1)
                 enemy.not_shooting()
 
     # report_alive - A background function that reporting the status of the FieldObjects on the field status to their
@@ -380,7 +384,10 @@ class FieldUDP:
                                      Utility.Receiver.company_commander.value,
                                      Utility.MessageType.move_approval.value, message)
                 self.send_handler(send_packet)
-                print("**")
+
+                save_message = Message(datetime.now().strftime("%H:%M:%S"), message)
+                self.scenario.save_message(save_message)
+
                 logger.debug(
                     "Move approval message was sent from FieldObject #{} to CC #{}".format(field_object.get_id(),
                                                                                            field_object.get_company_num()))
@@ -405,13 +412,15 @@ class FieldUDP:
 
                 self.send_handler(send_packet)
 
+                save_message = Message(datetime.now().strftime("%H:%M:%S"), message)
+                self.scenario.save_message(save_message)
+
                 logger.debug(
                     f"Engage approval was sent from FieldObject #{field_object.get_id()} to CC #{field_object.get_company_num()}")
 
 
         # Error case
         else:
-            # print(str(address) + " >> " + rec_packet)
             logger.error(str(address) + " >> " + str(rec_packet))
 
     # send_handler(send_packet) - Sending the packet that it gets
@@ -555,6 +564,9 @@ class FieldObjects:
 
     def shoot(self):
         self.ammo = self.ammo - 1
+
+    def set_in_sight(self, in_sight):
+        self.in_sight = in_sight
 
 
 # Soldier
@@ -790,6 +802,185 @@ class LookoutPoint(Enemy):
         self.hp -= damage
 
 
+# Scenario
+class Scenario:
+    def __init__(self, file_name, date_time):
+        self.file_name = file_name
+        self.date_time = date_time
+        self.messages = []
+
+    def set_file_name(self, file_name):
+        self.file_name = file_name
+
+    def set_date_time(self, date_time):
+        self.date_time = date_time
+
+    def save_message(self, message):
+        self.messages.append(message)
+        self.save()
+
+    def save(self):
+        with open(self.file_name, 'wb') as file:
+            pickle.dump(self, file)
+            file.close()
+
+        # file = open("FieldScenarios/"+self.file_name, 'wb')
+        # pickle.dump(self, file, 2)
+        # file.close()
+
+    # Getters
+    def get_file_name(self):
+        return self.file_name
+
+    def get_messages(self):
+        return self.messages
+
+    def get_date_time(self):
+        return self.date_time
+
+    def get_message(self, date_time):
+        return_message = []
+        counter = 1
+        for message in self.messages:
+            t1 = datetime.strptime(message.get_time(), "%H:%M:%S")
+            t2 = datetime.strptime(date_time, "%H:%M:%S")
+            counter += 1
+            if t1 > t2 or counter > len(self.messages):
+                return return_message
+            elif t1 == t2:
+                return_message.append(message)
+            else:
+                continue
+
+
+# FieldScenario
+class FieldScenario(Scenario):
+    def __init__(self, file_name=None, date_time=None):
+        super().__init__("FieldScenarios/" + file_name, date_time)
+        self.frames = []
+        self.start_time = None
+        self.end_time = None
+        self.total_time = None
+        self.time_in_sec = None
+
+    def save_frame(self, frame):
+        if len(self.frames) == 0:
+            self.start_time = frame.get_time()
+            self.end_time = frame.get_time()
+        else:
+            self.end_time = frame.get_time()
+
+        self.total_time = datetime.strptime(self.end_time, "%H:%M:%S") - datetime.strptime(self.start_time, "%H:%M:%S")
+        self.time_in_sec = self.total_time.seconds
+
+        self.add_frame(frame)
+
+        self.save()
+
+    def fix_frames(self):
+        current_time = datetime.strptime(self.start_time, "%H:%M:%S")
+        for index in range(self.time_in_sec):
+            if datetime.strptime(self.frames[index].get_time(), "%H:%M:%S") != current_time:
+                new_frame = Frame(datetime.strftime(current_time, "%H:%M:%S"), self.frames[index-1].get_forces())
+                self.frames.insert(index, new_frame)
+            current_time += timedelta(seconds=1)
+
+    # Getters
+    def get_start_time(self):
+        return self.start_time
+
+    def get_end_time(self):
+        return self.end_time
+
+    def get_total_time(self):
+        return self.total_time
+
+    def get_time_in_sec(self):
+        return self.time_in_sec
+
+    def get_frames(self):
+        return self.frames
+
+    def get_frame(self, date_time):
+        for frame in self.frames:
+            if frame.get_time() == date_time:
+                return frame
+        print(f"There is no time {date_time} in {self.file_name}")
+
+    def add_frame(self, frame):
+        self.frames.append(frame)
+
+
+# CompanyCommanderScenario
+class CompanyCommanderScenario(Scenario):
+    def __init__(self, file_name=None, date_time=None, company_num=None, company_commander=None):
+        super().__init__("CompanyCommanderScenarios/" + file_name, date_time)
+        self.company_num = company_num
+        self.company_commander = company_commander
+
+    def set_company_num(self, company_num):
+        self.company_num = company_num
+
+    def set_company_commander(self, company_commander):
+        self.company_commander = company_commander
+
+    # Getters
+    def get_company_num(self):
+        return self.company_num
+
+    def get_company_commander(self):
+        return self.company_commander
+
+
+# Frame
+class Frame:
+    def __init__(self, date_time, forces):
+        self.date_time = date_time
+        self.frame_forces = []
+        self.create_new_forces(forces)
+        self.enemies = []
+        self.set_enemies()
+
+    def set_enemies(self):
+        for field_object in self.frame_forces:
+            if len(field_object.get_in_sight()) > 0:
+                for enemy in field_object.get_in_sight():
+                    if enemy not in self.enemies:
+                        self.enemies.append(enemy)
+
+    # Getters
+    def get_time(self):
+        return self.date_time
+
+    def get_forces(self):
+        return self.frame_forces
+
+    def get_enemies(self):
+        return self.enemies
+
+    def print_forces(self):
+        string = ""
+        for f in self.frame_forces:
+            string += str(f.get_location())
+        return string
+
+    def __str__(self):
+        return "date: " + self.get_time() + "\nforces:\n" + self.print_forces()
+
+    def create_new_forces(self, forces):
+        for field_object in forces:
+            if field_object.get_type() is Utility.ObjectType.soldier.value:
+                soldier = Soldier(field_object.get_company_num(), field_object.get_location(), field_object.get_ammo())
+                soldier.set_in_sight(field_object.get_in_sight())
+                self.frame_forces.append(soldier)
+            elif field_object.get_type() is Utility.ObjectType.apc.value:
+                apc = APC(field_object.get_company_num(), field_object.get_location(), field_object.get_ammo())
+                apc.set_in_sight(field_object.get_in_sight())
+                self.frame_forces.append(apc)
+            else:
+                pass
+
+
 # Packet
 class Packet:
     # Attributes
@@ -874,6 +1065,10 @@ class AliveMessage:
     def get_field_object(self):
         return self.field_object
 
+    @staticmethod
+    def get_type():
+        return Utility.MessageType.alive.value
+
 
 # MoveApprovalMessage
 class MoveApprovalMessage:
@@ -896,6 +1091,10 @@ class MoveApprovalMessage:
     def get_approval_packet_id(self):
         return self.approval_packet_id
 
+    @staticmethod
+    def get_type():
+        return Utility.MessageType.move_approval.value
+
 
 # EnemiesInSightMessage
 class EnemiesInSightMessage:
@@ -906,6 +1105,10 @@ class EnemiesInSightMessage:
     # Getters
     def get_enemies(self):
         return self.enemies
+
+    @staticmethod
+    def get_type():
+        return Utility.MessageType.enemies_in_sight.value
 
 
 # MoveOrderMessage
@@ -932,6 +1135,10 @@ class MoveOrderMessage:
                                                                          self.field_object_id,
                                                                          self.location)
 
+    @staticmethod
+    def get_type():
+        return Utility.MessageType.move_order.value
+
 
 # EngageOrderMessage
 class EngageOrderMessage:
@@ -946,6 +1153,10 @@ class EngageOrderMessage:
 
     def get_enemy(self):
         return self.enemy
+
+    @staticmethod
+    def get_type():
+        return Utility.MessageType.engage_order.value
 
 
 # EngageApprovalMessage
@@ -973,6 +1184,10 @@ class EngageApprovalMessage:
     def get_approval_packet_id(self):
         return self.approval_packet_id
 
+    @staticmethod
+    def get_type():
+        return Utility.MessageType.engage_approval.value
+
 
 # GotShotMessage
 class GotShotMessage:
@@ -982,3 +1197,96 @@ class GotShotMessage:
 
     def get_field_object(self):
         return self.field_object
+
+    @staticmethod
+    def get_type():
+        return Utility.MessageType.got_shot.value
+
+
+# NotApprovedMessage
+class NotApprovedMessage:
+    # Constructor
+    def __init__(self, field_object_id, company_num):
+        self.field_object_id = field_object_id
+        self.company_num = company_num
+
+    def get_field_object_id(self):
+        return self.field_object_id
+
+    def get_company_num(self):
+        return self.company_num
+
+    @staticmethod
+    def get_type():
+        return Utility.MessageType.not_approved_message.value
+
+
+# Message:
+class Message:
+    def __init__(self, date_time, message):
+        self.date_time = date_time
+        self.message = message
+        self.colored_msg = None
+        self.set_colored(message)
+
+    def set_colored(self, message):
+
+        if message.get_type() is Utility.MessageType.move_order.value:
+            field_object_id = message.get_field_object_id()
+            location = message.get_new_location()
+            msg = "[ " + self.date_time + " ]" + "  " + \
+                  f"CC #{message.get_company_num()} sent Move Order message ({location}) to" \
+                  f"#{field_object_id}<br />"
+
+            self.colored_msg = "<span style=\" font-size:8pt; font-weight:400; color:#000000;\" >"
+            self.colored_msg += msg
+            self.colored_msg += "</span>"
+
+        elif message.get_type() is Utility.MessageType.move_approval.value:
+            msg = "[ " + self.date_time + " ]" + "  " + f"#{message.get_field_object().get_id()} started moving <br />"
+
+            self.colored_msg = "<span style=\" font-size:8pt; font-weight:400; color:#000000;\" >"
+            self.colored_msg += msg
+            self.colored_msg += "</span>"
+
+        elif message.get_type() is Utility.MessageType.engage_order.value:
+            field_object = message.get_field_object()
+            msg = "[ " + self.date_time + " ]" + "  " + \
+                  f"CC #{field_object.get_company_num()} sent Engage Order message to" \
+                  f"#{message.get_field_object().get_id()}<br />"
+
+            self.colored_msg = "<span style=\" font-size:8pt; font-weight:400; color:#000000;\" >"
+            self.colored_msg += msg
+            self.colored_msg += "</span>"
+
+        elif message.get_type() is Utility.MessageType.engage_approval.value:
+            msg = "[ " + self.date_time + " ]" + "  " + f"#{message.get_field_object_id()} started engaging target <br />"
+
+            self.colored_msg = "<span style=\" font-size:8pt; font-weight:400; color:#000000;\" >"
+            self.colored_msg += msg
+            self.colored_msg += "</span>"
+
+        elif message.get_type() is Utility.MessageType.got_shot.value:
+            msg = "[ " + self.date_time + " ]" + " " + f"#{message.get_field_object()} got shot <br />"
+
+            self.colored_msg = "<span style=\" font-size:8pt; font-weight:400; color:#ff0000;\" >"
+            self.colored_msg += msg
+            self.colored_msg += "</span>"
+
+        elif message.get_type() is Utility.MessageType.not_approved_message.value:
+            msg = "[ " + self.date_time + " ]" + "  " + f"Soldier #{message.get_field_object_id()} " \
+                                                   f"didn't approved the {message.get_type()} <br />"
+
+            self.colored_msg = "<span style=\" font-size:8pt; font-weight:500; color:#940913;\" >"
+            self.colored_msg += msg
+            self.colored_msg += "</span>"
+
+    def get_message(self):
+        return self.message
+
+    def get_time(self):
+        return self.date_time
+
+    def get_colored_msg(self):
+        return self.colored_msg
+

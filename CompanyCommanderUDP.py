@@ -7,7 +7,7 @@ import Utility
 from Utility import Company, MessageType, Case, sender_receiver_switch_case, get_field_address, contain, \
     get_cc_listen_sock, get_cc_send_sock, get_cc_receive_address, get_cc_send_address, Sender, Receiver, setup_logger, \
     get_cc_to_bc_send_sock, get_bc_address, get_cc_to_bc_send_address
-from Entities import CompanyCommander, AliveMessage, Packet
+from Entities import CompanyCommander, AliveMessage, Packet, NotApprovedMessage, CompanyCommanderScenario, Message
 
 # Initialize the Logger
 # logging.basicConfig(filename='CompanyCommanderLog.log', level=logging.DEBUG, format='%(asctime)s : %(levelname)s : '
@@ -36,6 +36,9 @@ cc_to_bc_sock = get_cc_to_bc_send_sock()
 
 # Initiate CC
 company_commander = CompanyCommander(1, (0, 0), 0)
+
+date_t = datetime.now().strftime("%d-%m-%Y %H.%M.%S")
+scenario = CompanyCommanderScenario()
 
 
 def get_company_commander():
@@ -159,13 +162,13 @@ def send_handler(packet):
             sock = send_sock
 
         byte_packet = pickle.dumps(packet)
+        message = packet.get_message()
 
         if packet.get_message_type() == MessageType.move_order.value or \
                 packet.get_message_type() == MessageType.engage_order.value:
 
             message_type = None
             field_object_id = None
-            message = packet.get_message()
 
             if packet.get_message_type() == MessageType.move_order.value:
                 message_type = "Move Order"
@@ -185,16 +188,28 @@ def send_handler(packet):
                     console_messages.append(
                         ("[ " + dt_string + " ]" + "  " + f"Soldier #{field_object_id} didn't approved the {message_type} <br />",
                          Utility.MessageType.not_approved_message.value))
+
+                    message = NotApprovedMessage(field_object_id, company_commander.get_company_num())
+                    msg = Message(datetime.now().strftime("%H:%M:%S"), message)
+                    scenario.save_message(msg)
+
                     logger.error("The packet '{}' didn't reached to Field {}".format(packet, get_field_address()))
                     break
+
                 sock.sendto(byte_packet, address)
                 logger.debug("A Packet has been sent: {}".format(packet))
+                msg = Message(datetime.now().strftime("%H:%M:%S"), message)
+                scenario.save_message(msg)
+
                 count += 1
                 time.sleep(3)
 
         else:
             sock.sendto(byte_packet, address)
             logger.debug("A Packet has been sent: {}".format(packet))
+
+            # msg = Message(datetime.now().strftime("%H:%M:%S"), message)
+            # scenario.save_message(msg)
 
     except:
         logger.error("The packet '{}' didn't reached to Field {}".format(packet, get_field_address()))
@@ -225,6 +240,14 @@ def report_alive():
         time.sleep(10)
 
 
+def set_scenario():
+    date_time = datetime.now().strftime("%d-%m-%Y %H.%M.%S")
+    scenario.set_file_name(f"CompanyCommander{company_commander.get_company_num()}Scenario {date_time}")
+    scenario.set_date_time(date_time)
+    scenario.set_company_num(company_commander.get_company_num())
+    scenario.set_company_commander(company_commander)
+
+
 # Main
 def main(company_num, location):
     # # Initialize the Logger
@@ -252,6 +275,12 @@ def main(company_num, location):
 
     # Update CC
     set_company_commander(company_num, location)
+
+    date_time = datetime.now().strftime("%d-%m-%Y %H.%M.%S")
+    scenario.set_file_name(f"CompanyCommanderScenarios/CompanyCommander{company_commander.get_company_num()}Scenario {date_time}")
+    scenario.set_date_time(date_time)
+    scenario.set_company_num(company_commander.get_company_num())
+    scenario.set_company_commander(company_commander)
 
     # start listen() func on background
     listen_thread = threading.Thread(target=listen)

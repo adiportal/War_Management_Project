@@ -1,3 +1,4 @@
+import pickle
 import socket
 import enum
 import logging
@@ -285,6 +286,13 @@ def setup_logger(name, log_file, level=logging.INFO):
     return logger
 
 
+def load(file_name):
+    file_name = file_name
+    with open(file_name, 'rb') as file:
+        scenario = pickle.load(file)
+        return scenario
+
+
 # Enum Classes
 # Cases
 class Sender(enum.Enum):
@@ -376,3 +384,9 @@ class MoveToMessageIndexes(enum.Enum):
 class MovingTuple(enum.Enum):
     on_move = 0
     location = 1
+
+
+class SpeedButtons(enum.Enum):
+    normal = 0
+    x2 = 1
+    x4 = 2

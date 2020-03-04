@@ -253,7 +253,7 @@
           </rect>
          </property>
          <property name="styleSheet">
-          <string notr="true">background-color: rgb(255, 255, 255);</string>
+          <string notr="true"/>
          </property>
          <property name="text">
           <string/>
