@@ -1,4 +1,4 @@
-
+import sys
 import threading
 import time
 from datetime import datetime, timedelta
@@ -15,16 +15,18 @@ from map_key import Ui_MainWindow
 
 
 class MatplotlibWidget(QMainWindow):
-
     soldiers = []
     enemies = []
-    company_commander_scenario = Utility.load("CompanyCommanderScenarios/CompanyCommander1Scenario 04-03-2020 16.07.03")
-    field_scenario = Utility.load("FieldScenarios/Field_Scenario 04-03-2020 16.06.59")
-    field_scenario.fix_frames()
-    frames = field_scenario.get_frames()
+    cc_scenarios = []
+    field_scenario = None
+    frames = None
     play = False
 
-    def __init__(self):
+    def __init__(self, cc1_path=None, cc2_path=None, cc3_path=None, field_path=None):
+        self.set_pathes(cc1_path, cc2_path, cc3_path, field_path)
+        self.field_scenario.fix_frames()
+        self.frames = self.field_scenario.get_frames()
+
         QMainWindow.__init__(self)
 
         loadUi("timeslider.ui", self)
@@ -48,6 +50,17 @@ class MatplotlibWidget(QMainWindow):
         self.pause_button.clicked.connect(self.pause_press)
 
         self.update_graph()
+
+    def set_pathes(self, cc1_path, cc2_path, cc3_path, field_path):
+
+        cc_path_list = [cc1_path, cc2_path, cc3_path]
+
+        for path in cc_path_list:
+            if path != "None":
+                cc_scenario = Utility.load("CompanyCommanderScenarios/" + str(path))
+                self.cc_scenarios.append(cc_scenario)
+
+        self.field_scenario = Utility.load("FieldScenarios/" + str(field_path))
 
     def map_key_window(self):
         self.window = QtWidgets.QMainWindow()
@@ -144,11 +157,15 @@ class MatplotlibWidget(QMainWindow):
                     self.console.insertHtml(message.get_colored_msg())
                     self.console.moveCursor(QTextCursor.End)
 
-            cc_message = self.company_commander_scenario.get_message(datetime.strftime(current_time, "%H:%M:%S"))
-            if len(cc_message) > 0:
-                for message in cc_message:
-                    self.console.insertHtml(message.get_colored_msg())
-                    self.console.moveCursor(QTextCursor.End)
+            for cc in self.cc_scenarios:
+                if cc is None:
+                    continue
+
+                cc_message = cc.get_message(datetime.strftime(current_time, "%H:%M:%S"))
+                if len(cc_message) > 0:
+                    for message in cc_message:
+                        self.console.insertHtml(message.get_colored_msg())
+                        self.console.moveCursor(QTextCursor.End)
 
             current_time += timedelta(seconds=1)
 
@@ -203,8 +220,12 @@ class MatplotlibWidget(QMainWindow):
             pass
 
 
+cc1_path = sys.argv[1]
+cc2_path = sys.argv[2]
+cc3_path = sys.argv[3]
+field_path = sys.argv[4]
 QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
 app = QApplication([])
-window = MatplotlibWidget()
+window = MatplotlibWidget(cc1_path, cc2_path, cc3_path, field_path)
 window.show()
 app.exec_()

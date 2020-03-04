@@ -25,9 +25,9 @@ class FieldUDP:
         self.enemies = []
         self.marked_enemies = []
 
-        date_time = datetime.now().strftime("%d-%m-%Y %H.%M.%S")
+        date_time = datetime.now().strftime("%d-%m-%Y.%H.%M.%S")
 
-        self.scenario = FieldScenario(f"Field_Scenario {date_time}", date_time)
+        self.scenario = FieldScenario(f"Field_Scenario.{date_time}", date_time)
 
         self.sock = Utility.get_field_sock()
         self.sock.bind(Utility.get_field_address())

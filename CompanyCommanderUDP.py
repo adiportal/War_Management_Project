@@ -276,8 +276,8 @@ def main(company_num, location):
     # Update CC
     set_company_commander(company_num, location)
 
-    date_time = datetime.now().strftime("%d-%m-%Y %H.%M.%S")
-    scenario.set_file_name(f"CompanyCommanderScenarios/CompanyCommander{company_commander.get_company_num()}Scenario {date_time}")
+    date_time = datetime.now().strftime("%d-%m-%Y.%H.%M.%S")
+    scenario.set_file_name(f"CompanyCommander{company_commander.get_company_num()}Scenario.{date_time}")
     scenario.set_date_time(date_time)
     scenario.set_company_num(company_commander.get_company_num())
     scenario.set_company_commander(company_commander)
