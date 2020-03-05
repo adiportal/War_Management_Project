@@ -239,37 +239,37 @@ class MatplotlibWidget(QMainWindow):
                 for x, y, m in zip(x_enemy, y_enemy, marker_enemy):
                     self.MplWidget.canvas.axes.plot([x], [y], color="red", marker=m, markersize=4,
                                                     markeredgecolor="black")
-        # x_cc = []
-        # y_cc = []
-        # color_cc = []
+        x_cc = []
+        y_cc = []
+        color_cc = []
 
-        # for c in self.company_commanders:
-        #     if (self.company1.checkState(0) == QtCore.Qt.Checked or
-        #         self.company1_commander.checkState(0) == QtCore.Qt.Checked) \
-        #             and c.company_number == 1:
-        #         x_cc.append(c.x)
-        #         y_cc.append(c.y)
-        #         color_cc.append('cyan')
-        #
-        #     elif (self.company2.checkState(0) == QtCore.Qt.Checked
-        #           or self.company2_commander.checkState(0) == QtCore.Qt.Checked) \
-        #             and c.company_number == 2:
-        #         x_cc.append(c.x)
-        #         y_cc.append(c.y)
-        #         color_cc.append('orange')
-        #
-        #     elif (self.company3.checkState(0) == QtCore.Qt.Checked
-        #           or self.company3_commander.checkState(0) == QtCore.Qt.Checked) and c.company_number == 3:
-        #         x_cc.append(c.x)
-        #         y_cc.append(c.y)
-        #         color_cc.append('lime')
-        #
-        #     else:
-        #         continue
-        #
-        #     for xcc, ycc, co in zip(x_cc, y_cc, color_cc):
-        #         self.MplWidget.canvas.axes.plot([xcc], [ycc], color="black", marker='o', markersize=7, picker=10,
-        #                                         markeredgecolor=co, markeredgewidth=1.5)
+        for c in self.company_commanders:
+            if (self.company1.checkState(0) == QtCore.Qt.Checked or
+                self.company1_commander.checkState(0) == QtCore.Qt.Checked) \
+                    and c.company_number == 1:
+                x_cc.append(c.x)
+                y_cc.append(c.y)
+                color_cc.append('cyan')
+
+            elif (self.company2.checkState(0) == QtCore.Qt.Checked
+                  or self.company2_commander.checkState(0) == QtCore.Qt.Checked) \
+                    and c.company_number == 2:
+                x_cc.append(c.x)
+                y_cc.append(c.y)
+                color_cc.append('orange')
+
+            elif (self.company3.checkState(0) == QtCore.Qt.Checked
+                  or self.company3_commander.checkState(0) == QtCore.Qt.Checked) and c.company_number == 3:
+                x_cc.append(c.x)
+                y_cc.append(c.y)
+                color_cc.append('lime')
+
+            else:
+                continue
+
+            for xcc, ycc, co in zip(x_cc, y_cc, color_cc):
+                self.MplWidget.canvas.axes.plot([xcc], [ycc], color="black", marker='o', markersize=7, picker=10,
+                                                markeredgecolor=co, markeredgewidth=1.5)
 
     @staticmethod
     def create_plot_by_companies(x, y, color, marker, sizes, labels, s, company, soldiers, apcs, c):

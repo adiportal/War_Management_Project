@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 import copy
 import Utility
 
-# logger = Utility.setup_logger('field', 'field.log')
+logger = Utility.setup_logger('field', 'field.log')
 
 
 # FieldUDP
@@ -914,7 +914,9 @@ class FieldScenario(Scenario):
 # CompanyCommanderScenario
 class CompanyCommanderScenario(Scenario):
     def __init__(self, file_name=None, date_time=None, company_num=None, company_commander=None):
-        super().__init__("CompanyCommanderScenarios/" + file_name, date_time)
+        if file_name is not None:
+            file_name = "CompanyCommanderScenarios/" + file_name
+        super().__init__(file_name, date_time)
         self.company_num = company_num
         self.company_commander = company_commander
 

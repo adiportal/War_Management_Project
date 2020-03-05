@@ -17,6 +17,7 @@ from map_key import Ui_MainWindow
 class MatplotlibWidget(QMainWindow):
     soldiers = []
     enemies = []
+    company_commanders = []
     cc_scenarios = []
     field_scenario = None
     frames = None
@@ -52,7 +53,6 @@ class MatplotlibWidget(QMainWindow):
         self.update_graph()
 
     def set_pathes(self, cc1_path, cc2_path, cc3_path, field_path):
-
         cc_path_list = [cc1_path, cc2_path, cc3_path]
 
         for path in cc_path_list:
@@ -74,10 +74,10 @@ class MatplotlibWidget(QMainWindow):
         self.MplWidget.canvas.axes.clear()
         img = plt.imread("MAP.png")
         self.MplWidget.canvas.axes.imshow(img, extent=[0, 25, 0, 15])
-        self.create_plot_new(self.soldiers, self.enemies)
+        self.create_plot_new(self.soldiers, self.enemies, self.company_commanders)
         self.MplWidget.canvas.draw()
 
-    def create_plot_new(self, soldiers, enemies):
+    def create_plot_new(self, soldiers, enemies, company_commanders):
         # self.MplWidget.canvas.axes.get_yaxis().set_visible(False)
         # self.MplWidget.canvas.axes.get_xaxis().set_visible(False)
 
@@ -129,6 +129,25 @@ class MatplotlibWidget(QMainWindow):
                 self.MplWidget.canvas.axes.plot([x], [y], color="red", marker=m, markersize=7,
                                                 markeredgecolor="black", picker=5)
 
+        cc_x = []
+        cc_y = []
+        cc_color = []
+
+        for cc in company_commanders:
+            if cc is not None:
+                cc_x.append(cc.company_commander.x)
+                cc_y.append(cc.company_commander.y)
+                if cc.company_num == 1:
+                    cc_color.append("cyan")
+                elif cc.company_num == 2:
+                    cc_color.append("orange")
+                else:
+                    cc_color.append("lime")
+
+        for x, y, color in zip(cc_x, cc_y, cc_color):
+            self.MplWidget.canvas.axes.plot([x], [y], color="black", marker="o", markersize=7, markeredgecolor=color,
+                                            markeredgewidth=1.5)
+
     def value_changed(self):
         index = self.slider.value()
         self.val = index
@@ -136,12 +155,14 @@ class MatplotlibWidget(QMainWindow):
         if index == 0:
             self.soldiers = []
             self.enemies = []
+            self.company_commanders = []
             self.update_graph()
 
         else:
             self.frame = self.frames[index - 1]
             self.soldiers = self.frame.get_forces()
             self.enemies = self.frame.get_enemies()
+            self.company_commanders = self.cc_scenarios
             self.update_graph()
             self.set_console(self.frame.get_time())
 
