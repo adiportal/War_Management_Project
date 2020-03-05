@@ -443,11 +443,7 @@ class MatplotlibWidget(QMainWindow):
                         self.tooltip_coords = line.get_xdata(), line.get_ydata()
                         self.tooltip_text = line.get_label()
                         break
-                    elif self.is_enemy(line.get_xdata(), line.get_ydata()) == 1:
-                        self.tooltip.set_visible(True)
-                        self.tooltip_coords = line.get_xdata(), line.get_ydata()
-                        self.tooltip_text = line.get_label()
-                        break
+
             else:
                 self.tooltip.set_visible(False)
         self.tooltip_visible = self.tooltip._visible
