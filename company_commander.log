@@ -32,3 +32,7 @@
 2020-03-05 14:43:21,214 INFO A new socket has been initiated: <socket.socket fd=996, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
 2020-03-05 14:43:21,214 INFO A new socket has been initiated: <socket.socket fd=984, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
 2020-03-05 14:43:49,328 ERROR The packet '[ #3. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Move Order, Message: || Company: 1, ID: 3, MoveTo Location: ((9.088619061189597, 7.994341082115376)) || ]' didn't reached to Field ('127.0.0.1', 5007)
+2020-03-05 15:28:07,954 INFO A new socket has been initiated: <socket.socket fd=836, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('0.0.0.0', 5008)>
+2020-03-05 15:28:07,955 INFO A new socket has been initiated: <socket.socket fd=764, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5011)>
+2020-03-05 15:28:07,955 INFO A new socket has been initiated: <socket.socket fd=908, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=('127.0.0.1', 5015)>
+2020-03-05 15:28:36,548 ERROR The packet '[ #3. Sender: CC, Company: 1, Receiver: Soldier, Message Type: Move Order, Message: || Company: 1, ID: 1, MoveTo Location: ((12.63053169401132, 9.765297398526238)) || ]' didn't reached to Field ('127.0.0.1', 5007)

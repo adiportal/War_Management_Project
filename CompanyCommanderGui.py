@@ -526,8 +526,8 @@ def main(company_num1, location1):
 
 
 if __name__ == '__main__':
-    company_num = int(1)
-    location = (float(1), float(1))
+    company_num = int(sys.argv[1])
+    location = (float(sys.argv[2]), float(sys.argv[3]))
     if company_num == 1 or company_num == 2 or company_num == 3:
         if not in_use(get_cc_send_address(int(company_num))):
             main(company_num, location)
