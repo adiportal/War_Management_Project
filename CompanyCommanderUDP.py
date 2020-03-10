@@ -178,31 +178,9 @@ def send_handler(packet):
                 field_object_id = message.get_field_object().get_id()
 
             order_packets.append(packet)
-            count = 0
-
-            while packet in order_packets:
-                if count == 3:
-                    order_packets.remove(packet)
-                    now = datetime.now()
-                    dt_string = now.strftime("%H:%M:%S")
-                    console_messages.append(
-                        ("[ " + dt_string + " ]" + "  " + f"Soldier #{field_object_id} didn't approved the {message_type} <br />",
-                         Utility.MessageType.not_approved_message.value))
-
-                    message = NotApprovedMessage(field_object_id, company_commander.get_company_num())
-                    msg = Message(datetime.now().strftime("%H:%M:%S"), message)
-                    scenario.save_message(msg)
-
-                    logger.error("The packet '{}' didn't reached to Field {}".format(packet, get_field_address()))
-                    break
-
-                sock.sendto(byte_packet, address)
-                logger.debug("A Packet has been sent: {}".format(packet))
-                msg = Message(datetime.now().strftime("%H:%M:%S"), message)
-                scenario.save_message(msg)
-
-                count += 1
-                time.sleep(3)
+            args = packet, sock, field_object_id, message_type, byte_packet, message, address
+            send_approval_try_thread = threading.Thread(target=send_approval_try, args=args)
+            send_approval_try_thread.start()
 
         else:
             sock.sendto(byte_packet, address)
@@ -214,6 +192,33 @@ def send_handler(packet):
     except:
         logger.error("The packet '{}' didn't reached to Field {}".format(packet, get_field_address()))
 
+
+def send_approval_try(packet, sock, field_object_id, message_type, byte_packet, message, address):
+    count = 0
+    while packet in order_packets:
+        if count == 3:
+            order_packets.remove(packet)
+            now = datetime.now()
+            dt_string = now.strftime("%H:%M:%S")
+            console_messages.append(
+                (
+                "[ " + dt_string + " ]" + "  " + f"Soldier #{field_object_id} didn't approved the {message_type} <br />",
+                Utility.MessageType.not_approved_message.value))
+
+            message = NotApprovedMessage(field_object_id, company_commander.get_company_num())
+            msg = Message(datetime.now().strftime("%H:%M:%S"), message)
+            scenario.save_message(msg)
+
+            logger.error("The packet '{}' didn't reached to Field {}".format(packet, get_field_address()))
+            break
+
+        sock.sendto(byte_packet, address)
+        logger.debug("A Packet has been sent: {}".format(packet))
+        msg = Message(datetime.now().strftime("%H:%M:%S"), message)
+        scenario.save_message(msg)
+
+        count += 1
+        time.sleep(3)
 
 def set_company_commander(company_num, location):
     company_commander.set_company(company_num)

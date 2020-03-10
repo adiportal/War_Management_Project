@@ -182,7 +182,7 @@ class FieldUDP:
         while True:
             for enemy in self.enemies:
 
-                if enemy.get_type() is Utility.EnemyType.launcher.value or Utility.EnemyType.lookout_point.value:
+                if enemy.get_type() is Utility.EnemyType.launcher.value or enemy.get_type() is Utility.EnemyType.lookout_point.value:
                     continue
 
                 if len(enemy.get_in_sight()) == 0 or enemy.get_ammo() <= 0:
@@ -1269,7 +1269,7 @@ class Message:
             self.colored_msg += "</span>"
 
         elif message.get_type() is Utility.MessageType.got_shot.value:
-            msg = "[ " + self.date_time + " ]" + " " + f"#{message.get_field_object()} got shot <br />"
+            msg = "[ " + self.date_time + " ]" + " " + f"#{message.get_field_object_id()} got shot <br />"
 
             self.colored_msg = "<span style=\" font-size:8pt; font-weight:400; color:#ff0000;\" >"
             self.colored_msg += msg
